@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EGGY HUB 支持作者</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f9f7fe 0%, #e3f2fd 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(120deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .egg-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .egg-icon:hover {
+            transform: scale(1.1);
+            color: #ffdd40;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            border-left: 4px solid #6a11cb;
+            padding-left: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #2575fc;
+            font-size: 1.8rem;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .section-content {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+        
+        .highlight {
+            background: #e3f2ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid #2575fc;
+        }
+        
+        .warning {
+            background: #fff8e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .alert {
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid #f44336;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .qr-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .qr-placeholder {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 1px solid #eaeaea;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .qr-placeholder:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        
+        .qr-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+        
+        .qr-caption {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
+            font-size: 1.2rem;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card i {
+            font-size: 2.8rem;
+            color: #6a11cb;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .benefits-list {
+            text-align: left;
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+        
+        .benefits-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9ff;
+            color: #666;
+            font-size: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .separator {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #6a11cb, transparent);
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .qr-placeholder {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .feature-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>EGGY HUB 支持作者</h1>
+<p class="header-subtitle">为蛋码研究院管理组提供支持，共同维护蛋码爱好者的乐园</p>
+<div class="egg-icon" id="eggIcon">
+<i class="fas fa-egg"></i>
+</div>
+</header>
+<div class="content">
+<div class="section">
+<h2 class="section-title"><i class="fas fa-users"></i> EGGY HUB 管理组的一段话</h2>
+<div class="section-content">
+<div class="highlight">
+<p>✅ EGGYHUB 是水杨酸酸亲手制作的网站，在此也感谢蛋码研究院管理组成员协助。网站的服务器费用都由水杨酸酸承担，提供免费服务。我们为了回血一些服务器费用，现在开放投喂功能。</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h2 class="section-title"><i class="fas fa-heart"></i> 致每一位爱好蛋码的EGGY</h2>
+<div class="section-content">
+<p>✅ 欢迎来到蛋码hub——这片属于《蛋仔派对》爱好者的乐园。从蛋码分享、在线编辑器，到大佬们的视频教程、蛋码比赛，这里的每一个功能都源于我们个人的热爱与坚持。</p>
+<p>如果蛋码hub曾给你带来过灵感与帮助，或许你愿意支持我们？无关多少，都是对我们的鼓励：至少它能帮我们分担一点服务器的开销。</p>
+<p>如果你愿意以"投喂"的方式表达认可，我们将会记录下来你对我们的支持！</p>
+<div class="warning">
+<p>蛋码hub是免费平台，投喂应当是自愿的。投喂前请确保你不是"人类幼崽（18周岁以下）"哦。</p>
+</div>
+</div>
+</div>
+<div class="features">
+<div class="feature-card">
+<i class="fas fa-gift"></i>
+<h3>投喂回馈</h3>
+<ul class="benefits-list">
+<li>金色名字</li>
+<li>加入投喂列表</li>
+<li>返还蛋码碎片</li>
+<li>加入投喂专属群</li>
+</ul>
+</div>
+<div class="feature-card">
+<i class="fas fa-list"></i>
+<h3>赞助列表</h3>
+<p style="margin-top: 20px; font-size: 1.2rem; color: #6a11cb;">即将公布</p>
+</div>
+<div class="feature-card">
+<i class="fas fa-hand-holding-heart"></i>
+<h3>赞助方式</h3>
+<p style="margin-top: 20px; font-size: 1.2rem; color: #2575fc;">扫码支持</p>
+</div>
+</div>
+<div class="separator"></div>
+<div class="section">
+<h2 class="section-title"><i class="fas fa-exclamation-triangle"></i> 重要提示</h2>
+<div class="section-content">
+<p>eggyhub一切开发皆在学习，网站不存在任何商业收费行为，所有功能均免费使用，所有虚拟货币和道具均可免费获得。</p>
+<div class="highlight">
+<p>"投喂"并非是购买特殊服务、或优先待遇、或任何与eggyhub管理组的某种契约。</p>
+</div>
+<div class="alert">
+<p>🚨 您只要投喂就代表您已仔细阅读并且保证您已成年！</p>
+</div>
+</div>
+</div>
+<div class="qr-container">
+<div class="qr-placeholder">
+<img alt="EGGY HUB 赞助二维码" src="https://i.postimg.cc/bJ75dSSp/Ag-AABS8-GGMZg-Kx41x-DFFH7m-BMg1-WBHl-I.jpg"/>
+</div>
+<p class="qr-caption">扫码，备注附带网站ID</p>
+</div>
+</div>
+<footer>
+<p>EGGY HUB © 2025 | 蛋码研究院管理组 | 为蛋仔派对爱好者提供免费服务</p>
+</footer>
+</div>
+
+</body>
+</html>
