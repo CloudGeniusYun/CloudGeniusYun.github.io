@@ -116,7 +116,7 @@ h1 {
     background-color: #e8f0fe;
     color: #1a73e8;
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 8px;
     font-size: 12px;
 }
 
@@ -142,11 +142,13 @@ h1 {
     background-color: #0d62d9;
 }
 
-/* 修改后的禁用按钮样式 - 浅蓝色偏灰 */
-.join-btn:disabled {
+/* 针对a标签的禁用按钮样式 */
+.disabled-btn {
     background-color: #e6f0ff; /* 非常浅的蓝色 */
     color: #a8c7fa; /* 浅蓝色文字 */
     cursor: not-allowed;
+    /*border: 1px solid #d1e3ff;  浅蓝色边框 */
+    pointer-events: none; /* 阻止所有鼠标事件 */
 }
 
 /* 宽屏模式 - 卡片宽度为页面一半 */
