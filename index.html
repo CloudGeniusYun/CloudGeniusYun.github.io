@@ -43,7 +43,15 @@
             letter-spacing: 1px;
         }
         
-        .sponsor-button {
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .sponsor-button, .main-site-button, .group-chat-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -56,21 +64,38 @@
             font-weight: 600;
             box-shadow: 0 8px 20px rgba(255, 75, 43, 0.4);
             transition: all 0.3s ease;
-            margin-top: 20px;
             position: relative;
             overflow: hidden;
         }
         
-        .sponsor-button:hover {
+        .main-site-button {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            box-shadow: 0 8px 20px rgba(17, 153, 142, 0.4);
+        }
+        
+        .group-chat-button {
+            background: linear-gradient(45deg, #654ea3, #da98b4);
+            box-shadow: 0 8px 20px rgba(101, 78, 163, 0.4);
+        }
+        
+        .sponsor-button:hover, .main-site-button:hover, .group-chat-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(255, 75, 43, 0.5);
         }
         
-        .sponsor-button:active {
+        .main-site-button:hover {
+            box-shadow: 0 12px 25px rgba(17, 153, 142, 0.5);
+        }
+        
+        .group-chat-button:hover {
+            box-shadow: 0 12px 25px rgba(101, 78, 163, 0.5);
+        }
+        
+        .sponsor-button:active, .main-site-button:active, .group-chat-button:active {
             transform: translateY(0);
         }
         
-        .sponsor-button::before {
+        .sponsor-button::before, .main-site-button::before, .group-chat-button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -81,7 +106,7 @@
             transition: 0.5s;
         }
         
-        .sponsor-button:hover::before {
+        .sponsor-button:hover::before, .main-site-button:hover::before, .group-chat-button:hover::before {
             left: 100%;
         }
         
@@ -105,7 +130,7 @@
                 font-size: 2rem;
             }
             
-            .sponsor-button {
+            .sponsor-button, .main-site-button, .group-chat-button {
                 padding: 15px 30px;
                 font-size: 1.2rem;
             }
@@ -119,10 +144,20 @@
 <body>
     <div class="container">
         <h1>云云鬼才自建站</h1>
-        <a href="./page/eggyhub/sponsor/index.html" class="sponsor-button">
-            <img src="./picture/zanzhu.png" alt="赞助" class="button-icon">
-            Eggyhub赞助列表
-        </a>
+        <div class="button-container">
+            <a href="#" class="main-site-button">
+                <img src="./picture/zanzhu.png" alt="Eggyhub主站" class="button-icon">
+                Eggyhub主站
+            </a>
+            <a href="#" class="group-chat-button">
+                <img src="./picture/zanzhu.png" alt="ECI相关群聊" class="button-icon">
+                ECI相关群聊
+            </a>
+            <a href="./page/eggyhub/sponsor/index.html" class="sponsor-button">
+                <img src="./picture/zanzhu.png" alt="赞助" class="button-icon">
+                Eggyhub赞助列表
+            </a>
+        </div>
     </div>
     
     <div class="footer">
