@@ -332,88 +332,6 @@
             transform: scale(1.05);
         }
 
-        /* Experience Section */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
-            transform: translateX(-50%);
-        }
-
-        .timeline-item {
-            display: flex;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .timeline-item:nth-child(odd) {
-            flex-direction: row-reverse;
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-left: 0;
-            margin-right: 3rem;
-            text-align: right;
-        }
-
-        .timeline-date {
-            flex: 1;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .timeline-date span {
-            background: var(--card-bg);
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            font-weight: 500;
-        }
-
-        .timeline-content {
-            flex: 2;
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            margin-left: 3rem;
-            transition: var(--transition);
-        }
-
-        .timeline-content:hover {
-            border-color: var(--primary);
-            box-shadow: var(--glow);
-        }
-
-        .timeline-content h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-marker {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 15px;
-            height: 15px;
-            background: var(--primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px var(--primary);
-        }
-
         /* Projects Section */
         .projects-grid {
             display: grid;
@@ -479,6 +397,100 @@
             border-radius: 15px;
             font-size: 0.8rem;
             border: 1px solid rgba(119, 0, 255, 0.5);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-info {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .contact-info h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            width: 30px;
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(10, 15, 35, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 4px;
+            color: var(--light);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 247, 255, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: rgba(0, 247, 255, 0.1);
+            box-shadow: var(--glow);
         }
 
         /* Footer */
@@ -548,27 +560,8 @@
                 display: none;
             }
             
-            .timeline::before {
-                left: 20px;
-            }
-            
-            .timeline-item {
-                flex-direction: row !important;
-            }
-            
-            .timeline-item .timeline-content {
-                margin-left: 3rem;
-                margin-right: 0;
-                text-align: left;
-            }
-            
-            .timeline-date {
-                justify-content: flex-start;
-                padding-left: 0;
-            }
-            
-            .timeline-marker {
-                left: 20px;
+            .contact-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -580,7 +573,6 @@
             <nav class="nav-links">
                 <a href="#about">关于</a>
                 <a href="#skills">技能</a>
-                <a href="#experience">经历</a>
                 <a href="#projects">项目</a>
                 <a href="#contact">联系</a>
             </nav>
@@ -649,42 +641,6 @@
             </div>
         </section>
 
-        <section id="experience">
-            <h2 class="section-title">工作经历</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        <span>2020 - 至今</span>
-                    </div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>高级前端工程师 - 创新科技公司</h3>
-                        <p>领导前端团队开发企业级SaaS平台，采用微前端架构提升系统可维护性。引入WebAssembly技术优化核心算法性能，使数据处理速度提升40%。</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        <span>2018 - 2020</span>
-                    </div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>全栈开发工程师 - 数字解决方案公司</h3>
-                        <p>负责多个客户项目的全栈开发，使用React和Node.js构建响应式Web应用。实施CI/CD流程，将部署时间缩短60%。</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        <span>2016 - 2018</span>
-                    </div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>前端开发工程师 - 初创科技公司</h3>
-                        <p>参与公司核心产品的UI/UX设计与前端实现，使用Vue.js框架构建单页应用。优化前端性能，使页面加载时间减少35%。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="projects">
             <h2 class="section-title">项目展示</h2>
             <div class="projects-grid">
@@ -736,7 +692,52 @@
             </div>
         </section>
 
-        <footer id="contact">
+        <section id="contact">
+            <h2 class="section-title">联系我</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>联系方式</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>zhangming@example.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+86 138-0000-0000</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>北京市海淀区</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-github"></i>
+                            <span>github.com/zhangming</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>发送消息</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">邮箱</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">消息</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <footer>
             <div class="social-links">
                 <a href="#"><i class="fab fa-github"></i></a>
                 <a href="#"><i class="fab fa-linkedin"></i></a>
