@@ -3,568 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技感个人简介</title>
+    <title>云云鬼才个人简介</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
-
-        :root {
-            --primary: #00f7ff;
-            --secondary: #7700ff;
-            --accent: #ff00c8;
-            --dark: #0a0a16;
-            --darker: #050510;
-            --light: #e0e0ff;
-            --card-bg: rgba(10, 15, 35, 0.7);
-            --glow: 0 0 15px rgba(0, 247, 255, 0.7);
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--darker), var(--dark));
-            color: var(--light);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(119, 0, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 0, 200, 0.05) 0%, transparent 50%);
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Header Styles */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 0;
-            border-bottom: 1px solid rgba(0, 247, 255, 0.3);
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-            padding: 0.5rem 0;
-            transition: var(--transition);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 4rem;
-            align-items: center;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1.2;
-        }
-
-        .hero-content h2 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-weight: 400;
-        }
-
-        .hero-content p {
-            margin-bottom: 2rem;
-            color: rgba(224, 224, 255, 0.8);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.2), transparent);
-            transition: var(--transition);
-            z-index: -1;
-        }
-
-        .cta-button:hover {
-            box-shadow: var(--glow);
-            transform: translateY(-3px);
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
-        }
-
-        .hero-visual {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .profile-container {
-            width: 300px;
-            height: 300px;
-            position: relative;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 5px;
-            box-shadow: var(--glow);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: var(--dark);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .tech-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 247, 255, 0.5);
-            animation: rotate 20s linear infinite;
-        }
-
-        .circle:nth-child(1) {
-            width: 350px;
-            height: 350px;
-            top: -25px;
-            left: -25px;
-        }
-
-        .circle:nth-child(2) {
-            width: 400px;
-            height: 400px;
-            top: -50px;
-            left: -50px;
-            animation-duration: 25s;
-            animation-direction: reverse;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Sections */
-        section {
-            margin-bottom: 4rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: var(--primary);
-        }
-
-        /* Skills Section */
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 1.5rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            transition: var(--transition);
-        }
-
-        .skill-category:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--glow);
-        }
-
-        .skill-category h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-        }
-
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-
-        .skill-item {
-            background: rgba(0, 247, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            transition: var(--transition);
-        }
-
-        .skill-item:hover {
-            background: rgba(0, 247, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        /* Projects Section */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            transition: var(--transition);
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: var(--glow);
-        }
-
-        .project-image {
-            height: 180px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .project-card:hover .project-image img {
-            transform: scale(1.1);
-        }
-
-        .project-info {
-            padding: 1.5rem;
-        }
-
-        .project-info h3 {
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-        }
-
-        .project-info p {
-            color: rgba(224, 224, 255, 0.8);
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
-        }
-
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .project-tags span {
-            background: rgba(119, 0, 255, 0.2);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(119, 0, 255, 0.5);
-        }
-
-        /* Contact Section */
-        .contact-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .contact-info {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 247, 255, 0.1);
-        }
-
-        .contact-info h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-        }
-
-        .contact-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .contact-item i {
-            color: var(--primary);
-            font-size: 1.2rem;
-            width: 30px;
-        }
-
-        .contact-form {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 247, 255, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--light);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(10, 15, 35, 0.5);
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            border-radius: 4px;
-            color: var(--light);
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(0, 247, 255, 0.2);
-        }
-
-        textarea.form-control {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            padding: 0.8rem 2rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .submit-btn:hover {
-            background: rgba(0, 247, 255, 0.1);
-            box-shadow: var(--glow);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(0, 247, 255, 0.3);
-            margin-top: 4rem;
-            position: relative;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--card-bg);
-            color: var(--light);
-            text-decoration: none;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            box-shadow: var(--glow);
-            transform: translateY(-3px);
-        }
-
-        .copyright {
-            color: rgba(224, 224, 255, 0.6);
-            font-size: 0.9rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .contact-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -580,9 +21,9 @@
 
         <section class="hero" id="about">
             <div class="hero-content">
-                <h1>张明</h1>
-                <h2>高级前端开发工程师</h2>
-                <p>专注于创造前沿的数字体验，将创新设计与尖端技术相结合。拥有5年全栈开发经验，致力于构建高性能、可扩展的Web应用。</p>
+                <h1>云云鬼才</h1>
+                <h2>蛋码研究院管理员</h2>
+                <p>蛋码研究院Eggyhub移动应用开发，蛋码研究院认证推荐官，蛋码研究院在职官号运营</p>
                 <a href="#contact" class="cta-button">联系我</a>
             </div>
             <div class="hero-visual">
@@ -593,7 +34,7 @@
                 <div class="profile-container">
                     <div class="profile-image">
                         <!-- 在实际使用中，请替换为您自己的头像URL -->
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80" alt="个人头像">
+                        <img src="./picture/head.jpg" alt="个人头像">
                     </div>
                 </div>
             </div>
@@ -603,39 +44,33 @@
             <h2 class="section-title">技术专长</h2>
             <div class="skills-container">
                 <div class="skill-category">
-                    <h3>前端技术</h3>
+                    <h3>Windows</h3>
                     <div class="skill-list">
-                        <span class="skill-item">HTML5/CSS3</span>
-                        <span class="skill-item">JavaScript/ES6+</span>
-                        <span class="skill-item">TypeScript</span>
-                        <span class="skill-item">React</span>
-                        <span class="skill-item">Vue.js</span>
-                        <span class="skill-item">Next.js</span>
-                        <span class="skill-item">Three.js</span>
-                        <span class="skill-item">WebGL</span>
+                        <span class="skill-item">系统重装</span>
+                        <span class="skill-item">系统维护</span>
+                        <span class="skill-item">远程辅助操作</span>
+                        <span class="skill-item">远程系统重装服务</span>
+                        <span class="skill-item">Windows系统问题答疑</span>
                     </div>
                 </div>
                 <div class="skill-category">
-                    <h3>后端技术</h3>
+                    <h3>Eggyhub移动端应用</h3>
                     <div class="skill-list">
-                        <span class="skill-item">Node.js</span>
-                        <span class="skill-item">Express</span>
-                        <span class="skill-item">MongoDB</span>
-                        <span class="skill-item">PostgreSQL</span>
-                        <span class="skill-item">GraphQL</span>
-                        <span class="skill-item">RESTful API</span>
+                        <span class="skill-item">蛋码研究院</span>
+                        <span class="skill-item">https://eggyhub.top</span>
+                        <span class="skill-item">网站同构</span>
+                        <span class="skill-item">移动端应用</span>
+                        <span class="skill-item">Android</span>
                     </div>
                 </div>
                 <div class="skill-category">
                     <h3>工具与平台</h3>
                     <div class="skill-list">
                         <span class="skill-item">Git</span>
-                        <span class="skill-item">Docker</span>
-                        <span class="skill-item">AWS</span>
-                        <span class="skill-item">Webpack</span>
-                        <span class="skill-item">Figma</span>
-                        <span class="skill-item">Jest</span>
-                        <span class="skill-item">Cypress</span>
+                        <span class="skill-item">Windows</span>
+                        <span class="skill-item">Adobe Photoshop</span>
+                        <span class="skill-item">Adobe Illustrate</span>
+                        <span class="skill-item">UI设计</span>
                     </div>
                 </div>
             </div>
@@ -649,43 +84,13 @@
                         <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="数据可视化平台">
                     </div>
                     <div class="project-info">
-                        <h3>实时数据可视化平台</h3>
-                        <p>基于WebGL和D3.js构建的高性能数据可视化平台，支持实时数据流和大规模数据集的可视化分析。</p>
+                        <h3>Eggyhub移动端应用</h3>
+                        <p>基于Eggyhub网站端进行同功能拓展的移动端应用，专门为适配移动端界面而生。</p>
                         <div class="project-tags">
-                            <span>React</span>
-                            <span>D3.js</span>
-                            <span>WebGL</span>
-                            <span>WebSocket</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="AI助手应用">
-                    </div>
-                    <div class="project-info">
-                        <h3>智能AI助手应用</h3>
-                        <p>集成自然语言处理和机器学习算法的AI助手，提供个性化内容推荐和智能任务管理功能。</p>
-                        <div class="project-tags">
-                            <span>Vue.js</span>
-                            <span>Node.js</span>
-                            <span>TensorFlow.js</span>
-                            <span>MongoDB</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="区块链交易平台">
-                    </div>
-                    <div class="project-info">
-                        <h3>区块链交易平台</h3>
-                        <p>基于以太坊的去中心化交易平台，实现安全的数字资产交易和智能合约执行。</p>
-                        <div class="project-tags">
-                            <span>React</span>
-                            <span>Solidity</span>
-                            <span>Web3.js</span>
-                            <span>IPFS</span>
+                            <span>蛋码研究院</span>
+                            <span>eggyhub</span>
+                            <span>https://eggyhub.top</span>
+                            <span>云云鬼才</span>
                         </div>
                     </div>
                 </div>
@@ -700,38 +105,42 @@
                     <div class="contact-details">
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>zhangming@example.com</span>
+                            <span>个人邮箱：zyz2034688700@163.com</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
-                            <span>+86 138-0000-0000</span>
+                            <span>个人QQ：3491395670</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>北京市海淀区</span>
+                            <span>黑龙江省齐齐哈尔</span>
                         </div>
                         <div class="contact-item">
                             <i class="fab fa-github"></i>
-                            <span>github.com/zhangming</span>
+                            <span>github.com/cloudgeniusyun</span>
                         </div>
                     </div>
                 </div>
                 <div class="contact-form">
-                    <h3>发送消息</h3>
-                    <form>
+                    <h3>在线发送消息</h3>
+                    <form id="feedbackForm">
                         <div class="form-group">
                             <label for="name">姓名</label>
-                            <input type="text" id="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                            <div class="error-message" id="nameError"></div>
                         </div>
                         <div class="form-group">
                             <label for="email">邮箱</label>
-                            <input type="email" id="email" class="form-control" required>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                            <div class="error-message" id="emailError"></div>
                         </div>
                         <div class="form-group">
-                            <label for="message">消息</label>
-                            <textarea id="message" class="form-control" required></textarea>
+                            <label for="body">内容</label>
+                            <textarea id="body" name="body" class="form-control" required></textarea>
+                            <div class="error-message" id="bodyError"></div>
                         </div>
-                        <button type="submit" class="submit-btn">发送消息</button>
+                        <button type="submit" class="submit-btn" id="submitBtn">发送消息</button>
+                        <div id="formMessage" class="form-message"></div>
                     </form>
                 </div>
             </div>
@@ -740,40 +149,14 @@
         <footer>
             <div class="social-links">
                 <a href="#"><i class="fab fa-github"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-codepen"></i></a>
+                <a href="#"><i class="fab fa-qq"></i></a>
+                <a href="#"><i class="fab fa-envelope"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
             </div>
             <p class="copyright">© 2023 张明 - 高级前端开发工程师</p>
         </footer>
     </div>
 
-    <script>
-        // 添加滚动动画效果
-        document.addEventListener('DOMContentLoaded', function() {
-            const sections = document.querySelectorAll('section');
-            
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-            
-            sections.forEach(section => {
-                section.style.opacity = 0;
-                section.style.transform = 'translateY(20px)';
-                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(section);
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
