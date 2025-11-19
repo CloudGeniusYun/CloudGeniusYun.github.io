@@ -462,7 +462,7 @@ section {
 
 .admin-cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1.5rem;
 }
 
@@ -474,7 +474,7 @@ section {
     border: 1px solid rgba(0, 247, 255, 0.1);
     transition: var(--transition);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.5rem;
 }
 
@@ -595,10 +595,6 @@ footer::before {
         grid-template-columns: 1fr;
     }
     
-    .admin-cards-container {
-        grid-template-columns: 1fr;
-    }
-    
     .admin-card {
         flex-direction: column;
         text-align: center;
@@ -610,7 +606,7 @@ footer::before {
     }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) {
     .admin-cards-container {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -618,13 +614,6 @@ footer::before {
 
 @media (min-width: 1025px) {
     .admin-cards-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    /* 在特别宽的屏幕上显示三列 */
-    @media (min-width: 1400px) {
-        .admin-cards-container {
-            grid-template-columns: repeat(3, 1fr);
-        }
+        grid-template-columns: repeat(3, 1fr);
     }
 }
