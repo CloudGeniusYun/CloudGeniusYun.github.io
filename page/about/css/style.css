@@ -540,12 +540,17 @@ section {
 @media (max-width: 767px) {
     .admin-card {
         flex-direction: column;
+        text-align: center;
     }
 
     .admin-avatar {
         margin-right: 0;
         margin-bottom: 15px;
-        align-self: center;
+        align-self: center; /* 确保头像在垂直布局中水平居中 */
+    }
+    
+    .admin-info {
+        text-align: center; /* 确保文本在垂直布局中居中 */
     }
 }
 
