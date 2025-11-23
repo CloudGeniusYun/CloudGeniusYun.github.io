@@ -51,7 +51,7 @@
             margin-top: 20px;
         }
         
-        .sponsor-button, .main-site-button, .group-chat-button {
+        .sponsor-button, .main-site-button, .group-chat-button,.forum-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -77,8 +77,13 @@
             background: linear-gradient(45deg, #654ea3, #da98b4);
             box-shadow: 0 8px 20px rgba(101, 78, 163, 0.4);
         }
+                
+        .forum-button {
+            background: linear-gradient(45deg, hwb(49 5% 15%), #e2f537);
+            box-shadow: 0 8px 20px rgba(101, 78, 163, 0.4);
+        }
         
-        .sponsor-button:hover, .main-site-button:hover, .group-chat-button:hover {
+        .sponsor-button:hover, .main-site-button:hover, .group-chat-button:hover,.forum-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(255, 75, 43, 0.5);
         }
@@ -91,7 +96,7 @@
             box-shadow: 0 12px 25px rgba(101, 78, 163, 0.5);
         }
         
-        .group-chat-button:hover {
+        .forum-button:hover {
             box-shadow: 0 12px 25px rgba(101, 78, 163, 0.5);
         }
 
@@ -110,7 +115,7 @@
             transition: 0.5s;
         }
         
-        .sponsor-button:hover::before, .main-site-button:hover::before, .group-chat-button:hover::before {
+        .sponsor-button:hover::before, .main-site-button:hover::before, .group-chat-button:hover::before,.forum-button:hover::before {
             left: 100%;
         }
         
