@@ -91,11 +91,15 @@
             box-shadow: 0 12px 25px rgba(101, 78, 163, 0.5);
         }
         
-        .sponsor-button:active, .main-site-button:active, .group-chat-button:active {
+        .group-chat-button:hover {
+            box-shadow: 0 12px 25px rgba(101, 78, 163, 0.5);
+        }
+
+        .sponsor-button:active, .main-site-button:active, .group-chat-button:active,.forum-button:active {
             transform: translateY(0);
         }
         
-        .sponsor-button::before, .main-site-button::before, .group-chat-button::before {
+        .sponsor-button::before, .main-site-button::before, .group-chat-button::before, .forum-button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -156,6 +160,10 @@
             <a href="./page/eggyhub/sponsor/index.html" class="sponsor-button">
                 <img src="./picture/sponsor.png" alt="赞助" class="button-icon">
                 Eggyhub赞助列表
+            </a>
+            <a href="./page/eggyhub/forum/index.html" class="forum-button">
+                <img src="./picture/forum.png" alt="小论坛" class="button-icon">
+                小论坛
             </a>
         </div>
     </div>
