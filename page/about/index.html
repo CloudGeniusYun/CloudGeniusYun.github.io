@@ -14,6 +14,7 @@
             <nav class="nav-links">
                 <a href="#about">关于</a>
                 <a href="#skills">技能</a>
+                <a href="#experience">经历</a>
                 <a href="#projects">项目</a>
                 <a href="#contact">联系</a>
             </nav>
@@ -75,6 +76,26 @@
             </div>
         </section>
 
+        <section id="experience">
+            <h2 class="section-title">工作经历</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2025-08-07</div>
+                    <div class="timeline-content">
+                        <h3>设计Eggyhub</h3>
+                        <p>负责蛋码研究院移动应用的整体架构设计和用户界面规划，确保应用的功能完整性和用户体验。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2025-08-21</div>
+                    <div class="timeline-content">
+                        <h3>发布Eggyhub</h3>
+                        <p>成功将蛋码研究院移动应用发布到应用商店，完成上线部署和初期运营维护。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="projects">
             <h2 class="section-title">项目展示</h2>
             <div class="projects-grid">
@@ -121,7 +142,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="admin-section">
                 <h3 class="admin-section-title">ECI管理员</h3>
                 <div class="admin-cards-container">
@@ -135,7 +156,7 @@
                             <p>蛋码研究院创始人，</p>
                         </div>
                     </div>
-                    
+
                     <div class="admin-card">
                         <div class="admin-avatar">
                             <img src="./picture/fdc.jpg" alt="管理员头像">
@@ -146,7 +167,7 @@
                             <p>蛋仔派对蛋码战神，执着于蛋码逻辑与惊魂夜模式玩法。</p>
                         </div>
                     </div>
-                    
+
                     <div class="admin-card">
                         <div class="admin-avatar">
                             <img src="./picture/z.jpg" alt="管理员头像">
@@ -157,7 +178,7 @@
                             <p> </p>
                         </div>
                     </div>
-                    
+
                     <div class="admin-card">
                         <div class="admin-avatar">
                             <img src="./picture/head.jpg" alt="管理员头像">
@@ -168,7 +189,7 @@
                             <p>负责蛋码研究院移动应用开发和技术架构设计，专注于Windows系统优化和远程技术支持。</p>
                         </div>
                     </div>
-                    
+
                     <div class="admin-card">
                         <div class="admin-avatar">
                             <img src="./picture/kkosan.jpg" alt="管理员头像">
@@ -192,6 +213,20 @@
             </div>
             <p class="copyright">© 2025 云云鬼才 - 蛋码研究院管理员</p>
         </footer>
+    </div>
+
+    <!-- 背景音乐控件 -->
+    <audio id="bgMusic" loop>
+        <source src="music/background.mp3" type="audio/mp3">
+        您的浏览器不支持音频元素。
+    </audio>
+    <div class="music-controls">
+        <button id="musicToggle" class="music-btn">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="volume-control">
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5">
+        </div>
     </div>
 
     <script src="js/script.js"></script>
