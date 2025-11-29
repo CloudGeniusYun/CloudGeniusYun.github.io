@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 设置多个备用音乐源
     const musicSources = [
-        'https://cdn.pixabay.com/download/audio/2022/03/15/audio_2f552359a8.mp3?filename=ambient-piano-amp-strings-120799.mp3', // 在线源1
-        'https://cdn.pixabay.com/download/audio/2022/01/18/audio_5b735208a3.mp3?filename=cinematic-ambient-116199.mp3', // 在线源2
+        'https://eggyhub.top/api/repos/2/background.mp3', // 在线源1
+        '', // 在线源2
         './music/backgrounds.mp3' // 本地备用
     ];
     
