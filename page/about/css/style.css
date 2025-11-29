@@ -365,7 +365,7 @@ section {
 /* 左侧项目（奇数项）- 向右偏移 */
 .timeline-item:nth-child(odd) {
     justify-content: flex-end;
-    padding-right: 30%; /* 控制整体向左偏移 */
+    padding-right: 300%; /* 控制整体向右偏移 */
 }
 
 .timeline-item:nth-child(odd) .timeline-date {
@@ -386,7 +386,7 @@ section {
 /* 右侧项目（偶数项）- 向左偏移 */
 .timeline-item:nth-child(even) {
     justify-content: flex-start;
-    padding-left: 30%; /* 控制整体向右偏移 */
+    padding-left: 300%; /* 控制整体向左偏移 */
 }
 
 .timeline-item:nth-child(even) .timeline-date {
