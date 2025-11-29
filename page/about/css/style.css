@@ -335,10 +335,10 @@ section {
     color: var(--primary);
 }
 
-/* Experience Section - 修复时间轴布局 */
+/* Experience Section - 时间轴布局优化 */
 .timeline {
     position: relative;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding-bottom: 2rem;
 }
@@ -359,45 +359,52 @@ section {
     margin-bottom: 3rem;
     position: relative;
     align-items: flex-start;
+    width: 100%;
 }
 
-/* 左侧项目（奇数项） */
+/* 左侧项目（奇数项）- 内容区域更宽 */
 .timeline-item:nth-child(odd) {
     justify-content: flex-start;
+    padding-right: 5%;
 }
 
 .timeline-item:nth-child(odd) .timeline-date {
     order: 1;
     text-align: right;
     margin-right: 2rem;
+    flex: 0 0 180px;
 }
 
 .timeline-item:nth-child(odd) .timeline-content {
     order: 2;
     text-align: left;
-    margin-left: 2rem;
+    margin-left: 0;
+    flex: 1;
+    max-width: 500px;
 }
 
-/* 右侧项目（偶数项） */
+/* 右侧项目（偶数项）- 内容区域更宽 */
 .timeline-item:nth-child(even) {
     justify-content: flex-end;
+    padding-left: 5%;
 }
 
 .timeline-item:nth-child(even) .timeline-date {
     order: 2;
     text-align: left;
     margin-left: 2rem;
+    flex: 0 0 180px;
 }
 
 .timeline-item:nth-child(even) .timeline-content {
     order: 1;
     text-align: right;
-    margin-right: 2rem;
+    margin-right: 0;
+    flex: 1;
+    max-width: 500px;
 }
 
 .timeline-date {
-    flex: 0 0 auto;
-    width: 150px;
     padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
@@ -411,7 +418,6 @@ section {
 }
 
 .timeline-content {
-    flex: 0 1 400px;
     background: var(--card-bg);
     padding: 1.5rem;
     border-radius: 10px;
@@ -431,7 +437,7 @@ section {
     margin-bottom: 0.5rem;
 }
 
-/* 修复时间轴圆点样式 - 空心圆点 */
+/* 时间轴圆点 */
 .timeline-marker {
     position: absolute;
     left: 50%;
@@ -839,10 +845,16 @@ footer::before {
         left: 20px;
     }
     
+    .timeline {
+        max-width: 100%;
+    }
+    
     .timeline-item {
-        flex-direction: column !important;
+        flex-direction: column;
         justify-content: flex-start;
         padding-left: 50px;
+        padding-right: 0;
+        padding-left: 0;
         margin-bottom: 2rem;
     }
     
@@ -854,6 +866,7 @@ footer::before {
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
         order: 1 !important;
+        flex: none !important;
     }
     
     .timeline-content {
