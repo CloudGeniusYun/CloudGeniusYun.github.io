@@ -335,7 +335,7 @@ section {
     color: var(--primary);
 }
 
-/* Experience Section - 修正时间轴布局 */
+/* Experience Section - 重写时间轴布局 */
 .timeline {
     position: relative;
     max-width: 1200px;
@@ -352,79 +352,66 @@ section {
     width: 2px;
     background: linear-gradient(to bottom, transparent 0%, var(--primary) 15%, var(--primary) 85%, transparent 100%);
     transform: translateX(-50%);
+    z-index: 1;
 }
 
 .timeline-item {
-    display: flex;
-    margin-bottom: 3rem;
     position: relative;
-    align-items: flex-start;
-    width: 100%;
+    min-height: 120px;
+    margin-bottom: 3rem;
+    display: block;
 }
 
-/* 左侧项目（奇数项）- 向右偏移 */
-.timeline-item:nth-child(odd) {
-    justify-content: flex-start;
-    padding-left: 50%; /* 控制整体向左偏移 */
+/* 时间轴圆点 - 固定位置在时间轴线上 */
+.timeline-marker {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--dark);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    transform: translate(-50%, 0);
+    box-shadow: 0 0 10px var(--primary);
+    z-index: 2;
 }
 
-.timeline-item:nth-child(odd) .timeline-date {
-    order: 1;
-    text-align: right;
-    margin-right: 2rem;
-    flex: 0 0 180px;
-}
-
-.timeline-item:nth-child(odd) .timeline-content {
-    order: 2;
-    text-align: left;
-    margin-left: 0;
-    flex: 1;
-    max-width: 500px;
-}
-
-/* 右侧项目（偶数项）- 向左偏移 */
-.timeline-item:nth-child(even) {
-    justify-content: flex-end;
-    padding-right: 50%; /* 控制整体向右偏移 */
-}
-
-.timeline-item:nth-child(even) .timeline-date {
-    order: 2;
-    text-align: left;
-    margin-left: 2rem;
-    flex: 0 0 180px;
-}
-
-.timeline-item:nth-child(even) .timeline-content {
-    order: 1;
-    text-align: right;
-    margin-right: 0;
-    flex: 1;
-    max-width: 500px;
-}
-
+/* 日期 - 根据奇偶行分别定位 */
 .timeline-date {
+    position: absolute;
+    top: 0;
+    width: 180px;
     padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: var(--card-bg);
     border-radius: 20px;
     border: 1px solid rgba(0, 247, 255, 0.3);
     font-weight: 500;
-    z-index: 2;
-    position: relative;
+    text-align: center;
+    z-index: 3;
 }
 
+/* 奇数行 - 日期在时间轴线左侧 */
+.timeline-item:nth-child(odd) .timeline-date {
+    left: calc(50% - 200px); /* 时间轴左侧，距离时间轴20px */
+}
+
+/* 偶数行 - 日期在时间轴线右侧 */
+.timeline-item:nth-child(even) .timeline-date {
+    right: calc(50% - 200px); /* 时间轴右侧，距离时间轴20px */
+}
+
+/* 内容区域 - 根据奇偶行分别定位 */
 .timeline-content {
-    background: var(--card-bg);
+    position: absolute;
+    top: -10px;
+    width: 500px;
     padding: 1.5rem;
+    background: var(--card-bg);
     border-radius: 10px;
     border: 1px solid rgba(0, 247, 255, 0.1);
     transition: var(--transition);
-    position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 
 .timeline-content:hover {
@@ -437,19 +424,15 @@ section {
     margin-bottom: 0.5rem;
 }
 
-/* 时间轴圆点 */
-.timeline-marker {
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    width: 20px;
-    height: 20px;
-    background: var(--dark);
-    border: 2px solid var(--primary);
-    border-radius: 50%;
-    transform: translate(-50%, 0);
-    box-shadow: 0 0 10px var(--primary);
-    z-index: 3;
+/* 奇数行 - 内容在时间轴线右侧 */
+.timeline-item:nth-child(odd) .timeline-content {
+    left: calc(50% + 40px); /* 时间轴右侧，距离时间轴40px */
+}
+
+/* 偶数行 - 内容在时间轴线左侧 */
+.timeline-item:nth-child(even) .timeline-content {
+    right: calc(50% + 40px); /* 时间轴左侧，距离时间轴40px */
+    text-align: right;
 }
 
 /* Projects Section */
@@ -842,44 +825,51 @@ footer::before {
 /* 时间轴响应式设计 - 移动端布局 */
 @media (max-width: 768px) {
     .timeline::before {
-        left: 20px;
-    }
-    
-    .timeline {
-        max-width: 100%;
+        left: 30px;
     }
     
     .timeline-item {
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-left: 50px;
-        padding-right: 0;
-        padding-left: 0;
-        margin-bottom: 2rem;
+        padding-left: 70px;
+        min-height: auto;
+        margin-bottom: 3rem;
+    }
+    
+    .timeline-marker {
+        left: 30px;
+        top: 15px;
     }
     
     .timeline-date {
         position: static;
         width: 100%;
-        margin: 0 0 1rem 0 !important;
-        text-align: left !important;
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-        order: 1 !important;
-        flex: none !important;
+        margin-bottom: 1rem;
+        text-align: left;
+        transform: none;
+        left: auto;
+        right: auto;
     }
     
     .timeline-content {
-        max-width: none;
-        flex: 1;
-        margin: 0 !important;
-        text-align: left !important;
-        order: 2 !important;
+        position: static;
+        width: 100%;
+        text-align: left;
+        margin-top: 0;
+        transform: none;
+        left: auto;
+        right: auto;
     }
     
-    .timeline-marker {
-        left: 20px;
-        top: 40px;
+    /* 移动端重置所有位置 */
+    .timeline-item:nth-child(odd) .timeline-date,
+    .timeline-item:nth-child(even) .timeline-date {
+        position: static;
+        margin-bottom: 1rem;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-content,
+    .timeline-item:nth-child(even) .timeline-content {
+        position: static;
+        text-align: left;
     }
 }
 
