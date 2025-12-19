@@ -4,7 +4,7 @@ const contributors = [
         id: 1,
         name: "摆烂的透明",
         role: "长期测试员",
-        bio: "发现了Eggyhub中的数多个bug，并及时进行反馈，同时提供了Eggyhub内部大部分的图标",
+        bio: "发现了Eggyhub中的数多个bug，并及时进行反馈，同时提供了Eggyhub内部大部分的图标。",
         avatar: "http://q.qlogo.cn/headimg_dl?dst_uin=3400432882&spec=640&img_type=jpg",
         joinDate: "2025-08-18",
         quote: "细节决定成败，每一个BUG的发现都是产品进步的机会。"
@@ -52,7 +52,7 @@ const contributors = [
         bio: "Eggyhub的内测人员，为内测时软件功能提供了宝贵建议。",
         avatar: "http://q.qlogo.cn/headimg_dl?dst_uin=991375262&spec=640&img_type=jpg",
         joinDate: "2025-08-18",
-        quote: "应用的稳定性是靠不断的测试得出的"
+        quote: "应用的稳定性是靠不断的测试得出的。"
     },
     {
         id: 7,
@@ -106,7 +106,7 @@ const contributors = [
         bio: "长期对软件进行测试，包括但不限于每一次版本更新前的功能性测试",
         avatar: "http://q.qlogo.cn/headimg_dl?dst_uin=2450069268&spec=640&img_type=jpg",
         joinDate: "2025-09-17",
-        quote: "软件的问题要尽早发现，避免在发布后产生bug"
+        quote: "软件的问题要尽早发现，避免在发布后产生bug。"
     }
 ];
 
