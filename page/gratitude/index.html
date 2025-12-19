@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试贡献者感谢页 - Eggyhub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- 科技感背景 -->
+    <div id="matrix-bg"></div>
+    
+    <!-- 发光圆环装饰 -->
+    <div class="glow-circle glow-circle-1"></div>
+    <div class="glow-circle glow-circle-2"></div>
+    
+    <div class="container">
+        <!-- 头部区域 -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-bug"></i>
+                <span>EGGYHUB</span>
+            </div>
+            
+            <h1 class="title">贡献者荣誉墙</h1>
+            
+            <p class="subtitle">
+                感谢所有通过测试和反馈BUG，帮助Eggyhub不断改进与成长的贡献者。你们的每一次测试、每一个反馈，都是我们前进的动力。
+            </p>
+            
+            <!-- 简化为两个统计方框 -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalContributors">48</div>
+                    <div class="stat-label">测试贡献者</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalBugs">327</div>
+                    <div class="stat-label">BUG反馈</div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 贡献者展示区 -->
+        <section class="contributors-section">
+            <h2 class="section-title">我们的测试员</h2>
+            
+            <div class="contributors-container" id="contributorsContainer">
+                <!-- 贡献者卡片将通过JavaScript动态生成 -->
+            </div>
+        </section>
+        
+        <!-- 页脚 -->
+        <footer>
+            <p class="footer-text">
+                在Eggyhub成功的背后总有一群人在默默无闻，你们不仅是Eggyhub从幼年逐渐成长的见证人，也是Eggyhub的建设的最大贡献者，感谢有你们。
+            </p>
+            
+            <div class="footer-links">
+                <a href="mailto:danmayanjiuyuan@163.com" class="footer-link" target="_blank">
+                    <i class="fas fa-bug"></i> 反馈BUG
+                </a>
+                <a href="https://eggyhub.top" class="footer-link" target="_blank">
+                    <i class="fas fa-globe"></i> 官方网站
+                </a>
+            </div>
+            
+            <p style="margin-top: 40px; color: var(--text-muted);">
+                 <span class="heart">💥</span>Made By Eggyhub-CloudGenius | 致敬所有测试贡献者
+            </p>
+        </footer>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>
