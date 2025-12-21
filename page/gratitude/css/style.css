@@ -518,7 +518,7 @@ footer::before {
     border-radius: 50%;
     filter: blur(40px);
     opacity: 0.3;
-    z-index: -1;
+    z-index: -3;
 }
 
 .glow-circle-1 {

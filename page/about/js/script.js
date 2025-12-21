@@ -173,13 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         bgMusic.play();
     });
     
-    // 添加用户交互监听器，用于在自动播放被阻止时重试
-    document.body.addEventListener('click', function() {
-        if (!isPlaying && bgMusic.readyState >= 2) {
-            console.log('用户交互检测，尝试播放音乐');
-            playMusic();
-        }
-    });
+
     
     // 添加键盘事件监听器
     document.addEventListener('keydown', function(e) {
