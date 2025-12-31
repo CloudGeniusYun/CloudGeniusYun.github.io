@@ -149,7 +149,7 @@ function renderContributors() {
 // 更新统计数据
 function updateStats() {
     const totalContributors = contributors.length;
-    const totalBugs = 43; // 可以根据需要改为动态计算
+    const totalBugs = 47; // 可以根据需要改为动态计算
     
     document.getElementById('totalContributors').textContent = totalContributors;
     document.getElementById('totalBugs').textContent = totalBugs;
