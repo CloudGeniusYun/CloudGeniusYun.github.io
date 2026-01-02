@@ -71,7 +71,21 @@
             </p>
         </footer>
     </div>
-
+    <!-- 请将以下代码块，放在你原有的 <script src="./js/script.js"></script> 这行之前 -->
+    <script src="./js/fontManager.js"></script>
+    <script>
+        // 在DOM和主要脚本加载后，开始加载字体
+        document.addEventListener('DOMContentLoaded', function() {
+            // 延迟一点开始，避免与页面其他初始化资源竞争网络
+            setTimeout(() => {
+                window.FontLoader.load().then(results => {
+                    console.log('页面字体动态加载完毕。状态：', window.FontLoader.getStatus());
+                }).catch(err => {
+                    console.error('字体加载流程发生意外错误:', err);
+                });
+            }, 100);
+        });
+    </script>
     <script src="./js/script.js"></script>
     <script src="./js/particles.js"></script>
 </body>
