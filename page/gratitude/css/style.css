@@ -8,12 +8,16 @@
     --text-color: #e0e0ff;
     --text-muted: #a0a0cc;
 }
+@font-face{
+    font-family: 'yangrendong';
+    src:url('font/yangrendong.tff');
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    font-family: 'yangrendong','Segoe UI', 'Roboto', 'Arial', sans-serif;
 }
 
 body {
