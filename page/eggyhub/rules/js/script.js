@@ -124,12 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (result.status === 'warning') {
             durationElement.textContent = '警告⚠️';
-            formulaElement.textContent = result.formula;
+            formulaElement.innerHTML = result.formula;
             statusElement.textContent = result.message;
             statusElement.style.color = '#f59e0b';
         } else if (result.status === 'blacklist') {
             durationElement.textContent = '拉黑';
-            formulaElement.textContent = result.formula;
+            formulaElement.innerHTML = result.formula;
             statusElement.textContent = result.message;
             statusElement.style.color = '#dc2626';
         } else {
