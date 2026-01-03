@@ -57,118 +57,124 @@
         <div class="calculator-section">
             <h2>禁言时长计算器</h2>
             <div class="calculator">
-                <div class="input-group">
-                    <label for="violationCount">违规次数（第几次违规）：</label>
-                    <input type="number" id="violationCount" min="1" max="15" value="2">
-                    <div class="input-note">注：第一次为警告，从第二次开始计算禁言</div>
-                </div>
-                
-                <div class="formula-group">
-                    <label>计算公式：</label>
-                    <div class="formula">
-                        禁言时长 = min(1 × 1.8<sup>(违规次数-2)</sup>, 48) 小时
+                <!-- 左侧：计算器输入部分 -->
+                <div class="calculator-left">
+                    <div class="input-group">
+                        <label for="violationCount">违规次数（第几次违规）：</label>
+                        <input type="number" id="violationCount" min="1" max="15" value="2">
+                        <div class="input-note">注：第一次为警告，从第二次开始计算禁言</div>
                     </div>
-                    <div class="formula-note">结果四舍五入取整</div>
-                </div>
-                
-                <button id="calculateBtn">计算禁言时长</button>
-                
-                <div class="result" id="result">
-                    <div class="result-item">
-                        <span class="result-label">禁言时长：</span>
-                        <span class="result-value" id="duration">1 小时</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">计算公式：</span>
-                        <span class="result-value" id="formulaText">1 × 1.8<sup>0</sup> = 1 小时</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">状态：</span>
-                        <span class="result-status" id="status">正常禁言</span>
-                    </div>
-                </div>
-                
-                <div class="examples">
-                    <h3>禁言规则示例：</h3>
-                    <table class="example-table">
-                        <thead>
-                            <tr>
-                                <th>违规次数</th>
-                                <th>计算过程</th>
-                                <th>禁言时长</th>
-                                <th>说明</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>第1次</td>
-                                <td>-</td>
-                                <td>警告⚠️</td>
-                                <td>仅警告，不禁言</td>
-                            </tr>
-                            <tr>
-                                <td>第2次</td>
-                                <td>1 × 1.8<sup>0</sup> = 1</td>
-                                <td>1小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第3次</td>
-                                <td>1 × 1.8<sup>1</sup> = 1.8</td>
-                                <td>2小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第4次</td>
-                                <td>1 × 1.8<sup>2</sup> = 3.24</td>
-                                <td>3小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第5次</td>
-                                <td>1 × 1.8<sup>3</sup> = 5.832</td>
-                                <td>6小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第6次</td>
-                                <td>1 × 1.8<sup>4</sup> = 10.4976</td>
-                                <td>10小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第7次</td>
-                                <td>1 × 1.8<sup>5</sup> = 18.89568</td>
-                                <td>19小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第8次</td>
-                                <td>1 × 1.8<sup>6</sup> = 34.012224</td>
-                                <td>34小时</td>
-                                <td>四舍五入取整</td>
-                            </tr>
-                            <tr>
-                                <td>第9次</td>
-                                <td>1 × 1.8<sup>7</sup> = 61.222</td>
-                                <td>48小时</td>
-                                <td>达到上限</td>
-                            </tr>
-                            <tr>
-                                <td>第10次</td>
-                                <td>-</td>
-                                <td>拉黑</td>
-                                <td>累计10次违规</td>
-                            </tr>
-                        </tbody>
-                    </table>
                     
-                    <div class="formula-explain">
-                        <strong>公式说明：</strong>
-                        <div>1. 第一次违规：警告⚠️</div>
-                        <div>2. 第n次违规（n≥2）：禁言时长 = min(1 × 1.8<sup>(n-2)</sup>, 48) 小时</div>
-                        <div>3. 计算结果四舍五入取整</div>
-                        <div>4. 累计10次违规后直接拉入黑名单</div>
+                    <div class="formula-group">
+                        <label>计算公式：</label>
+                        <div class="formula">
+                            禁言时长 = min(1 × 1.8<sup>(违规次数-2)</sup>, 48) 小时
+                        </div>
+                        <div class="formula-note">结果四舍五入取整</div>
+                    </div>
+                    
+                    <button id="calculateBtn">计算禁言时长</button>
+                    
+                    <div class="result" id="result">
+                        <div class="result-item">
+                            <span class="result-label">禁言时长：</span>
+                            <span class="result-value" id="duration">1 小时</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">计算公式：</span>
+                            <span class="result-value" id="formulaText">1 × 1.8<sup>0</sup> = 1 小时</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">状态：</span>
+                            <span class="result-status" id="status">正常禁言</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧：示例表格部分 -->
+                <div class="calculator-right">
+                    <div class="examples">
+                        <h3>禁言规则示例：</h3>
+                        <table class="example-table">
+                            <thead>
+                                <tr>
+                                    <th>违规次数</th>
+                                    <th>计算过程</th>
+                                    <th>禁言时长</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>第1次</td>
+                                    <td>-</td>
+                                    <td>警告⚠️</td>
+                                    <td>仅警告，不禁言</td>
+                                </tr>
+                                <tr>
+                                    <td>第2次</td>
+                                    <td>1 × 1.8<sup>0</sup> = 1</td>
+                                    <td>1小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第3次</td>
+                                    <td>1 × 1.8<sup>1</sup> = 1.8</td>
+                                    <td>2小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第4次</td>
+                                    <td>1 × 1.8<sup>2</sup> = 3.24</td>
+                                    <td>3小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第5次</td>
+                                    <td>1 × 1.8<sup>3</sup> = 5.832</td>
+                                    <td>6小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第6次</td>
+                                    <td>1 × 1.8<sup>4</sup> = 10.4976</td>
+                                    <td>10小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第7次</td>
+                                    <td>1 × 1.8<sup>5</sup> = 18.89568</td>
+                                    <td>19小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第8次</td>
+                                    <td>1 × 1.8<sup>6</sup> = 34.012224</td>
+                                    <td>34小时</td>
+                                    <td>四舍五入取整</td>
+                                </tr>
+                                <tr>
+                                    <td>第9次</td>
+                                    <td>1 × 1.8<sup>7</sup> = 61.222</td>
+                                    <td>48小时</td>
+                                    <td>达到上限</td>
+                                </tr>
+                                <tr>
+                                    <td>第10次</td>
+                                    <td>-</td>
+                                    <td>拉黑</td>
+                                    <td>累计10次违规</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="formula-explain">
+                            <strong>公式说明：</strong>
+                            <div>1. 第一次违规：警告⚠️</div>
+                            <div>2. 第n次违规（n≥2）：禁言时长 = min(1 × 1.8<sup>(n-2)</sup>, 48) 小时</div>
+                            <div>3. 计算结果四舍五入取整</div>
+                            <div>4. 累计10次违规后直接拉入黑名单</div>
+                        </div>
                     </div>
                 </div>
             </div>
