@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -151,8 +151,32 @@ h1:after {
 }
 
 .calculator {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
+}
+
+/* 宽屏布局：左右分栏 */
+@media (min-width: 1024px) {
+    .calculator {
+        display: flex;
+        gap: 30px;
+    }
+    
+    .calculator-left {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .calculator-right {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .example-table th,
+    .example-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
 }
 
 .input-group {
@@ -289,6 +313,7 @@ h1:after {
     border-radius: 8px;
     padding: 20px;
     border: 1px solid #e2e8f0;
+    height: 100%;
 }
 
 .examples h3 {
@@ -351,6 +376,10 @@ h1:after {
 @media (max-width: 768px) {
     body {
         padding: 15px;
+    }
+    
+    .container {
+        max-width: 100%;
     }
     
     .header {
@@ -478,5 +507,11 @@ h1:after {
     
     .input-group input {
         border: 1px solid #ccc;
+    }
+    
+    @media (min-width: 1024px) {
+        .calculator {
+            display: block;
+        }
     }
 }
