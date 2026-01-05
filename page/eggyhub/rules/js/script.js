@@ -159,14 +159,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const violationTableBody = document.getElementById('violationTableBody');
     const statsElement = document.getElementById('stats');
     
-    // 用户违规计数
+    // 用户违规计数（按规则分类）
     let userViolationCounts = {};
     let totalRecords = 0;
     
     // 解析违规条例，提取规则编号
     function parseRuleNumber(ruleText) {
-        const match = ruleText.match(/第(\d+)条/);
-        return match ? parseInt(match[1]) : 0;
+        // 支持多种格式：
+        // 1. 纯数字: "1", "2", "3"
+        // 2. 带"第"字: "第1条", "第2条"
+        // 3. 带规则描述: "第1条规则", "违反第2条"
+        
+        const match = ruleText.match(/(\d+)/);
+        return match ? parseInt(match[1]) : 1; // 默认规则1
     }
     
     // 根据规则编号和违规次数确定处理方式
@@ -186,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // 规则1、4、6、7的处理方式：使用指数禁言公式
+        // 注意：规则7是兜底规则，也使用禁言公式
         if (violationCount <= 1) {
             return '警告⚠️';
         } else if (violationCount >= 10) {
@@ -212,6 +218,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else if (punishment.includes('拉黑') || punishment.includes('黑名单')) {
             return 'blacklist-row';
+        } else if (punishment.includes('踢出')) {
+            return 'blacklist-row'; // 踢出也显示为红色
         } else {
             return '';
         }
@@ -237,13 +245,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             lines.forEach(line => {
                 const parts = line.split('---');
-                if (parts.length === 3) {
+                if (parts.length === 4) {
                     const userName = parts[0].trim();
-                    const ruleText = parts[1].trim();
-                    const violationTime = parts[2].trim();
+                    const violationContent = parts[1].trim();
+                    const ruleText = parts[2].trim();
+                    const violationTime = parts[3].trim();
                     const ruleNumber = parseRuleNumber(ruleText);
                     
-                    // 更新用户违规计数
+                    // 更新用户违规计数（按规则分类）
                     if (!userViolationCounts[userName]) {
                         userViolationCounts[userName] = {};
                     }
@@ -256,11 +265,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     records.push({
                         userName,
-                        ruleText,
+                        violationContent,
                         violationTime,
                         ruleNumber,
+                        ruleText, // 保留用于调试
                         userRuleCount: userViolationCounts[userName][ruleNumber]
                     });
+                } else {
+                    console.warn('格式错误的行:', line);
                 }
             });
             
@@ -283,7 +295,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr>
                     <td colspan="4" class="loading">
                         加载违规记录失败：${error.message}<br>
-                        请确保list.txt文件位于正确的位置（../list.txt）
+                        请确保list.txt文件位于正确的位置（../list.txt）<br>
+                        文件格式应为：用户名---违规内容---违规条例---违反时间
                     </td>
                 </tr>
             `;
@@ -317,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tableHTML += `
                 <tr class="${rowClass}">
                     <td><strong>${record.userName}</strong></td>
-                    <td>${record.ruleText}</td>
+                    <td>${record.violationContent}</td>
                     <td>${record.violationTime}</td>
                     <td>${punishment}</td>
                 </tr>
@@ -330,8 +343,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更新统计信息
     function updateStats(count) {
         const userCount = Object.keys(userViolationCounts).length;
+        
+        // 计算总违规次数
+        let totalViolations = 0;
+        Object.values(userViolationCounts).forEach(userRules => {
+            Object.values(userRules).forEach(count => {
+                totalViolations += count;
+            });
+        });
+        
         statsElement.innerHTML = `
-            <span>共 ${count} 条记录，${userCount} 个用户</span>
+            <span>共 ${count} 条记录，${userCount} 个用户，${totalViolations} 次违规</span>
         `;
     }
     
