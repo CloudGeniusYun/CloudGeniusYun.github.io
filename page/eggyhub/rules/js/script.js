@@ -149,10 +149,197 @@ document.addEventListener('DOMContentLoaded', function() {
     calculateBtn.addEventListener('click', updateResult);
     
     // 绑定输入框变化事件
-    //violationCountInput.addEventListener('input', updateResult);
+    violationCountInput.addEventListener('input', updateResult);
     
     // 初始计算一次
     updateResult();
+    
+    // 违规记录系统
+    const refreshBtn = document.getElementById('refreshBtn');
+    const violationTableBody = document.getElementById('violationTableBody');
+    const statsElement = document.getElementById('stats');
+    
+    // 用户违规计数
+    let userViolationCounts = {};
+    let totalRecords = 0;
+    
+    // 解析违规条例，提取规则编号
+    function parseRuleNumber(ruleText) {
+        const match = ruleText.match(/第(\d+)条/);
+        return match ? parseInt(match[1]) : 0;
+    }
+    
+    // 根据规则编号和违规次数确定处理方式
+    function getPunishment(userName, ruleNumber, violationCount) {
+        // 规则2和3的处理方式：第一次警告，不调整则踢出
+        if (ruleNumber === 2 || ruleNumber === 3) {
+            if (violationCount === 1) {
+                return '警告⚠️，请及时调整';
+            } else {
+                return '踢出群聊';
+            }
+        }
+        
+        // 规则5的处理方式：视情节严重程度给予相应处罚
+        if (ruleNumber === 5) {
+            return '视情节严重程度给予相应处罚';
+        }
+        
+        // 规则1、4、6、7的处理方式：使用指数禁言公式
+        if (violationCount <= 1) {
+            return '警告⚠️';
+        } else if (violationCount >= 10) {
+            return '拉入黑名单';
+        } else {
+            const result = calculateMuteDuration(violationCount);
+            if (result.status === 'blacklist') {
+                return '拉入黑名单';
+            } else {
+                return `禁言 ${result.duration} 小时`;
+            }
+        }
+    }
+    
+    // 根据处理方式确定行样式类
+    function getRowClass(punishment) {
+        if (punishment.includes('警告')) {
+            return 'warning-row';
+        } else if (punishment.includes('禁言')) {
+            if (punishment.includes('48小时')) {
+                return 'max-mute-row';
+            } else {
+                return 'mute-row';
+            }
+        } else if (punishment.includes('拉黑') || punishment.includes('黑名单')) {
+            return 'blacklist-row';
+        } else {
+            return '';
+        }
+    }
+    
+    // 从list.txt文件加载违规记录
+    async function loadViolationRecords() {
+        try {
+            const response = await fetch('../list.txt');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const text = await response.text();
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            
+            // 重置计数
+            userViolationCounts = {};
+            totalRecords = lines.length;
+            
+            // 处理每一行记录
+            const records = [];
+            
+            lines.forEach(line => {
+                const parts = line.split('---');
+                if (parts.length === 3) {
+                    const userName = parts[0].trim();
+                    const ruleText = parts[1].trim();
+                    const violationTime = parts[2].trim();
+                    const ruleNumber = parseRuleNumber(ruleText);
+                    
+                    // 更新用户违规计数
+                    if (!userViolationCounts[userName]) {
+                        userViolationCounts[userName] = {};
+                    }
+                    
+                    if (!userViolationCounts[userName][ruleNumber]) {
+                        userViolationCounts[userName][ruleNumber] = 0;
+                    }
+                    
+                    userViolationCounts[userName][ruleNumber]++;
+                    
+                    records.push({
+                        userName,
+                        ruleText,
+                        violationTime,
+                        ruleNumber,
+                        userRuleCount: userViolationCounts[userName][ruleNumber]
+                    });
+                }
+            });
+            
+            // 按时间倒序排列（最新的在前面）
+            records.sort((a, b) => {
+                return new Date(b.violationTime) - new Date(a.violationTime);
+            });
+            
+            // 更新表格
+            updateViolationTable(records);
+            
+            // 更新统计信息
+            updateStats(records.length);
+            
+            return records;
+            
+        } catch (error) {
+            console.error('加载违规记录失败:', error);
+            violationTableBody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="loading">
+                        加载违规记录失败：${error.message}<br>
+                        请确保list.txt文件位于正确的位置（../list.txt）
+                    </td>
+                </tr>
+            `;
+            statsElement.innerHTML = '<span style="color:#dc2626">加载失败</span>';
+            return [];
+        }
+    }
+    
+    // 更新违规记录表格
+    function updateViolationTable(records) {
+        if (records.length === 0) {
+            violationTableBody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="loading">暂无违规记录</td>
+                </tr>
+            `;
+            return;
+        }
+        
+        let tableHTML = '';
+        
+        records.forEach(record => {
+            const punishment = getPunishment(
+                record.userName, 
+                record.ruleNumber, 
+                record.userRuleCount
+            );
+            
+            const rowClass = getRowClass(punishment);
+            
+            tableHTML += `
+                <tr class="${rowClass}">
+                    <td><strong>${record.userName}</strong></td>
+                    <td>${record.ruleText}</td>
+                    <td>${record.violationTime}</td>
+                    <td>${punishment}</td>
+                </tr>
+            `;
+        });
+        
+        violationTableBody.innerHTML = tableHTML;
+    }
+    
+    // 更新统计信息
+    function updateStats(count) {
+        const userCount = Object.keys(userViolationCounts).length;
+        statsElement.innerHTML = `
+            <span>共 ${count} 条记录，${userCount} 个用户</span>
+        `;
+    }
+    
+    // 绑定刷新按钮事件
+    refreshBtn.addEventListener('click', loadViolationRecords);
+    
+    // 初始加载违规记录
+    loadViolationRecords();
     
     // 打印友好提示
     window.addEventListener('beforeprint', function() {
