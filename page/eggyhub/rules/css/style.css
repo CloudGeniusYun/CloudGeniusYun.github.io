@@ -120,12 +120,30 @@ h1:after {
     font-style: italic;
 }
 
+/* 组合部分：计算器和违规公示 */
+.combined-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 40px 0;
+}
+
+@media (min-width: 1024px) {
+    .combined-section {
+        flex-direction: row;
+    }
+    
+    .calculator-section,
+    .violation-section {
+        flex: 1;
+    }
+}
+
 /* 禁言计算器样式 */
 .calculator-section {
     background-color: white;
     border-radius: 12px;
     padding: 30px;
-    margin: 40px 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     border-top: 4px solid #0096ff;
 }
@@ -152,31 +170,6 @@ h1:after {
 
 .calculator {
     max-width: 100%;
-    margin: 0 auto;
-}
-
-/* 宽屏布局：左右分栏 */
-@media (min-width: 1024px) {
-    .calculator {
-        display: flex;
-        gap: 30px;
-    }
-    
-    .calculator-left {
-        flex: 1;
-        min-width: 300px;
-    }
-    
-    .calculator-right {
-        flex: 1;
-        min-width: 300px;
-    }
-    
-    .example-table th,
-    .example-table td {
-        padding: 8px;
-        font-size: 13px;
-    }
 }
 
 .input-group {
@@ -307,69 +300,246 @@ h1:after {
     font-size: 14px;
 }
 
-/* 示例表格样式 */
-.examples {
+.quick-reference {
+    margin-top: 25px;
+    padding: 15px;
     background-color: #f8fafc;
     border-radius: 8px;
-    padding: 20px;
     border: 1px solid #e2e8f0;
-    height: 100%;
 }
 
-.examples h3 {
+.quick-reference h3 {
     font-size: 16px;
     font-weight: 600;
     color: #475569;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-.example-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px 0;
+.reference-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.reference-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.ref-count {
+    font-weight: 600;
+    color: #1e293b;
     font-size: 14px;
 }
 
-.example-table th {
+.ref-duration {
+    font-weight: 600;
+    color: #0096ff;
+    font-size: 13px;
+}
+
+/* 违规公示部分 */
+.violation-section {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid #dc2626;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.section-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e293b;
+    position: relative;
+}
+
+.section-header h2:after {
+    content: '';
+    position: absolute;
+    bottom: -17px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background-color: #dc2626;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#refreshBtn {
+    padding: 8px 16px;
+    background-color: #0096ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#refreshBtn:hover {
+    background-color: #0080e0;
+}
+
+.stats {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.violation-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 400px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.violation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.violation-table th {
     background-color: #f0f9ff;
     color: #0096ff;
     font-weight: 600;
+    padding: 12px 10px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.violation-table td {
     padding: 10px;
-    text-align: center;
-    border: 1px solid #cbd5e1;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
 }
 
-.example-table td {
-    padding: 8px 10px;
-    border: 1px solid #e2e8f0;
-    text-align: center;
-}
-
-.example-table tr:nth-child(even) {
+.violation-table tr:nth-child(even) {
     background-color: #f8fafc;
 }
 
-.example-table tr:hover {
+.violation-table tr:hover {
     background-color: #f0f9ff;
 }
 
-.example-table sup {
-    font-size: 0.8em;
-    vertical-align: super;
+.loading {
+    text-align: center;
+    padding: 30px !important;
+    color: #64748b;
+    font-style: italic;
 }
 
-.formula-explain {
+/* 违规记录状态样式 */
+.warning-row {
+    background-color: #fffbeb !important;
+}
+
+.mute-row {
+    background-color: #f0f9ff !important;
+}
+
+.max-mute-row {
+    background-color: #fef2f2 !important;
+}
+
+.blacklist-row {
+    background-color: #fee2e2 !important;
+}
+
+.warning-row td:last-child {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.mute-row td:last-child {
+    color: #0096ff;
+    font-weight: 600;
+}
+
+.max-mute-row td:last-child {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.blacklist-row td:last-child {
+    color: #991b1b;
+    font-weight: 700;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
     margin-top: 20px;
-    padding: 15px;
-    background-color: #f0f9ff;
-    border-radius: 8px;
-    border-left: 4px solid #0096ff;
-    font-size: 14px;
-    line-height: 1.5;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
 }
 
-.formula-explain div {
-    margin-bottom: 5px;
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.legend-color.warning {
+    background-color: #fffbeb;
+    border: 1px solid #f59e0b;
+}
+
+.legend-color.mute {
+    background-color: #f0f9ff;
+    border: 1px solid #0096ff;
+}
+
+.legend-color.max-mute {
+    background-color: #fef2f2;
+    border: 1px solid #dc2626;
+}
+
+.legend-color.blacklist {
+    background-color: #fee2e2;
+    border: 1px solid #991b1b;
 }
 
 /* 响应式设计 */
@@ -404,12 +574,25 @@ h1:after {
         font-size: 14px;
     }
     
-    .calculator-section {
+    .calculator-section,
+    .violation-section {
         padding: 20px;
     }
     
-    .calculator-section h2 {
+    .calculator-section h2,
+    .section-header h2 {
         font-size: 20px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .controls {
+        width: 100%;
+        justify-content: space-between;
     }
     
     .result-item {
@@ -421,13 +604,8 @@ h1:after {
         margin-top: 5px;
     }
     
-    .example-table {
-        font-size: 12px;
-    }
-    
-    .example-table th,
-    .example-table td {
-        padding: 6px 4px;
+    .reference-items {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -459,19 +637,22 @@ h1:after {
         font-size: 13px;
     }
     
-    .calculator-section {
+    .calculator-section,
+    .violation-section {
         padding: 15px;
     }
     
-    .example-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+    .violation-table {
+        font-size: 12px;
     }
     
-    .formula {
-        font-size: 14px;
-        padding: 6px 10px;
+    .violation-table th,
+    .violation-table td {
+        padding: 8px 6px;
+    }
+    
+    .reference-items {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -495,13 +676,14 @@ h1:after {
         box-shadow: none;
     }
     
-    .calculator-section {
-        break-inside: avoid;
+    .calculator-section,
+    .violation-section {
         box-shadow: none;
         border: 1px solid #ddd;
     }
     
-    #calculateBtn {
+    #calculateBtn,
+    #refreshBtn {
         display: none;
     }
     
@@ -510,7 +692,7 @@ h1:after {
     }
     
     @media (min-width: 1024px) {
-        .calculator {
+        .combined-section {
             display: block;
         }
     }
