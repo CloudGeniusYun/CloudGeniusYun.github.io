@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     calculateBtn.addEventListener('click', updateResult);
     
     // 绑定输入框变化事件
-    violationCountInput.addEventListener('input', updateResult);
+    //violationCountInput.addEventListener('input', updateResult);
     
     // 初始计算一次
     updateResult();
