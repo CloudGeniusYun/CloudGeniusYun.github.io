@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     calculateBtn.addEventListener('click', updateResult);
     
     // 绑定输入框变化事件
-    //violationCountInput.addEventListener('input', updateResult);
+    violationCountInput.addEventListener('input', updateResult);
     
     // 初始计算一次
     updateResult();
@@ -226,9 +226,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 从list.txt文件加载违规记录
-    async function loadViolationRecords() {
+    async function loadViolationRecords(forceRefresh = false) {
         try {
-            const response = await fetch('list.txt');
+            // 添加时间戳参数避免浏览器缓存
+            const timestamp = forceRefresh ? `?t=${Date.now()}` : '';
+            const response = await fetch(`list.txt${timestamp}`);
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -295,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr>
                     <td colspan="4" class="loading">
                         加载违规记录失败：${error.message}<br>
-                        请确保list.txt文件位于正确的位置（../list.txt）<br>
+                        请确保list.txt文件位于正确的位置（与index.html同级）<br>
                         文件格式应为：用户名---违规内容---违规条例---违反时间
                     </td>
                 </tr>
@@ -358,7 +361,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 绑定刷新按钮事件
-    refreshBtn.addEventListener('click', loadViolationRecords);
+    refreshBtn.addEventListener('click', function() {
+        // 显示加载状态
+        const originalText = this.textContent;
+        this.textContent = '刷新中...';
+        this.disabled = true;
+        
+        // 强制刷新，添加时间戳避免缓存
+        loadViolationRecords(true).finally(() => {
+            // 恢复按钮状态
+            this.textContent = originalText;
+            this.disabled = false;
+        });
+    });
     
     // 初始加载违规记录
     loadViolationRecords();
