@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 从list.txt文件加载违规记录
     async function loadViolationRecords() {
         try {
-            const response = await fetch('../list.txt');
+            const response = await fetch('list.txt');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
