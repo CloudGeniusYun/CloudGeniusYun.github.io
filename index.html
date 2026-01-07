@@ -54,7 +54,7 @@
             margin-top: 20px;
         }
 
-        .sponsor-button, .main-site-button, .group-chat-button, .forum-button, .gratitude-button {
+        .sponsor-button, .main-site-button, .group-chat-button, .forum-button, .gratitude-button, .whitecrane-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -94,7 +94,12 @@
             box-shadow: 0 8px 20px rgba(0, 114, 255, 0.4);
         }
 
-        .sponsor-button:hover, .main-site-button:hover, .group-chat-button:hover, .forum-button:hover, .gratitude-button:hover {
+        .whitecrane-button {
+            background: linear-gradient(45deg, #8A2BE2, #4B0082);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .sponsor-button:hover, .main-site-button:hover, .group-chat-button:hover, .forum-button:hover, .gratitude-button:hover, .whitecrane-button:hover {
             transform: translateY(-5px);
         }
 
@@ -118,11 +123,15 @@
             box-shadow: 0 12px 25px rgba(0, 114, 255, 0.5);
         }
 
-        .sponsor-button:active, .main-site-button:active, .group-chat-button:active, .forum-button:active, .gratitude-button:active {
+        .whitecrane-button:hover {
+            box-shadow: 0 12px 25px rgba(138, 43, 226, 0.5);
+        }
+
+        .sponsor-button:active, .main-site-button:active, .group-chat-button:active, .forum-button:active, .gratitude-button:active, .whitecrane-button:active {
             transform: translateY(0);
         }
 
-        .sponsor-button::before, .main-site-button::before, .group-chat-button::before, .forum-button::before, .gratitude-button::before {
+        .sponsor-button::before, .main-site-button::before, .group-chat-button::before, .forum-button::before, .gratitude-button::before, .whitecrane-button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -133,7 +142,7 @@
             transition: 0.5s;
         }
 
-        .sponsor-button:hover::before, .main-site-button:hover::before, .group-chat-button:hover::before, .forum-button:hover::before, .gratitude-button:hover::before {
+        .sponsor-button:hover::before, .main-site-button:hover::before, .group-chat-button:hover::before, .forum-button:hover::before, .gratitude-button:hover::before, .whitecrane-button:hover::before {
             left: 100%;
         }
 
@@ -144,6 +153,36 @@
             border-radius: 6px;
             object-fit: cover;
             border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* 站外链接分割线样式 */
+        .section-divider {
+            width: 100%;
+            margin: 30px 0 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider-text {
+            display: inline-block;
+            padding: 0 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .divider-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            z-index: -1;
         }
 
         .footer {
@@ -157,13 +196,18 @@
                 font-size: 2rem;
             }
 
-            .sponsor-button, .main-site-button, .group-chat-button, .forum-button, .gratitude-button {
+            .sponsor-button, .main-site-button, .group-chat-button, .forum-button, .gratitude-button, .whitecrane-button {
                 padding: 15px 30px;
                 font-size: 1.2rem;
             }
 
             .container {
                 padding: 30px 20px;
+            }
+            
+            .divider-text {
+                font-size: 1rem;
+                padding: 0 15px;
             }
         }
     </style>
@@ -191,6 +235,18 @@
             <a href="./page/about/index.html" class="forum-button">
                 <img src="./picture/about.png" alt="关于" class="button-icon">
                 关于
+            </a>
+            
+            <!-- 站外链接分割线 -->
+            <div class="section-divider">
+                <div class="divider-line"></div>
+                <div class="divider-text">站外链接</div>
+            </div>
+            
+            <!-- 白鹤星球按钮 -->
+            <a href="https://whitecrane.example.com" class="whitecrane-button">
+                <img src="./picture/whitecrane.png" alt="白鹤星球" class="button-icon">
+                白鹤星球
             </a>
         </div>
     </div>
