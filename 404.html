@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘿，页面跑丢了 | 404</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 装饰性背景元素 */
+        .bg-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            z-index: -1;
+        }
+
+        /* 主容器 */
+        .container {
+            text-align: center;
+            max-width: 900px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 故障艺术效果 - 404 标题 */
+        .glitch-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .glitch {
+            font-size: 8.5rem;
+            font-weight: 900;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 5px;
+            text-shadow: 4px 4px 0 #ff0055, -4px -4px 0 #00ccff;
+            animation: glitch-skew 4s infinite linear alternate-reverse;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch::before {
+            animation: glitch-anim-1 3s infinite linear alternate-reverse;
+            color: #ff0055;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+            color: #00ccff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-anim-1 {
+            0%, 100% { clip-path: inset(20% 0 65% 0); transform: translate(-2px, 2px); }
+            20% { clip-path: inset(70% 0 5% 0); transform: translate(3px, -3px); }
+            40% { clip-path: inset(10% 0 80% 0); transform: translate(-3px, 1px); }
+            60% { clip-path: inset(60% 0 30% 0); transform: translate(2px, -1px); }
+            80% { clip-path: inset(5% 0 60% 0); transform: translate(-1px, 3px); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0%, 100% { clip-path: inset(65% 0 20% 0); transform: translate(3px, -2px); }
+            20% { clip-path: inset(10% 0 70% 0); transform: translate(-3px, 3px); }
+            40% { clip-path: inset(80% 0 10% 0); transform: translate(1px, -3px); }
+            60% { clip-path: inset(30% 0 60% 0); transform: translate(-1px, 2px); }
+            80% { clip-path: inset(40% 0 5% 0); transform: translate(3px, -1px); }
+        }
+
+        @keyframes glitch-skew {
+            0%, 40%, 44%, 58%, 61%, 65%, 69%, 73%, 100% { transform: skew(0deg); }
+            41% { transform: skew(5deg); }
+            42% { transform: skew(-5deg); }
+            59% { transform: skew(3deg); }
+            60% { transform: skew(-2deg); }
+            63% { transform: skew(1deg); }
+            70% { transform: skew(-1deg); }
+        }
+
+        /* 副标题 */
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #aaa;
+            font-weight: 300;
+        }
+
+        /* “拽”文案区域 */
+        .quote-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #ff0055;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 700px;
+            border-radius: 0 12px 12px 0;
+            text-align: left;
+        }
+
+        .quote {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #f0f0f0;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .quote i {
+            color: #00ccff;
+            margin-right: 10px;
+        }
+
+        .author {
+            text-align: right;
+            color: #888;
+            font-style: italic;
+            font-size: 1rem;
+        }
+
+        /* 重力感应按钮 */
+        .button-container {
+            margin: 40px 0;
+            position: relative;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #runaway-btn {
+            padding: 18px 36px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff0055, #00ccff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            box-shadow: 0 10px 25px rgba(255, 0, 85, 0.4);
+            z-index: 20;
+        }
+
+        #runaway-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 35px rgba(255, 0, 85, 0.6);
+        }
+
+        /* 操作区域 */
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .action-btn i {
+            margin-right: 10px;
+        }
+
+        .home {
+            background: linear-gradient(90deg, #00ccff, #0088ff);
+        }
+
+        .contact {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 页脚 */
+        footer {
+            margin-top: 50px;
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .glitch { font-size: 5rem; }
+            .subtitle { font-size: 1.4rem; }
+            .quote { font-size: 1.2rem; }
+            .container { padding: 25px; }
+            .actions { flex-direction: column; align-items: center; }
+            .action-btn { width: 90%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态背景元素 -->
+    <div class="bg-element" style="width: 300px; height: 300px; top: -150px; left: -150px;"></div>
+    <div class="bg-element" style="width: 200px; height: 200px; bottom: -100px; right: -100px;"></div>
+
+    <div class="container">
+        <div class="glitch-container">
+            <h1 class="glitch" data-text="404">404</h1>
+        </div>
+        
+        <p class="subtitle">
+            <i class="fas fa-exclamation-triangle"></i> 哎呀，你要找的页面可能被黑洞吸走了
+        </p>
+
+        <!-- “拽”文案区域 -->
+        <div class="quote-box">
+            <p class="quote" id="dynamic-quote">
+                <!-- 随机文案由JavaScript填充 -->
+            </p>
+            <p class="author">—— 来自本网站的提醒</p>
+        </div>
+
+        <!-- 重力感应按钮 -->
+        <div class="button-container">
+            <button id="runaway-btn">
+                <i class="fas fa-hand-point-right"></i> 不服？点我试试
+            </button>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="actions">
+            <a href="/" class="action-btn home">
+                <i class="fas fa-home"></i> 带我回首页
+            </a>
+            <a href="javascript:history.back()" class="action-btn">
+                <i class="fas fa-arrow-left"></i> 返回上一页
+            </a>
+            <a href="mailto:your-email@example.com" class="action-btn contact">
+                <i class="fas fa-envelope"></i> 联系站长
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© <span id="current-year"></span> 你的网站名. 本页面由“404故障艺术生成器”强力驱动</p>
+        <p style="margin-top: 5px; font-size: 0.8rem; color: #555;">
+            <i class="fas fa-magic"></i> 提示：刷新页面可以更换一句新文案
+        </p>
+    </footer>
+
+    <script>
+        // 设置当前年份
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // 随机“拽”文案库
+        const quotes = [
+            "页面不见了？很正常，智者向内寻求力量。",
+            "这个页面可能去追求自由和远方了，就像你一直想的那样。",
+            "别找了，不存在的页面就像你明天要早起一样虚无。",
+            "404不是错误，是一次意外的数字冥想。",
+            "你发现了一个开发者都没发现的隐藏关卡，可惜没奖励。",
+            "页面加载失败，但你的帅气/美丽加载成功了。",
+            "服务器说它今天不想工作，并表示理解你为什么也不想上班。",
+            "网页失踪案已记录，但破案优先级低于喝杯咖啡。",
+            "这里什么都没有，除了你浪费的这几秒钟。珍惜它。",
+            "错误代码：404。深层含义：给你一个冷静思考人生的机会。"
+        ];
+
+        // 随机选择一句文案并显示
+        function setRandomQuote() {
+            const quoteElement = document.getElementById('dynamic-quote');
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            quoteElement.innerHTML = `<i class="fas fa-quote-left"></i> ${quotes[randomIndex]}`;
+        }
+        // 页面加载和刷新时都更新
+        setRandomQuote();
+
+        // 重力感应按钮：鼠标靠近时逃跑
+        const runawayBtn = document.getElementById('runaway-btn');
+        const buttonContainer = document.querySelector('.button-container');
+        
+        if (buttonContainer && runawayBtn) {
+            buttonContainer.addEventListener('mousemove', function(e) {
+                const containerRect = buttonContainer.getBoundingClientRect();
+                const btnRect = runawayBtn.getBoundingClientRect();
+                
+                // 容器中心点
+                const containerCenterX = containerRect.left + containerRect.width / 2;
+                const containerCenterY = containerRect.top + containerRect.height / 2;
+                
+                // 鼠标位置
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                
+                // 计算鼠标与按钮中心的距离
+                const btnCenterX = btnRect.left + btnRect.width / 2;
+                const btnCenterY = btnRect.top + btnRect.height / 2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - btnCenterX, 2) + 
+                    Math.pow(mouseY - btnCenterY, 2)
+                );
+                
+                // 如果鼠标距离按钮太近（小于150px），让按钮“逃跑”
+                const runDistance = 150;
+                if (distance < runDistance) {
+                    // 计算远离鼠标的新位置（指向容器中心的反方向）
+                    const deltaX = btnCenterX - mouseX;
+                    const deltaY = btnCenterY - mouseY;
+                    
+                    // 归一化并设置移动距离
+                    const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const moveX = (deltaX / length) * (runDistance - distance);
+                    const moveY = (deltaY / length) * (runDistance - distance);
+                    
+                    // 计算新位置，确保按钮不跑出容器
+                    let newX = parseFloat(runawayBtn.style.left || 0) + moveX;
+                    let newY = parseFloat(runawayBtn.style.top || 0) + moveY;
+                    
+                    // 限制按钮在容器内移动
+                    const maxX = (containerRect.width - btnRect.width) / 2;
+                    const maxY = (containerRect.height - btnRect.height) / 2;
+                    
+                    newX = Math.max(-maxX, Math.min(maxX, newX));
+                    newY = Math.max(-maxY, Math.min(maxY, newY));
+                    
+                    // 应用新位置
+                    runawayBtn.style.left = newX + 'px';
+                    runawayBtn.style.top = newY + 'px';
+                }
+            });
+            
+            // 点击按钮时让它回到中心，并显示提示
+            runawayBtn.addEventListener('click', function() {
+                // 复位
+                runawayBtn.style.left = '0px';
+                runawayBtn.style.top = '0px';
+                
+                // 更换按钮文字
+                const originalHTML = runawayBtn.innerHTML;
+                runawayBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> 好吧，算你厉害！';
+                runawayBtn.style.background = 'linear-gradient(90deg, #00ff88, #00ccff)';
+                
+                // 3秒后恢复
+                setTimeout(() => {
+                    runawayBtn.innerHTML = originalHTML;
+                    runawayBtn.style.background = 'linear-gradient(90deg, #ff0055, #00ccff)';
+                }, 3000);
+                
+                // 同时换一句新文案
+                setRandomQuote();
+            });
+        }
+
+        // 添加一些随机的背景元素
+        for (let i = 0; i < 15; i++) {
+            const bgEl = document.createElement('div');
+            bgEl.classList.add('bg-element');
+            const size = Math.random() * 100 + 50;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            
+            bgEl.style.width = `${size}px`;
+            bgEl.style.height = `${size}px`;
+            bgEl.style.left = `${posX}vw`;
+            bgEl.style.top = `${posY}vh`;
+            bgEl.style.background = `rgba(255, 255, 255, ${Math.random() * 0.02})`;
+            
+            document.body.appendChild(bgEl);
+        }
+    </script>
+</body>
+</html>
