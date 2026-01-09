@@ -27,11 +27,13 @@
             color: #f0f8ff;
             min-height: 100vh;
             font-family: 'Rajdhani', sans-serif;
-            overflow: hidden;
+            /* 修改：允许页面滚动 */
+            overflow-x: hidden;
+            overflow-y: auto; /* 允许垂直滚动 */
             position: relative;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* 改为顶部对齐 */
             padding: 20px;
         }
 
@@ -46,7 +48,7 @@
             pointer-events: none;
         }
 
-        /* 主容器 */
+        /* 主容器 - 修改高度设置 */
         .container {
             position: relative;
             z-index: 10;
@@ -61,7 +63,9 @@
             box-shadow: 
                 0 0 60px rgba(0, 243, 255, 0.25),
                 inset 0 0 40px rgba(0, 20, 40, 0.5);
-            overflow: hidden;
+            /* 修改：允许容器高度根据内容自适应 */
+            margin: 20px auto; /* 增加上下边距 */
+            min-height: auto; /* 移除固定最小高度 */
         }
 
         /* 扫描线效果 */
@@ -221,7 +225,7 @@
             51%, 100% { opacity: 0.3; }
         }
 
-        /* 落款样式 - 修改：与正文颜色统一，完全不透明，移除斜体 */
+        /* 落款样式 - 与正文颜色统一，完全不透明，移除斜体 */
         .quote-signature {
             position: absolute;
             bottom: 0;
@@ -380,38 +384,63 @@
 
         /* 窄屏响应式设计 */
         @media (max-width: 768px) {
+            body {
+                padding: 15px; /* 减少内边距 */
+                align-items: flex-start; /* 确保顶部对齐 */
+                min-height: 100vh;
+                display: block; /* 改为块级布局 */
+            }
+            
+            .container {
+                padding: 30px 20px; /* 减少内边距 */
+                margin: 0 auto 30px; /* 调整边距 */
+                border-radius: 20px; /* 稍微减小圆角 */
+            }
+            
             .glitch-tech { 
                 font-size: 5.5rem; 
-                letter-spacing: 6px; 
+                letter-spacing: 6px;
+                margin-bottom: 10px;
             }
+            
             .subtitle-tech { 
-                font-size: 1.2rem; 
+                font-size: 1.2rem;
+                letter-spacing: 3px;
+                margin-top: -5px;
             }
+            
             .info-panel { 
                 padding: 25px 25px 45px 25px;
-                min-height: 200px; 
+                min-height: 200px;
+                margin: 30px auto;
             }
+            
             .quote-display { 
                 font-size: 1.3rem; 
-                min-height: 120px; 
+                min-height: 120px;
+                line-height: 1.6;
             }
+            
             .quote-signature { 
                 font-size: 1.1rem; 
                 padding: 6px 0 0 15px;
                 right: 5px;
-                color: #f0f8ff; /* 保持与正文颜色统一 */
+                color: #f0f8ff;
             }
-            .container { 
-                padding: 35px 25px; 
-            }
+            
             .actions { 
                 flex-direction: column; 
-                align-items: center; 
+                align-items: center;
+                gap: 15px;
+                margin-top: 30px;
             }
+            
             .action-btn { 
                 width: 100%; 
                 max-width: 320px; 
-                justify-content: center; 
+                justify-content: center;
+                padding: 15px 30px;
+                font-size: 1rem;
             }
             
             /* 窄屏下完全隐藏逃跑按钮 */
@@ -430,6 +459,57 @@
             .refresh-quote-btn:hover {
                 top: -22px;
                 right: -22px;
+            }
+            
+            footer {
+                margin-top: 40px;
+                font-size: 0.9rem;
+            }
+            
+            .hint {
+                font-size: 0.85rem;
+                line-height: 1.4;
+            }
+        }
+        
+        /* 超小屏幕额外优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 15px;
+                margin: 0 auto 20px;
+            }
+            
+            .glitch-tech {
+                font-size: 4.5rem;
+                letter-spacing: 4px;
+            }
+            
+            .subtitle-tech {
+                font-size: 1rem;
+                letter-spacing: 2px;
+            }
+            
+            .info-panel {
+                padding: 20px 20px 40px 20px;
+                min-height: 180px;
+            }
+            
+            .quote-display {
+                font-size: 1.1rem;
+                min-height: 100px;
+            }
+            
+            .quote-signature {
+                font-size: 1rem;
+            }
+            
+            .actions {
+                gap: 12px;
+            }
+            
+            .action-btn {
+                padding: 12px 25px;
+                font-size: 0.95rem;
             }
         }
     </style>
