@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>路径丢失 | 404</title>
+    <title>信号中断 | 404</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -176,17 +176,17 @@
             text-shadow: 0 0 15px rgba(168, 254, 255, 0.8);
         }
 
-        /* 信息显示面板 - 重要修改 */
+        /* 信息显示面板 */
         .info-panel {
             background: rgba(10, 20, 50, 0.7);
             border: 1px solid rgba(0, 243, 255, 0.4);
             border-radius: 16px;
-            padding: 35px 40px 55px 40px; /* 增加底部内边距为落款留空间 */
+            padding: 35px 40px 55px 40px;
             margin: 40px auto;
             max-width: 800px;
             position: relative;
             text-align: left;
-            min-height: 220px; /* 增加最小高度 */
+            min-height: 220px;
             display: flex;
             align-items: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -201,7 +201,7 @@
             min-height: 140px;
             font-weight: 500;
             position: relative;
-            padding-bottom: 25px; /* 为落款预留空间 */
+            padding-bottom: 25px;
         }
 
         /* 打字机光标效果 */
@@ -221,36 +221,28 @@
             51%, 100% { opacity: 0.3; }
         }
 
-        /* 新增：文字落款 */
+        /* 落款样式 - 与正文统一 */
         .quote-signature {
             position: absolute;
             bottom: 0;
             right: 0;
-            color: rgba(168, 254, 255, 0.7);
-            font-size: 1.1rem;
+            color: rgba(240, 248, 255, 0.85);
+            font-size: 1.3rem;
             font-style: italic;
             font-weight: 400;
-            letter-spacing: 1px;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
             text-align: right;
-            padding: 5px 10px;
-            background: rgba(0, 20, 40, 0.3);
-            border-radius: 6px;
-            border-left: 2px solid rgba(0, 243, 255, 0.3);
-            animation: signature-glow 4s ease-in-out infinite alternate;
+            padding: 8px 0 0 20px;
+            background: none;
+            border: none;
+            border-radius: 0;
+            animation: none;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
         }
 
-        @keyframes signature-glow {
-            0% { 
-                text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
-                border-left-color: rgba(0, 243, 255, 0.3);
-            }
-            100% { 
-                text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
-                border-left-color: rgba(185, 103, 255, 0.5);
-            }
-        }
-
-        /* 刷新按钮 - 调整位置避免遮挡 */
+        /* 刷新按钮 - 外部位置不遮挡光标 */
         .refresh-quote-btn {
             position: absolute;
             top: -25px;
@@ -281,7 +273,7 @@
             right: -28px;
         }
 
-        /* 全屏逃跑按钮 */
+        /* 全屏逃跑按钮 - 基础样式 */
         #runaway-btn {
             padding: 22px 45px;
             font-size: 1.5rem;
@@ -387,30 +379,60 @@
             100% { left: 200%; opacity: 0; }
         }
 
-        /* 响应式设计 */
+        /* 窄屏响应式设计 */
         @media (max-width: 768px) {
-            .glitch-tech { font-size: 5.5rem; letter-spacing: 6px; }
-            .subtitle-tech { font-size: 1.2rem; }
+            .glitch-tech { 
+                font-size: 5.5rem; 
+                letter-spacing: 6px; 
+            }
+            .subtitle-tech { 
+                font-size: 1.2rem; 
+            }
             .info-panel { 
                 padding: 25px 25px 45px 25px;
                 min-height: 200px; 
             }
-            .quote-display { font-size: 1.3rem; min-height: 120px; }
-            .quote-signature { 
-                font-size: 1rem; 
-                right: 10px;
-                background: rgba(0, 20, 40, 0.5);
+            .quote-display { 
+                font-size: 1.3rem; 
+                min-height: 120px; 
             }
-            .container { padding: 35px 25px; }
-            .actions { flex-direction: column; align-items: center; }
-            .action-btn { width: 100%; max-width: 320px; justify-content: center; }
-            #runaway-btn { 
-                padding: 18px 35px; 
-                font-size: 1.2rem;
+            .quote-signature { 
+                font-size: 1.1rem; 
+                padding: 6px 0 0 15px;
+                right: 5px;
+            }
+            .container { 
+                padding: 35px 25px; 
+            }
+            .actions { 
+                flex-direction: column; 
+                align-items: center; 
+            }
+            .action-btn { 
+                width: 100%; 
+                max-width: 320px; 
+                justify-content: center; 
+            }
+            
+            /* 窄屏下缩小逃跑按钮 */
+            #runaway-btn {
+                padding: 12px 24px;
+                font-size: 1rem;
+                border-width: 1.5px;
+                backdrop-filter: blur(5px);
+                min-width: 160px;
+                max-width: 200px;
+                white-space: nowrap;
                 left: 50% !important;
                 top: 50% !important;
                 transform: translate(-50%, -50%) !important;
             }
+            
+            #runaway-btn i {
+                margin-right: 8px;
+                font-size: 0.9em;
+            }
+            
             .refresh-quote-btn {
                 width: 45px;
                 height: 45px;
@@ -418,6 +440,7 @@
                 top: -20px;
                 right: -20px;
             }
+            
             .refresh-quote-btn:hover {
                 top: -22px;
                 right: -22px;
@@ -435,19 +458,18 @@
             <p class="subtitle-tech"><i class="fas fa-satellite-dish"></i> 信号中断 · 全屏逃脱模式已激活</p>
         </div>
 
-        <!-- 信息面板 - 已添加落款 -->
+        <!-- 信息面板 -->
         <div class="info-panel">
             <!-- 刷新语录按钮 -->
             <button class="refresh-quote-btn" id="refreshQuoteBtn" title="换一句语录">
                 <i class="fas fa-sync-alt"></i>
             </button>
             
-            <!-- 语录显示区域 - 包含落款 -->
+            <!-- 语录显示区域 -->
             <div class="quote-display" id="quoteDisplay">
                 <!-- 打字机动效将在此显示 -->
-                <!-- 落款将通过JavaScript动态添加 -->
             </div>
-            <!-- 新增的文字落款 -->
+            <!-- 统一样式落款 -->
             <div class="quote-signature">——深空网络响应</div>
         </div>
 
@@ -459,13 +481,13 @@
             <a href="javascript:history.back()" class="action-btn">
                 <i class="fas fa-arrow-circle-left"></i> 重新路由
             </a>
-            <a href="mailto:3491395670@qq.com" class="action-btn">
+            <a href="mailto:your-email@example.com" class="action-btn">
                 <i class="fas fa-terminal"></i> 联系管理员
             </a>
         </div>
 
         <footer>
-            <p>© <span id="currentYear"></span> 云云鬼才 • 深空网络协议 | 错误日志 #<span id="errorCode"></span></p>
+            <p>© <span id="currentYear"></span> 深空网络协议 | 错误日志 #<span id="errorCode"></span></p>
             <p class="hint"><i class="fas fa-gamepad"></i> 提示：中央按钮可在全屏幕自由移动，试试追捕它！</p>
         </footer>
     </div>
@@ -491,13 +513,13 @@
             "错误代码：404。深层含义：给你一个冷静思考人生的机会。",
             "错误404：宇宙是沉默的，但你的点击在此产生了回响。",
             "这个页面存在于另一个概率云中。观测行为导致了它的坍缩。",
-            "协议连接超时。服务器回应：“意义本身在此处也是404。”",
+            "协议连接超时。服务器回应：'意义本身在此处也是404。'",
             "你发现了一个空指针。伟大的探索总是从面对虚无开始。",
             "路径解析失败。但失败本身，是宇宙最可靠的常数之一。",
             "页面未找到。这或许证明了，虚无是存在的终极形式。",
             "你访问的坐标是空的。但空，不正是所有可能性的起点吗？",
             "404。一个完美的错误，存在于这个不完美的数字世界。",
-            "这里什么也没有。但“没有”本身，不正是一个有趣的东西吗？",
+            "这里什么也没有。但‘没有’本身，不正是一个有趣的东西吗？",
             "别找了。这个页面比你明天的计划还要虚无。"
         ];
 
@@ -510,7 +532,6 @@
                 clearTimeout(currentTypingTimeout);
             }
             
-            // 确保落款保持可见
             element.innerHTML = '';
             let i = 0;
             
@@ -520,7 +541,6 @@
                     i++;
                     currentTypingTimeout = setTimeout(type, speed);
                 } else {
-                    // 打字完成，只显示静态光标
                     element.innerHTML = text + '<span class="typing-cursor"></span>';
                 }
             }
@@ -624,6 +644,11 @@
         let isMoving = false;
         let escapePower = 25;
 
+        // 检测是否为窄屏
+        function isNarrowScreen() {
+            return window.innerWidth <= 768;
+        }
+
         document.addEventListener('mousemove', function(e) {
             if (!runawayBtn || isMoving) return;
             
@@ -639,7 +664,8 @@
                 Math.pow(mouseY - btnCenterY, 2)
             );
             
-            const triggerDist = 150;
+            // 窄屏下增大触发距离，让按钮更"敏感"
+            const triggerDist = isNarrowScreen() ? 180 : 150;
             
             if (distance < triggerDist) {
                 isMoving = true;
@@ -648,8 +674,11 @@
                 const deltaY = btnCenterY - mouseY;
                 
                 const length = Math.max(Math.sqrt(deltaX*deltaX + deltaY*deltaY), 0.1);
-                const moveX = (deltaX / length) * (triggerDist - distance) / escapePower * 15;
-                const moveY = (deltaY / length) * (triggerDist - distance) / escapePower * 15;
+                
+                // 窄屏下减小移动幅度，让按钮更容易被点击
+                const moveMultiplier = isNarrowScreen() ? 10 : 15;
+                const moveX = (deltaX / length) * (triggerDist - distance) / escapePower * moveMultiplier;
+                const moveY = (deltaY / length) * (triggerDist - distance) / escapePower * moveMultiplier;
                 
                 let currentX = parseFloat(runawayBtn.style.left) || (window.innerWidth/2 - btnRect.width/2);
                 let currentY = parseFloat(runawayBtn.style.top) || (window.innerHeight/2 - btnRect.height/2);
@@ -657,24 +686,26 @@
                 let newX = currentX + moveX;
                 let newY = currentY + moveY;
                 
-                const margin = 20;
-                const maxX = window.innerWidth - btnRect.width - margin;
-                const maxY = window.innerHeight - btnRect.height - margin;
+                // 窄屏下限制活动范围（中央安全区域）
+                const screenPadding = isNarrowScreen() ? window.innerWidth * 0.15 : 20;
+                const maxX = window.innerWidth - btnRect.width - screenPadding;
+                const maxY = window.innerHeight - btnRect.height - screenPadding;
                 
-                newX = Math.max(margin, Math.min(maxX, newX));
-                newY = Math.max(margin, Math.min(maxY, newY));
+                newX = Math.max(screenPadding, Math.min(maxX, newX));
+                newY = Math.max(screenPadding, Math.min(maxY, newY));
                 
                 runawayBtn.style.left = newX + 'px';
                 runawayBtn.style.top = newY + 'px';
                 
+                // 移动时的视觉反馈
                 runawayBtn.style.borderColor = 'rgba(255, 42, 195, 0.8)';
-                runawayBtn.style.boxShadow = '0 0 50px rgba(255, 42, 195, 0.5)';
+                runawayBtn.style.boxShadow = '0 0 30px rgba(255, 42, 195, 0.5)';
                 
                 setTimeout(() => {
                     isMoving = false;
                     runawayBtn.style.borderColor = 'rgba(0, 243, 255, 0.6)';
-                    runawayBtn.style.boxShadow = '0 0 40px rgba(0, 243, 255, 0.4)';
-                }, 100);
+                    runawayBtn.style.boxShadow = '0 0 25px rgba(0, 243, 255, 0.4)';
+                }, isNarrowScreen() ? 80 : 100);
             }
         });
 
@@ -721,6 +752,16 @@
         window.addEventListener('load', () => {
             initParticles();
             showRandomQuote();
+            
+            // 窗口大小变化时重新调整
+            window.addEventListener('resize', function() {
+                if (isNarrowScreen()) {
+                    // 窄屏下确保按钮回到中央
+                    runawayBtn.style.left = '50%';
+                    runawayBtn.style.top = '50%';
+                    runawayBtn.style.transform = 'translate(-50%, -50%)';
+                }
+            });
         });
 
         // ========== 按钮波纹效果 ==========
@@ -762,11 +803,12 @@
         `;
         document.head.appendChild(rippleStyle);
 
+        // 防止按钮被拖到屏幕外（辅助功能）
         setInterval(() => {
             if (!runawayBtn) return;
             
             const btnRect = runawayBtn.getBoundingClientRect();
-            const margin = 10;
+            const margin = isNarrowScreen() ? 30 : 10;
             
             if (btnRect.left < margin || btnRect.top < margin || 
                 btnRect.right > window.innerWidth - margin || 
