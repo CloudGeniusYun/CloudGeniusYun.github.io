@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>信号中断 | 404</title>
+    <title>路径丢失 | 404</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -11,7 +11,7 @@
             --neon-blue: #00f3ff;
             --neon-purple: #b967ff;
             --neon-pink: #ff2ac3;
-            --light-space: #121230; /* 更亮的深蓝背景 */
+            --light-space: #121230;
             --matrix-green: #00ff41;
             --text-glow: 0 0 12px var(--neon-blue), 0 0 24px rgba(0, 243, 255, 0.6);
         }
@@ -27,7 +27,7 @@
             color: #f0f8ff;
             min-height: 100vh;
             font-family: 'Rajdhani', sans-serif;
-            overflow: hidden; /* 隐藏滚动条，确保按钮不跑出视口 */
+            overflow: hidden;
             position: relative;
             display: flex;
             justify-content: center;
@@ -35,7 +35,7 @@
             padding: 20px;
         }
 
-        /* 明亮的动态粒子背景 */
+        /* 动态粒子画布 */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -46,16 +46,16 @@
             pointer-events: none;
         }
 
-        /* 主容器 - 更明亮的玻璃态 */
+        /* 主容器 */
         .container {
             position: relative;
             z-index: 10;
             max-width: 900px;
             width: 100%;
-            background: rgba(20, 25, 60, 0.75); /* 更亮的半透背景 */
+            background: rgba(20, 25, 60, 0.75);
             backdrop-filter: blur(15px);
             border-radius: 24px;
-            border: 1px solid rgba(0, 243, 255, 0.4); /* 更亮的边框 */
+            border: 1px solid rgba(0, 243, 255, 0.4);
             padding: 50px 40px;
             text-align: center;
             box-shadow: 
@@ -64,21 +64,21 @@
             overflow: hidden;
         }
 
-        /* 更强的扫描线效果 */
+        /* 扫描线效果 */
         .container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 3px; /* 更粗的扫描线 */
+            height: 3px;
             background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-pink), transparent);
             animation: scanline 3s linear infinite;
             z-index: 12;
             filter: blur(1px);
         }
 
-        /* 标题区域 - 增强故障效果 */
+        /* 标题区域 */
         .title-section {
             margin-bottom: 30px;
             position: relative;
@@ -86,7 +86,7 @@
 
         .glitch-tech {
             font-family: 'Orbitron', sans-serif;
-            font-size: 9rem; /* 更大的标题 */
+            font-size: 9rem;
             font-weight: 900;
             color: #ffffff;
             position: relative;
@@ -167,7 +167,7 @@
         }
 
         .subtitle-tech {
-            font-size: 1.6rem; /* 更大的副标题 */
+            font-size: 1.6rem;
             color: #a8feff;
             font-weight: 600;
             letter-spacing: 4px;
@@ -176,29 +176,32 @@
             text-shadow: 0 0 15px rgba(168, 254, 255, 0.8);
         }
 
-        /* 信息显示面板 */
+        /* 信息显示面板 - 重要修改 */
         .info-panel {
             background: rgba(10, 20, 50, 0.7);
             border: 1px solid rgba(0, 243, 255, 0.4);
             border-radius: 16px;
-            padding: 35px 40px;
+            padding: 35px 40px 55px 40px; /* 增加底部内边距为落款留空间 */
             margin: 40px auto;
             max-width: 800px;
             position: relative;
             text-align: left;
-            min-height: 200px;
+            min-height: 220px; /* 增加最小高度 */
             display: flex;
             align-items: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
+        /* 语录显示区域 */
         .quote-display {
-            font-size: 1.6rem; /* 更大的字体 */
+            font-size: 1.6rem;
             line-height: 1.8;
             color: #f0f8ff;
             width: 100%;
             min-height: 140px;
             font-weight: 500;
+            position: relative;
+            padding-bottom: 25px; /* 为落款预留空间 */
         }
 
         /* 打字机光标效果 */
@@ -218,35 +221,67 @@
             51%, 100% { opacity: 0.3; }
         }
 
-        /* 刷新按钮 - 更明显 */
+        /* 新增：文字落款 */
+        .quote-signature {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            color: rgba(168, 254, 255, 0.7);
+            font-size: 1.1rem;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-align: right;
+            padding: 5px 10px;
+            background: rgba(0, 20, 40, 0.3);
+            border-radius: 6px;
+            border-left: 2px solid rgba(0, 243, 255, 0.3);
+            animation: signature-glow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes signature-glow {
+            0% { 
+                text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+                border-left-color: rgba(0, 243, 255, 0.3);
+            }
+            100% { 
+                text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+                border-left-color: rgba(185, 103, 255, 0.5);
+            }
+        }
+
+        /* 刷新按钮 - 调整位置避免遮挡 */
         .refresh-quote-btn {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 50px;
-            height: 50px;
+            top: -25px;
+            right: -25px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
-            background: rgba(0, 243, 255, 0.15);
-            border: 2px solid rgba(0, 243, 255, 0.5);
+            background: rgba(0, 243, 255, 0.2);
+            border: 2px solid rgba(0, 243, 255, 0.6);
             color: var(--neon-blue);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             transition: all 0.4s ease;
-            z-index: 20;
-            backdrop-filter: blur(5px);
+            z-index: 25;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
         }
 
         .refresh-quote-btn:hover {
-            background: rgba(0, 243, 255, 0.3);
+            background: rgba(0, 243, 255, 0.35);
             border-color: var(--neon-blue);
-            transform: rotate(180deg);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.7);
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 0 35px rgba(0, 243, 255, 0.8);
+            top: -28px;
+            right: -28px;
         }
 
-        /* 移除原来的按钮容器，让按钮在全屏自由活动 */
+        /* 全屏逃跑按钮 */
         #runaway-btn {
             padding: 22px 45px;
             font-size: 1.5rem;
@@ -257,18 +292,17 @@
             border-radius: 70px;
             cursor: pointer;
             transition: all 0.2s ease;
-            position: fixed; /* 改为固定定位，可在全屏活动 */
+            position: fixed;
             box-shadow: 
                 0 0 40px rgba(0, 243, 255, 0.4),
                 inset 0 0 20px rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
-            z-index: 100; /* 确保按钮在最上层 */
+            z-index: 100;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 2px;
             text-transform: uppercase;
             backdrop-filter: blur(10px);
-            /* 初始位置居中 */
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -357,18 +391,36 @@
         @media (max-width: 768px) {
             .glitch-tech { font-size: 5.5rem; letter-spacing: 6px; }
             .subtitle-tech { font-size: 1.2rem; }
-            .info-panel { padding: 25px; min-height: 180px; }
+            .info-panel { 
+                padding: 25px 25px 45px 25px;
+                min-height: 200px; 
+            }
             .quote-display { font-size: 1.3rem; min-height: 120px; }
+            .quote-signature { 
+                font-size: 1rem; 
+                right: 10px;
+                background: rgba(0, 20, 40, 0.5);
+            }
             .container { padding: 35px 25px; }
             .actions { flex-direction: column; align-items: center; }
             .action-btn { width: 100%; max-width: 320px; justify-content: center; }
             #runaway-btn { 
                 padding: 18px 35px; 
                 font-size: 1.2rem;
-                /* 在小屏幕上限制按钮移动范围，避免跑出屏幕 */
                 left: 50% !important;
                 top: 50% !important;
                 transform: translate(-50%, -50%) !important;
+            }
+            .refresh-quote-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                top: -20px;
+                right: -20px;
+            }
+            .refresh-quote-btn:hover {
+                top: -22px;
+                right: -22px;
             }
         }
     </style>
@@ -383,17 +435,20 @@
             <p class="subtitle-tech"><i class="fas fa-satellite-dish"></i> 信号中断 · 全屏逃脱模式已激活</p>
         </div>
 
-        <!-- 信息面板 -->
+        <!-- 信息面板 - 已添加落款 -->
         <div class="info-panel">
             <!-- 刷新语录按钮 -->
             <button class="refresh-quote-btn" id="refreshQuoteBtn" title="换一句语录">
                 <i class="fas fa-sync-alt"></i>
             </button>
             
-            <!-- 语录显示区域 -->
+            <!-- 语录显示区域 - 包含落款 -->
             <div class="quote-display" id="quoteDisplay">
                 <!-- 打字机动效将在此显示 -->
+                <!-- 落款将通过JavaScript动态添加 -->
             </div>
+            <!-- 新增的文字落款 -->
+            <div class="quote-signature">——深空网络响应</div>
         </div>
 
         <!-- 操作按钮 -->
@@ -404,13 +459,13 @@
             <a href="javascript:history.back()" class="action-btn">
                 <i class="fas fa-arrow-circle-left"></i> 重新路由
             </a>
-            <a href="mailto:your-email@example.com" class="action-btn">
+            <a href="mailto:3491395670@qq.com" class="action-btn">
                 <i class="fas fa-terminal"></i> 联系管理员
             </a>
         </div>
 
         <footer>
-            <p>© <span id="currentYear"></span> 深空网络协议 | 错误日志 #<span id="errorCode"></span></p>
+            <p>© <span id="currentYear"></span> 云云鬼才 • 深空网络协议 | 错误日志 #<span id="errorCode"></span></p>
             <p class="hint"><i class="fas fa-gamepad"></i> 提示：中央按钮可在全屏幕自由移动，试试追捕它！</p>
         </footer>
     </div>
@@ -455,6 +510,7 @@
                 clearTimeout(currentTypingTimeout);
             }
             
+            // 确保落款保持可见
             element.innerHTML = '';
             let i = 0;
             
@@ -464,6 +520,7 @@
                     i++;
                     currentTypingTimeout = setTimeout(type, speed);
                 } else {
+                    // 打字完成，只显示静态光标
                     element.innerHTML = text + '<span class="typing-cursor"></span>';
                 }
             }
@@ -479,7 +536,7 @@
             
             currentQuoteIndex = newIndex;
             const quoteElement = document.getElementById('quoteDisplay');
-            typeWriter(quotes[currentQuoteIndex], quoteElement, 25); // 更快的打字速度
+            typeWriter(quotes[currentQuoteIndex], quoteElement, 25);
         }
 
         // ========== 明亮的粒子系统 ==========
@@ -487,7 +544,7 @@
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
-            const particleCount = 120; // 更多粒子
+            const particleCount = 120;
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -500,21 +557,19 @@
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 2.5 + 0.8; // 更大的粒子
+                    this.size = Math.random() * 2.5 + 0.8;
                     this.speedX = (Math.random() - 0.5) * 0.8;
                     this.speedY = (Math.random() - 0.5) * 0.8;
-                    this.color = Math.random() > 0.7 ? 'rgba(185, 103, 255, 0.7)' : 'rgba(0, 243, 255, 0.7)'; // 更亮的颜色
-                    this.alpha = Math.random() * 0.6 + 0.3; // 更高的透明度
+                    this.color = Math.random() > 0.7 ? 'rgba(185, 103, 255, 0.7)' : 'rgba(0, 243, 255, 0.7)';
+                    this.alpha = Math.random() * 0.6 + 0.3;
                     this.waveOffset = Math.random() * Math.PI * 2;
                 }
                 
                 update() {
-                    // 添加波浪运动
                     this.waveOffset += 0.05;
                     this.x += this.speedX + Math.sin(this.waveOffset) * 0.3;
                     this.y += this.speedY + Math.cos(this.waveOffset) * 0.3;
                     
-                    // 边界检查
                     if (this.x > canvas.width) this.x = 0;
                     if (this.x < 0) this.x = canvas.width;
                     if (this.y > canvas.height) this.y = 0;
@@ -525,7 +580,6 @@
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     
-                    // 创建发光效果
                     const gradient = ctx.createRadialGradient(
                         this.x, this.y, 0,
                         this.x, this.y, this.size * 2
@@ -545,7 +599,6 @@
             function animateParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // 添加背景光晕
                 const gradient = ctx.createRadialGradient(
                     canvas.width/2, canvas.height/2, 0,
                     canvas.width/2, canvas.height/2, canvas.width
@@ -569,9 +622,8 @@
         // ========== 全屏逃跑按钮逻辑 ==========
         const runawayBtn = document.getElementById('runaway-btn');
         let isMoving = false;
-        let escapePower = 25; // 逃跑力度
+        let escapePower = 25;
 
-        // 全屏鼠标追踪
         document.addEventListener('mousemove', function(e) {
             if (!runawayBtn || isMoving) return;
             
@@ -582,19 +634,16 @@
             const mouseX = e.clientX;
             const mouseY = e.clientY;
             
-            // 计算鼠标与按钮中心的距离
             const distance = Math.sqrt(
                 Math.pow(mouseX - btnCenterX, 2) + 
                 Math.pow(mouseY - btnCenterY, 2)
             );
             
-            // 触发逃跑的距离
             const triggerDist = 150;
             
             if (distance < triggerDist) {
                 isMoving = true;
                 
-                // 计算远离方向
                 const deltaX = btnCenterX - mouseX;
                 const deltaY = btnCenterY - mouseY;
                 
@@ -602,15 +651,12 @@
                 const moveX = (deltaX / length) * (triggerDist - distance) / escapePower * 15;
                 const moveY = (deltaY / length) * (triggerDist - distance) / escapePower * 15;
                 
-                // 当前按钮位置
                 let currentX = parseFloat(runawayBtn.style.left) || (window.innerWidth/2 - btnRect.width/2);
                 let currentY = parseFloat(runawayBtn.style.top) || (window.innerHeight/2 - btnRect.height/2);
                 
-                // 新位置（确保在屏幕内）
                 let newX = currentX + moveX;
                 let newY = currentY + moveY;
                 
-                // 屏幕边界检查（留出按钮自身大小的边距）
                 const margin = 20;
                 const maxX = window.innerWidth - btnRect.width - margin;
                 const maxY = window.innerHeight - btnRect.height - margin;
@@ -618,15 +664,12 @@
                 newX = Math.max(margin, Math.min(maxX, newX));
                 newY = Math.max(margin, Math.min(maxY, newY));
                 
-                // 应用新位置
                 runawayBtn.style.left = newX + 'px';
                 runawayBtn.style.top = newY + 'px';
                 
-                // 添加移动时的视觉效果
                 runawayBtn.style.borderColor = 'rgba(255, 42, 195, 0.8)';
                 runawayBtn.style.boxShadow = '0 0 50px rgba(255, 42, 195, 0.5)';
                 
-                // 短暂延迟后重置移动状态
                 setTimeout(() => {
                     isMoving = false;
                     runawayBtn.style.borderColor = 'rgba(0, 243, 255, 0.6)';
@@ -635,11 +678,9 @@
             }
         });
 
-        // 点击逃跑按钮
         runawayBtn.addEventListener('click', function(e) {
-            e.stopPropagation(); // 防止事件冒泡
+            e.stopPropagation();
             
-            // 视觉反馈
             const originalHTML = runawayBtn.innerHTML;
             const originalBorder = runawayBtn.style.border;
             const originalShadow = runawayBtn.style.boxShadow;
@@ -649,10 +690,8 @@
             runawayBtn.style.boxShadow = '0 0 60px rgba(0, 255, 65, 0.8)';
             runawayBtn.style.background = 'linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(0, 243, 255, 0.3))';
             
-            // 显示新语录
             showRandomQuote();
             
-            // 按钮振动效果
             let vibrationCount = 0;
             const vibrateInterval = setInterval(() => {
                 if (vibrationCount < 10) {
@@ -666,7 +705,6 @@
                 }
             }, 50);
             
-            // 3秒后恢复
             setTimeout(() => {
                 runawayBtn.innerHTML = originalHTML;
                 runawayBtn.style.border = originalBorder;
@@ -678,10 +716,8 @@
         });
 
         // ========== 事件绑定 ==========
-        // 刷新按钮事件
         document.getElementById('refreshQuoteBtn').addEventListener('click', showRandomQuote);
         
-        // 初始显示语录和粒子
         window.addEventListener('load', () => {
             initParticles();
             showRandomQuote();
@@ -715,7 +751,6 @@
             });
         });
 
-        // 添加波纹动画
         const rippleStyle = document.createElement('style');
         rippleStyle.textContent = `
             @keyframes ripple {
@@ -727,14 +762,12 @@
         `;
         document.head.appendChild(rippleStyle);
 
-        // ========== 防止按钮被拖到屏幕外（辅助功能） ==========
         setInterval(() => {
             if (!runawayBtn) return;
             
             const btnRect = runawayBtn.getBoundingClientRect();
             const margin = 10;
             
-            // 如果按钮在屏幕外，将其拉回
             if (btnRect.left < margin || btnRect.top < margin || 
                 btnRect.right > window.innerWidth - margin || 
                 btnRect.bottom > window.innerHeight - margin) {
