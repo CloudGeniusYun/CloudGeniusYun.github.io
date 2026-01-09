@@ -221,14 +221,14 @@
             51%, 100% { opacity: 0.3; }
         }
 
-        /* 落款样式 - 与正文统一 */
+        /* 落款样式 - 白色非斜体 */
         .quote-signature {
             position: absolute;
             bottom: 0;
             right: 0;
-            color: rgba(240, 248, 255, 0.85);
+            color: #ffffff; /* 纯白色 */
             font-size: 1.3rem;
-            font-style: italic;
+            font-style: normal; /* 移除斜体 */
             font-weight: 400;
             font-family: 'Rajdhani', sans-serif;
             line-height: 1.6;
@@ -379,7 +379,7 @@
             100% { left: 200%; opacity: 0; }
         }
 
-        /* 窄屏响应式设计 */
+        /* 窄屏响应式设计 - 重要修改 */
         @media (max-width: 768px) {
             .glitch-tech { 
                 font-size: 5.5rem; 
@@ -400,6 +400,7 @@
                 font-size: 1.1rem; 
                 padding: 6px 0 0 15px;
                 right: 5px;
+                color: #ffffff; /* 确保白色 */
             }
             .container { 
                 padding: 35px 25px; 
@@ -414,23 +415,9 @@
                 justify-content: center; 
             }
             
-            /* 窄屏下缩小逃跑按钮 */
+            /* 窄屏下完全隐藏逃跑按钮 */
             #runaway-btn {
-                padding: 12px 24px;
-                font-size: 1rem;
-                border-width: 1.5px;
-                backdrop-filter: blur(5px);
-                min-width: 160px;
-                max-width: 200px;
-                white-space: nowrap;
-                left: 50% !important;
-                top: 50% !important;
-                transform: translate(-50%, -50%) !important;
-            }
-            
-            #runaway-btn i {
-                margin-right: 8px;
-                font-size: 0.9em;
+                display: none !important;
             }
             
             .refresh-quote-btn {
@@ -469,7 +456,7 @@
             <div class="quote-display" id="quoteDisplay">
                 <!-- 打字机动效将在此显示 -->
             </div>
-            <!-- 统一样式落款 -->
+            <!-- 白色非斜体落款 -->
             <div class="quote-signature">——深空网络响应</div>
         </div>
 
@@ -487,12 +474,13 @@
         </div>
 
         <footer>
-            <p>© <span id="currentYear"></span> 深空网络协议 | 错误日志 #<span id="errorCode"></span></p>
+            <p>© <span id="currentYear"></span> 云云鬼才 • 深空网络协议 | 错误日志 #<span id="errorCode"></span></p>
             <p class="hint"><i class="fas fa-gamepad"></i> 提示：中央按钮可在全屏幕自由移动，试试追捕它！</p>
+            <p class="hint"><i class="fas fa-mobile-alt"></i> 移动端：逃跑按钮已隐藏，点击刷新图标更换语录</p>
         </footer>
     </div>
 
-    <!-- 全屏逃跑按钮 -->
+    <!-- 全屏逃跑按钮 - 窄屏下隐藏 -->
     <button id="runaway-btn">
         <i class="fas fa-crosshairs"></i> 来抓我啊！
     </button>
@@ -502,7 +490,7 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         document.getElementById('errorCode').textContent = Math.floor(Math.random() * 9000) + 1000;
 
-        // ========== 语录库 ==========
+        // ========== 语录库 - 单引号已改为中文双引号 ==========
         const quotes = [
             "页面不见了？很正常，智者向内寻求力量。",
             "这个页面可能去追求自由和远方了，就像你一直想的那样。",
@@ -513,13 +501,13 @@
             "错误代码：404。深层含义：给你一个冷静思考人生的机会。",
             "错误404：宇宙是沉默的，但你的点击在此产生了回响。",
             "这个页面存在于另一个概率云中。观测行为导致了它的坍缩。",
-            "协议连接超时。服务器回应：“意义本身在此处也是404。”",
+            "协议连接超时。服务器回应：“意义本身在此处也是404。”", // 中文双引号
             "你发现了一个空指针。伟大的探索总是从面对虚无开始。",
             "路径解析失败。但失败本身，是宇宙最可靠的常数之一。",
             "页面未找到。这或许证明了，虚无是存在的终极形式。",
             "你访问的坐标是空的。但空，不正是所有可能性的起点吗？",
             "404。一个完美的错误，存在于这个不完美的数字世界。",
-            "这里什么也没有。但“没有”本身，不正是一个有趣的东西吗？",
+            "这里什么也没有。但“没有”本身，不正是一个有趣的东西吗？", // 中文双引号
             "别找了。这个页面比你明天的计划还要虚无。"
         ];
 
@@ -639,7 +627,7 @@
             animateParticles();
         }
 
-        // ========== 全屏逃跑按钮逻辑 ==========
+        // ========== 全屏逃跑按钮逻辑 - 窄屏下不激活 ==========
         const runawayBtn = document.getElementById('runaway-btn');
         let isMoving = false;
         let escapePower = 25;
@@ -649,102 +637,104 @@
             return window.innerWidth <= 768;
         }
 
-        document.addEventListener('mousemove', function(e) {
-            if (!runawayBtn || isMoving) return;
-            
-            const btnRect = runawayBtn.getBoundingClientRect();
-            const btnCenterX = btnRect.left + btnRect.width / 2;
-            const btnCenterY = btnRect.top + btnRect.height / 2;
-            
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
-            
-            const distance = Math.sqrt(
-                Math.pow(mouseX - btnCenterX, 2) + 
-                Math.pow(mouseY - btnCenterY, 2)
-            );
-            
-            // 窄屏下增大触发距离，让按钮更"敏感"
-            const triggerDist = isNarrowScreen() ? 180 : 150;
-            
-            if (distance < triggerDist) {
-                isMoving = true;
+        // 只在宽屏下激活逃跑按钮功能
+        if (!isNarrowScreen()) {
+            document.addEventListener('mousemove', function(e) {
+                if (!runawayBtn || isMoving) return;
                 
-                const deltaX = btnCenterX - mouseX;
-                const deltaY = btnCenterY - mouseY;
+                const btnRect = runawayBtn.getBoundingClientRect();
+                const btnCenterX = btnRect.left + btnRect.width / 2;
+                const btnCenterY = btnRect.top + btnRect.height / 2;
                 
-                const length = Math.max(Math.sqrt(deltaX*deltaX + deltaY*deltaY), 0.1);
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
                 
-                // 窄屏下减小移动幅度，让按钮更容易被点击
-                const moveMultiplier = isNarrowScreen() ? 10 : 15;
-                const moveX = (deltaX / length) * (triggerDist - distance) / escapePower * moveMultiplier;
-                const moveY = (deltaY / length) * (triggerDist - distance) / escapePower * moveMultiplier;
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - btnCenterX, 2) + 
+                    Math.pow(mouseY - btnCenterY, 2)
+                );
                 
-                let currentX = parseFloat(runawayBtn.style.left) || (window.innerWidth/2 - btnRect.width/2);
-                let currentY = parseFloat(runawayBtn.style.top) || (window.innerHeight/2 - btnRect.height/2);
+                const triggerDist = 150;
                 
-                let newX = currentX + moveX;
-                let newY = currentY + moveY;
+                if (distance < triggerDist) {
+                    isMoving = true;
+                    
+                    const deltaX = btnCenterX - mouseX;
+                    const deltaY = btnCenterY - mouseY;
+                    
+                    const length = Math.max(Math.sqrt(deltaX*deltaX + deltaY*deltaY), 0.1);
+                    
+                    const moveMultiplier = 15;
+                    const moveX = (deltaX / length) * (triggerDist - distance) / escapePower * moveMultiplier;
+                    const moveY = (deltaY / length) * (triggerDist - distance) / escapePower * moveMultiplier;
+                    
+                    let currentX = parseFloat(runawayBtn.style.left) || (window.innerWidth/2 - btnRect.width/2);
+                    let currentY = parseFloat(runawayBtn.style.top) || (window.innerHeight/2 - btnRect.height/2);
+                    
+                    let newX = currentX + moveX;
+                    let newY = currentY + moveY;
+                    
+                    const margin = 20;
+                    const maxX = window.innerWidth - btnRect.width - margin;
+                    const maxY = window.innerHeight - btnRect.height - margin;
+                    
+                    newX = Math.max(margin, Math.min(maxX, newX));
+                    newY = Math.max(margin, Math.min(maxY, newY));
+                    
+                    runawayBtn.style.left = newX + 'px';
+                    runawayBtn.style.top = newY + 'px';
+                    
+                    runawayBtn.style.borderColor = 'rgba(255, 42, 195, 0.8)';
+                    runawayBtn.style.boxShadow = '0 0 30px rgba(255, 42, 195, 0.5)';
+                    
+                    setTimeout(() => {
+                        isMoving = false;
+                        runawayBtn.style.borderColor = 'rgba(0, 243, 255, 0.6)';
+                        runawayBtn.style.boxShadow = '0 0 25px rgba(0, 243, 255, 0.4)';
+                    }, 100);
+                }
+            });
+
+            runawayBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
                 
-                // 窄屏下限制活动范围（中央安全区域）
-                const screenPadding = isNarrowScreen() ? window.innerWidth * 0.15 : 20;
-                const maxX = window.innerWidth - btnRect.width - screenPadding;
-                const maxY = window.innerHeight - btnRect.height - screenPadding;
+                const originalHTML = runawayBtn.innerHTML;
+                const originalBorder = runawayBtn.style.border;
+                const originalShadow = runawayBtn.style.boxShadow;
                 
-                newX = Math.max(screenPadding, Math.min(maxX, newX));
-                newY = Math.max(screenPadding, Math.min(maxY, newY));
+                runawayBtn.innerHTML = '<i class="fas fa-check-circle"></i> 抓到了！';
+                runawayBtn.style.border = '2px solid #00ff41';
+                runawayBtn.style.boxShadow = '0 0 60px rgba(0, 255, 65, 0.8)';
+                runawayBtn.style.background = 'linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(0, 243, 255, 0.3))';
                 
-                runawayBtn.style.left = newX + 'px';
-                runawayBtn.style.top = newY + 'px';
+                showRandomQuote();
                 
-                // 移动时的视觉反馈
-                runawayBtn.style.borderColor = 'rgba(255, 42, 195, 0.8)';
-                runawayBtn.style.boxShadow = '0 0 30px rgba(255, 42, 195, 0.5)';
+                let vibrationCount = 0;
+                const vibrateInterval = setInterval(() => {
+                    if (vibrationCount < 10) {
+                        const offsetX = (Math.random() - 0.5) * 6;
+                        const offsetY = (Math.random() - 0.5) * 6;
+                        runawayBtn.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
+                        vibrationCount++;
+                    } else {
+                        clearInterval(vibrateInterval);
+                        runawayBtn.style.transform = 'translate(-50%, -50%)';
+                    }
+                }, 50);
                 
                 setTimeout(() => {
-                    isMoving = false;
-                    runawayBtn.style.borderColor = 'rgba(0, 243, 255, 0.6)';
-                    runawayBtn.style.boxShadow = '0 0 25px rgba(0, 243, 255, 0.4)';
-                }, isNarrowScreen() ? 80 : 100);
-            }
-        });
-
-        runawayBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            const originalHTML = runawayBtn.innerHTML;
-            const originalBorder = runawayBtn.style.border;
-            const originalShadow = runawayBtn.style.boxShadow;
-            
-            runawayBtn.innerHTML = '<i class="fas fa-check-circle"></i> 抓到了！';
-            runawayBtn.style.border = '2px solid #00ff41';
-            runawayBtn.style.boxShadow = '0 0 60px rgba(0, 255, 65, 0.8)';
-            runawayBtn.style.background = 'linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(0, 243, 255, 0.3))';
-            
-            showRandomQuote();
-            
-            let vibrationCount = 0;
-            const vibrateInterval = setInterval(() => {
-                if (vibrationCount < 10) {
-                    const offsetX = (Math.random() - 0.5) * 6;
-                    const offsetY = (Math.random() - 0.5) * 6;
-                    runawayBtn.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-                    vibrationCount++;
-                } else {
+                    runawayBtn.innerHTML = originalHTML;
+                    runawayBtn.style.border = originalBorder;
+                    runawayBtn.style.boxShadow = originalShadow;
+                    runawayBtn.style.background = 'linear-gradient(135deg, rgba(0, 243, 255, 0.25), rgba(185, 103, 255, 0.25))';
                     clearInterval(vibrateInterval);
                     runawayBtn.style.transform = 'translate(-50%, -50%)';
-                }
-            }, 50);
-            
-            setTimeout(() => {
-                runawayBtn.innerHTML = originalHTML;
-                runawayBtn.style.border = originalBorder;
-                runawayBtn.style.boxShadow = originalShadow;
-                runawayBtn.style.background = 'linear-gradient(135deg, rgba(0, 243, 255, 0.25), rgba(185, 103, 255, 0.25))';
-                clearInterval(vibrateInterval);
-                runawayBtn.style.transform = 'translate(-50%, -50%)';
-            }, 2000);
-        });
+                }, 2000);
+            });
+        } else {
+            // 窄屏下完全禁用按钮
+            runawayBtn.style.display = 'none';
+        }
 
         // ========== 事件绑定 ==========
         document.getElementById('refreshQuoteBtn').addEventListener('click', showRandomQuote);
@@ -752,16 +742,6 @@
         window.addEventListener('load', () => {
             initParticles();
             showRandomQuote();
-            
-            // 窗口大小变化时重新调整
-            window.addEventListener('resize', function() {
-                if (isNarrowScreen()) {
-                    // 窄屏下确保按钮回到中央
-                    runawayBtn.style.left = '50%';
-                    runawayBtn.style.top = '50%';
-                    runawayBtn.style.transform = 'translate(-50%, -50%)';
-                }
-            });
         });
 
         // ========== 按钮波纹效果 ==========
@@ -803,22 +783,24 @@
         `;
         document.head.appendChild(rippleStyle);
 
-        // 防止按钮被拖到屏幕外（辅助功能）
-        setInterval(() => {
-            if (!runawayBtn) return;
-            
-            const btnRect = runawayBtn.getBoundingClientRect();
-            const margin = isNarrowScreen() ? 30 : 10;
-            
-            if (btnRect.left < margin || btnRect.top < margin || 
-                btnRect.right > window.innerWidth - margin || 
-                btnRect.bottom > window.innerHeight - margin) {
+        // 防止按钮被拖到屏幕外（仅宽屏有效）
+        if (!isNarrowScreen()) {
+            setInterval(() => {
+                if (!runawayBtn) return;
                 
-                runawayBtn.style.left = '50%';
-                runawayBtn.style.top = '50%';
-                runawayBtn.style.transform = 'translate(-50%, -50%)';
-            }
-        }, 1000);
+                const btnRect = runawayBtn.getBoundingClientRect();
+                const margin = 10;
+                
+                if (btnRect.left < margin || btnRect.top < margin || 
+                    btnRect.right > window.innerWidth - margin || 
+                    btnRect.bottom > window.innerHeight - margin) {
+                    
+                    runawayBtn.style.left = '50%';
+                    runawayBtn.style.top = '50%';
+                    runawayBtn.style.transform = 'translate(-50%, -50%)';
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
