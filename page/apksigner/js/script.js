@@ -121,7 +121,7 @@ signBtn.addEventListener('click', async () => {
 
         // 执行签名（带进度监听）
         updateStatus('开始上传文件并签名...', 'info');
-        const response = await axios.post(`${API_BASE_URL}/sign`, formData, {
+        const response = await axios.post(`${API_BASE_URL}/api/sign`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             onUploadProgress: (progressEvent) => {
