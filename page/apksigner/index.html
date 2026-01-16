@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudGenius | APK 在线签名工具</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cloud-upload-alt"></i> CloudGenius APK 签名工具</h1>
+            <p class="subtitle">安全、快速地在线签名 Android 应用包 · 后端服务器: <code>154.37.213.170:6003</code></p>
+        </header>
+
+        <main>
+            <!-- 文件上传区域 -->
+            <section class="upload-card">
+                <h2><i class="fas fa-file-upload"></i> 1. 选择文件</h2>
+                <div class="upload-zone" id="apkDropZone">
+                    <i class="fas fa-android fa-3x"></i>
+                    <p><strong>拖放或点击上传 APK 文件</strong></p>
+                    <p class="file-info" id="apkFileInfo">尚未选择文件</p>
+                    <input type="file" id="apkFileInput" accept=".apk" hidden>
+                </div>
+                <div class="upload-zone" id="keystoreDropZone">
+                    <i class="fas fa-key fa-3x"></i>
+                    <p><strong>拖放或点击上传密钥库 (.jks/.keystore)</strong></p>
+                    <p class="file-info" id="keystoreFileInfo">尚未选择文件</p>
+                    <input type="file" id="keystoreFileInput" accept=".jks,.keystore" hidden>
+                </div>
+            </section>
+
+            <!-- 签名信息表单 -->
+            <section class="form-card">
+                <h2><i class="fas fa-keyboard"></i> 2. 填写签名信息</h2>
+                <div class="form-group">
+                    <label for="aliasInput"><i class="fas fa-tag"></i> 密钥别名 (Alias)</label>
+                    <input type="text" id="aliasInput" placeholder="例如: my-release-key">
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput"><i class="fas fa-lock"></i> 密钥库及密钥密码</label>
+                    <input type="password" id="passwordInput" placeholder="请输入密码">
+                </div>
+                <p class="hint"><i class="fas fa-info-circle"></i> 通常密钥库密码和密钥密码相同，如果不同请分开填写。</p>
+                <div class="form-group" id="keyPasswordGroup" style="display: none;">
+                    <label for="keyPasswordInput"><i class="fas fa-unlock-alt"></i> 密钥密码（单独）</label>
+                    <input type="password" id="keyPasswordInput" placeholder="请输入密钥密码（如不同）">
+                </div>
+                <button id="togglePasswordBtn" class="btn-secondary">
+                    <i class="fas fa-cog"></i> 我有独立的密钥密码
+                </button>
+            </section>
+
+            <!-- 控制与状态区域 -->
+            <section class="action-card">
+                <h2><i class="fas fa-play-circle"></i> 3. 开始签名</h2>
+                <button id="signBtn" class="btn-primary" disabled>
+                    <i class="fas fa-hammer"></i> 签名 APK 文件
+                </button>
+                <div class="progress-container" id="progressContainer" style="display: none;">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+                <div class="status-box" id="statusBox">
+                    <p><i class="fas fa-info-circle"></i> 请先完成上述步骤。</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2023 CloudGenius | 本工具使用您自己的密钥，文件仅在内存中处理，不会存储于服务器。</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
