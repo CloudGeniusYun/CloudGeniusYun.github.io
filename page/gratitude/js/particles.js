@@ -23,26 +23,29 @@ function() {
         n = u.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
     }
     function b() {
-        e.clearRect(0, 0, r, n);
-        var w = [f].concat(t);
-        var x, v, A, B, z, y;
-        t.forEach(function(i) {
-            i.x += i.xa,
-            i.y += i.ya,
-            i.xa *= i.x > r || i.x < 0 ? -1 : 1,
-            i.ya *= i.y > n || i.y < 0 ? -1 : 1,
-            e.fillRect(i.x - 0.5, i.y - 0.5, 1, 1);
-            for (v = 0; v < w.length; v++) {
-                x = w[v];
-                if (i !== x && null !== x.x && null !== x.y) {
-                    B = i.x - x.x,
-                    z = i.y - x.y,
-                    y = B * B + z * z;
-                    y < x.max && (x === f && y >= x.max / 2 && (i.x -= 0.03 * B, i.y -= 0.03 * z), A = (x.max - y) / x.max, e.beginPath(), e.lineWidth = A / 2, e.strokeStyle = "rgba(" + s.c + "," + (A + 0.2) + ")", e.moveTo(i.x, i.y), e.lineTo(x.x, x.y), e.stroke())
+        // 只有当画布可见时才进行绘制
+        if (u.style.display !== 'none') {
+            e.clearRect(0, 0, r, n);
+            var w = [f].concat(t);
+            var x, v, A, B, z, y;
+            t.forEach(function(i) {
+                i.x += i.xa,
+                i.y += i.ya,
+                i.xa *= i.x > r || i.x < 0 ? -1 : 1,
+                i.ya *= i.y > n || i.y < 0 ? -1 : 1,
+                e.fillRect(i.x - 0.5, i.y - 0.5, 1, 1);
+                for (v = 0; v < w.length; v++) {
+                    x = w[v];
+                    if (i !== x && null !== x.x && null !== x.y) {
+                        B = i.x - x.x,
+                        z = i.y - x.y,
+                        y = B * B + z * z;
+                        y < x.max && (x === f && y >= x.max / 2 && (i.x -= 0.03 * B, i.y -= 0.03 * z), A = (x.max - y) / x.max, e.beginPath(), e.lineWidth = A / 2, e.strokeStyle = "rgba(" + s.c + "," + (A + 0.2) + ")", e.moveTo(i.x, i.y), e.lineTo(x.x, x.y), e.stroke())
+                    }
                 }
-            }
-            w.splice(w.indexOf(i), 1)
-        }),
+                w.splice(w.indexOf(i), 1)
+            });
+        }
         m(b)
     }
     var u = document.createElement("canvas"),
@@ -75,6 +78,23 @@ function() {
         f.x = null,
         f.y = null
     };
+
+    // 添加粒子背景开关的逻辑
+    var particleToggle = document.getElementById('particleToggle');
+    if (particleToggle) {
+        particleToggle.addEventListener('change', function() {
+            if (this.checked) {
+                u.style.display = 'block'; // 显示画布
+            } else {
+                u.style.display = 'none'; // 隐藏画布
+            }
+        });
+        // 根据初始状态设置画布显示
+        if (!particleToggle.checked) {
+            u.style.display = 'none';
+        }
+    }
+
     for (var t = [], p = 0; s.n > p; p++) {
         var h = a() * r,
         g = a() * n,
