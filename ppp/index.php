@@ -16,7 +16,7 @@ $url = urldecode($url);
 
 // 如果没有协议，添加https://
 if (!preg_match('/^[a-z]+:\/\//i', $url)) {
-    $url = 'https://' . $url;
+    $url = 'https://tool.cccyun.cc/ip/?t='+'. $url';
 }
 
 // 基础验证
