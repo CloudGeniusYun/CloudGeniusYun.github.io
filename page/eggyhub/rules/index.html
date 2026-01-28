@@ -122,72 +122,75 @@
                 </div>
             </div>
             
-            <!-- 违规公示部分 -->
-            <div class="violation-section">
-                <div class="section-header">
-                    <h2>违规记录公示</h2>
-                    <div class="controls">
-                        <button id="refreshBtn">刷新记录</button>
-                        <div class="stats" id="stats">
-                            <span>正在加载...</span>
+            <!-- 违规公示部分 和 群内小男娘部分 组合 -->
+            <div class="right-column">
+                <!-- 违规公示部分 -->
+                <div class="violation-section">
+                    <div class="section-header">
+                        <h2>违规记录公示</h2>
+                        <div class="controls">
+                            <button id="refreshBtn">刷新记录</button>
+                            <div class="stats" id="stats">
+                                <span>正在加载...</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="violation-container">
-                    <div class="table-container">
-                        <table class="violation-table">
-                            <thead>
-                                <tr>
-                                    <th width="20%">用户名</th>
-                                    <th width="35%">违规内容</th>
-                                    <th width="25%">违规时间</th>
-                                    <th width="20%">处理方式</th>
-                                </tr>
-                            </thead>
-                            <tbody id="violationTableBody">
-                                <tr>
-                                    <td colspan="4" class="loading">正在加载违规记录...</td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                     
-                    <div class="legend">
-                        <div class="legend-item">
-                            <span class="legend-color warning"></span>
-                            <span>警告⚠️</span>
+                    <div class="violation-container">
+                        <div class="table-container">
+                            <table class="violation-table">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">用户名</th>
+                                        <th width="35%">违规内容</th>
+                                        <th width="25%">违规时间</th>
+                                        <th width="20%">处理方式</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="violationTableBody">
+                                    <tr>
+                                        <td colspan="4" class="loading">正在加载违规记录...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="legend-item">
-                            <span class="legend-color mute"></span>
-                            <span>禁言</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color max-mute"></span>
-                            <span>最长禁言(48小时)</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color blacklist"></span>
-                            <span>拉黑</span>
+                        
+                        <div class="legend">
+                            <div class="legend-item">
+                                <span class="legend-color warning"></span>
+                                <span>警告⚠️</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color mute"></span>
+                                <span>禁言</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color max-mute"></span>
+                                <span>最长禁言(48小时)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color blacklist"></span>
+                                <span>拉黑</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- 群内小男娘部分 -->
-            <div class="male-members-box">
-                <h2>群内小男娘</h2>
-                <div class="male-member-list">
-                    <div class="male-member-item">
-                        <img src="http://q.qlogo.cn/headimg_dl?dst_uin=2087820865&spec=640&img_type=jpg" alt="头像" class="member-avatar">
-                        <span>鬠婺（45.2%）『100万』</span>
-                    </div>
-                    <div class="male-member-item">
-                        <img src="http://q.qlogo.cn/headimg_dl?dst_uin=3358549398&spec=640&img_type=jpg" alt="头像" class="member-avatar">
-                        <span>翻斗车车20%</span>
-                    </div>
-                    <div class="male-member-item">
-                        <img src="http://q.qlogo.cn/headimg_dl?dst_uin=1736775887&spec=640&img_type=jpg" alt="头像" class="member-avatar">
-                        <span>甘蔗 蔗糖</span>
+                <!-- 群内小男娘部分 -->
+                <div class="male-members-box">
+                    <h2>群内小男娘</h2>
+                    <div class="male-member-list">
+                        <div class="male-member-item">
+                            <img src="http://q.qlogo.cn/headimg_dl?dst_uin=2087820865&spec=640&img_type=jpg" alt="头像" class="member-avatar">
+                            <span>鬠婺（45.2%）『100万』</span>
+                        </div>
+                        <div class="male-member-item">
+                            <img src="http://q.qlogo.cn/headimg_dl?dst_uin=3358549398&spec=640&img_type=jpg" alt="头像" class="member-avatar">
+                            <span>翻斗车车20%</span>
+                        </div>
+                        <div class="male-member-item">
+                            <img src="http://q.qlogo.cn/headimg_dl?dst_uin=1736775887&spec=640&img_type=jpg" alt="头像" class="member-avatar">
+                            <span>甘蔗 蔗糖</span>
+                        </div>
                     </div>
                 </div>
             </div>

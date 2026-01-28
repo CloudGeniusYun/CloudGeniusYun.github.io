@@ -130,12 +130,19 @@ h1:after {
 
 @media (min-width: 1024px) {
     .combined-section {
-        flex-direction: row;
+        flex-direction: row; /* 两列布局 */
+        align-items: flex-start; /* 顶部对齐 */
     }
     
-    .calculator-section,
-    .violation-section {
-        flex: 1;
+    .calculator-section {
+        flex: 1; /* 左侧计算器占据一份空间 */
+    }
+
+    .right-column {
+        flex: 1; /* 右侧列占据一份空间 */
+        display: flex;
+        flex-direction: column;
+        gap: 30px; /* 违规记录和男娘列表之间的间距 */
     }
 }
 
