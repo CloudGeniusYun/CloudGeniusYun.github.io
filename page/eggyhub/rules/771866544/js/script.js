@@ -255,24 +255,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     const violationTime = parts[3].trim();
                     const ruleNumber = parseRuleNumber(ruleText);
                     
-                    // 更新用户违规计数（按规则分类）
-                    if (!userViolationCounts[userName]) {
-                        userViolationCounts[userName] = {};
+                    // 提取唯一标识（最后一个括号内的内容，且前面有空格）
+                    // 格式：用户名 (QQ号)
+                    const idMatch = userName.match(/\s\(([^()]+)\)$/);
+                    const userId = idMatch ? idMatch[1] : userName;
+                    
+                    // 更新用户违规计数（按规则分类，使用 userId 作为唯一标识）
+                    if (!userViolationCounts[userId]) {
+                        userViolationCounts[userId] = {};
                     }
                     
-                    if (!userViolationCounts[userName][ruleNumber]) {
-                        userViolationCounts[userName][ruleNumber] = 0;
+                    if (!userViolationCounts[userId][ruleNumber]) {
+                        userViolationCounts[userId][ruleNumber] = 0;
                     }
                     
-                    userViolationCounts[userName][ruleNumber]++;
+                    userViolationCounts[userId][ruleNumber]++;
                     
                     records.push({
                         userName,
+                        userId, // 存储唯一标识用于后续处罚逻辑
                         violationContent,
                         violationTime,
                         ruleNumber,
                         ruleText, // 保留用于调试
-                        userRuleCount: userViolationCounts[userName][ruleNumber]
+                        userRuleCount: userViolationCounts[userId][ruleNumber]
                     });
                 } else {
                     console.warn('格式错误的行:', line);

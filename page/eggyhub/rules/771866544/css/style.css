@@ -98,8 +98,28 @@ h1:after {
     margin-bottom: 10px;
 }
 
+.rule-number-long {
+    display: inline-block;
+    padding: 0 10px;
+    height: 28px;
+    background-color: #0096ff;
+    color: white;
+    border-radius: 14px;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 12px;
+    margin-bottom: 10px;
+}
+
 .rule-content {
     color: #475569;
+    font-size: 15px;
+}
+
+.rule-content-red {
+    color: #e30000;
     font-size: 15px;
 }
 
