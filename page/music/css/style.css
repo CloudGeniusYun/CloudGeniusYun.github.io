@@ -138,8 +138,8 @@ body {
 .container {
     position: relative;
     width: 100%;
-    max-width: 400px;
-    height: 85vh; /* 稍微增加高度以容纳搜索框 */
+    max-width: 450px; /* 增加宽度以容纳更长的搜索栏 */
+    height: 85vh; 
     max-height: 750px;
     display: flex;
     flex-direction: column;
@@ -161,14 +161,110 @@ body {
 }
 
 #apiSource {
-    background: var(--input-bg);
-    border: none;
-    border-radius: 8px;
-    padding: 5px 10px;
-    color: var(--text-color);
+    display: none;
+}
+
+/* 自定义下拉菜单 */
+.custom-select-wrapper {
+    position: relative;
+    user-select: none;
+    width: 100px;
+    margin-right: 10px;
+}
+
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.select-trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
     font-size: 14px;
+    color: var(--text-color);
+    background: var(--input-bg);
+    border-radius: 20px;
     cursor: pointer;
-    outline: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.select-trigger:hover {
+    background: var(--glass-bg);
+    box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.select-trigger span {
+    margin-right: 5px;
+}
+
+.select-trigger i {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+.custom-select.open .select-trigger {
+    border-color: var(--glass-border);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.custom-select.open .select-trigger i {
+    transform: rotate(180deg);
+}
+
+.custom-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: var(--input-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    box-shadow: 0 5px 15px var(--shadow-heavy);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+}
+
+.custom-select.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.custom-option {
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.custom-option:last-child {
+    border-bottom: none;
+}
+
+.custom-option:hover {
+    background: var(--item-hover-bg);
+    color: var(--primary-color);
+    padding-left: 15px; /* 悬停时轻微右移效果 */
+}
+
+.custom-option.selected {
+    background: var(--item-active-bg);
+    color: var(--primary-color);
+    font-weight: bold;
 }
 
 #searchInput {
@@ -656,14 +752,20 @@ body {
 }
 
 .action-btn {
-    background: none;
+    background: transparent;
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    padding: 5px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-left: 5px;
     font-size: 12px;
     transition: all 0.2s;
+    padding: 0;
 }
 
 .action-btn:hover {
@@ -760,7 +862,7 @@ body {
 /* 桌面端响应式布局 */
 @media (min-width: 768px) {
     .container {
-        max-width: 1100px;
+        max-width: 1200px;
         height: 650px;
         /* 玻璃拟态 - 移至容器 */
         background: var(--glass-bg);
@@ -770,7 +872,7 @@ body {
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
         
         display: grid;
-        grid-template-columns: 1fr 380px;
+        grid-template-columns: 1fr 450px;
         grid-template-rows: auto 1fr;
         grid-template-areas: 
             "player search"

@@ -17,12 +17,27 @@
     <div class="container">
         <!-- 搜索区域 -->
         <div class="search-bar">
-            <select id="apiSource" style="display: none;">
-                <option value="netease">网易云</option>
-            </select>
+            <!-- 自定义下拉选择框 -->
+            <div class="custom-select-wrapper">
+                <select id="apiSource" style="display: none;">
+                    <option value="netease">网易云</option>
+                    <option value="kuwo">酷我</option>
+                </select>
+                <div class="custom-select" id="customSelect">
+                    <div class="select-trigger">
+                        <span id="selectValue">网易云</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option selected" data-value="netease">网易云</div>
+                        <div class="custom-option" data-value="kuwo">酷我</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="search-input-wrapper" style="display: flex; flex: 1; align-items: center; gap: 10px;">
                 <i class="fas fa-music" style="color: var(--primary-color);"></i>
-                <input type="text" id="searchInput" placeholder="搜索网易云音乐...">
+                <input type="text" id="searchInput" placeholder="搜索歌曲...">
             </div>
             <button id="searchBtn"><i class="fas fa-search"></i></button>
             <button id="themeToggleBtn" style="background: transparent; border: none; color: var(--text-color); cursor: pointer; font-size: 18px; margin-left: 5px;" title="切换模式">

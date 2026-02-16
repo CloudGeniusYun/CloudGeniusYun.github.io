@@ -40,6 +40,64 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchResultsEl = document.getElementById('searchResults');
     const sidebarTitle = document.getElementById('sidebarTitle');
 
+    // 监听源切换
+    if (apiSource) {
+        apiSource.addEventListener('change', () => {
+            const keyword = searchInput.value.trim();
+            if (keyword) {
+                searchMusic(keyword);
+            }
+        });
+    }
+
+    // 自定义下拉菜单交互
+    const customSelect = document.getElementById('customSelect');
+    if (customSelect) {
+        const trigger = customSelect.querySelector('.select-trigger');
+        const options = customSelect.querySelectorAll('.custom-option');
+        const selectValue = document.getElementById('selectValue');
+        const realSelect = document.getElementById('apiSource');
+
+        // 点击触发器切换显示
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            customSelect.classList.toggle('open');
+        });
+
+        // 点击选项
+        options.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // 更新选中状态样式
+                options.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                
+                // 更新显示的文字
+                const value = option.dataset.value;
+                const text = option.textContent;
+                selectValue.textContent = text;
+                
+                // 更新隐藏的 select 值并触发 change 事件
+                if (realSelect) {
+                    realSelect.value = value;
+                    const event = new Event('change');
+                    realSelect.dispatchEvent(event);
+                }
+                
+                // 关闭下拉菜单
+                customSelect.classList.remove('open');
+            });
+        });
+
+        // 点击外部关闭下拉菜单
+        document.addEventListener('click', (e) => {
+            if (!customSelect.contains(e.target)) {
+                customSelect.classList.remove('open');
+            }
+        });
+    }
+
     // 暗色模式切换
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     
@@ -254,12 +312,20 @@ document.addEventListener('DOMContentLoaded', function() {
     async function searchMusic(keyword, isLoadMore = false) {
         if (!keyword) return;
         
+        const source = document.getElementById('apiSource').value;
+
         if (!isLoadMore) {
-            currentSearchPage = 0; // 默认从0开始
             currentSearchKeyword = keyword;
             searchResults = [];
             hasMoreResults = true;
             searchResultsEl.innerHTML = '';
+            
+            // 根据源初始化分页
+            if (source === 'netease') {
+                currentSearchPage = 0;
+            } else {
+                currentSearchPage = 1; // 酷我从1开始
+            }
             
             // 切换到搜索结果视图
             showSearchResults();
@@ -277,25 +343,50 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         try {
-            // 网易云 API
-            const url = `https://oiapi.net/api/Music_163?name=${encodeURIComponent(keyword)}&page=${currentSearchPage}`;
+            let list = [];
             
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.code === 0 && data.data) {
-                const list = data.data;
+            if (source === 'netease') {
+                // 网易云 API
+                const url = `https://oiapi.net/api/Music_163?name=${encodeURIComponent(keyword)}&page=${currentSearchPage}`;
                 
-                if (list.length > 0) {
-                    searchResults = isLoadMore ? [...searchResults, ...list] : list;
-                    renderSearchResults(list, isLoadMore);
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.code === 0 && data.data) {
+                    list = data.data.map(item => ({
+                        ...item,
+                        source: 'netease'
+                    }));
                     currentSearchPage += 10;
-                } else {
-                    hasMoreResults = false;
-                    if (!isLoadMore) alert('未找到相关歌曲');
                 }
+            } else if (source === 'kuwo') {
+                // 酷我 API
+                const url = `https://oiapi.net/api/Kuwo?msg=${encodeURIComponent(keyword)}&page=${currentSearchPage}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.code === 1 && data.data) {
+                    list = data.data.map((item, index) => ({
+                        name: item.song,
+                        singers: [{ name: item.singer }],
+                        picurl: item.picture,
+                        id: item.rid,
+                        source: 'kuwo',
+                        page: currentSearchPage, // 保存当前页码
+                        n: index + 1, // 保存序号(1-10)
+                        duration: item.time
+                    }));
+                    currentSearchPage += 1;
+                }
+            }
+            
+            if (list.length > 0) {
+                searchResults = isLoadMore ? [...searchResults, ...list] : list;
+                renderSearchResults(list, isLoadMore);
             } else {
-                if (!isLoadMore) alert('搜索失败: ' + (data.message || '未知错误'));
+                hasMoreResults = false;
+                if (!isLoadMore) alert('未找到相关歌曲');
             }
         } catch (error) {
             console.error('搜索出错:', error);
@@ -318,8 +409,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // 计算起始序号
-        // 既然页面从0开始，那么第一页的起始是 0
-        const startIndex = currentSearchPage;
+        // 使用当前列表长度减去新增列表长度，保证序号正确连续
+        let startIndex = 0;
+        if (isAppend) {
+             // 这里的 searchResults 已经在外部更新包含了 list，所以 startIndex = 总长度 - 本次新增长度
+             startIndex = searchResults.length - list.length;
+        }
         
         list.forEach((item, index) => {
             const globalIndex = startIndex + index + 1; // 全局序号，从1开始
@@ -396,44 +491,79 @@ document.addEventListener('DOMContentLoaded', function() {
         document.title = '正在加载歌曲...';
         
         try {
-            // 使用 id 获取详情
-            const songId = item.id;
-            const url = `https://oiapi.net/api/Music_163?id=${songId}`;
-            
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.code === 0 && data.data) {
-                // 注意：API 返回的是 data 数组，我们取第一个元素
-                const result = Array.isArray(data.data) ? data.data[0] : data.data;
+            if (item.source === 'kuwo') {
+                // 酷我音乐逻辑
+                const url = `https://oiapi.net/api/Kuwo?msg=${encodeURIComponent(currentSearchKeyword)}&page=${item.page}&n=${item.n}`;
                 
-                if (!result) {
-                    throw new Error('歌曲数据为空');
-                }
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.code === 1 && data.data) {
+                    const result = data.data;
+                    const songData = {
+                        title: result.song,
+                        artist: result.singer,
+                        cover: result.picture,
+                        src: result.url,
+                        id: result.rid || item.id,
+                        lrc: '' // 酷我暂无歌词
+                    };
+                    
+                    addToPlaylistAndPlay(songData);
+                    renderLyrics([]); // 清空歌词
+                    
+                    // 显示特定提示
+                    setTimeout(() => {
+                        const noLyrics = document.getElementById('lyricsContainer').querySelector('.no-lyrics');
+                        if(noLyrics) noLyrics.textContent = '该渠道暂无歌词';
+                    }, 100);
 
-                const songData = {
-                    title: result.name,
-                    artist: result.singers ? result.singers[0].name : '未知歌手',
-                    cover: result.picurl || result.picture || item.picurl || item.picture, // 优先使用详情里的封面，如果没有则使用列表里的
-                    src: result.music_url || result.url, // 兼容不同的 URL 字段名
-                    id: songId,
-                    lrc: result.lrc
-                };
-                
-                addToPlaylistAndPlay(songData);
-                
-                // 获取歌词
-                fetchLyrics(songId);
-                // 切换回播放列表视图
-                showPlaylist();
-                // 关闭侧边栏，防止遮挡播放器
-                playlistSidebar.classList.remove('active');
+                    showPlaylist();
+                    playlistSidebar.classList.remove('active');
+                } else {
+                    throw new Error(data.message || '获取歌曲失败');
+                }
             } else {
-                alert('无法获取歌曲链接: ' + (data.message || '未知错误'));
+                // 网易云音乐逻辑
+                // 使用 id 获取详情
+                const songId = item.id;
+                const url = `https://oiapi.net/api/Music_163?id=${songId}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.code === 0 && data.data) {
+                    // 注意：API 返回的是 data 数组，我们取第一个元素
+                    const result = Array.isArray(data.data) ? data.data[0] : data.data;
+                    
+                    if (!result) {
+                        throw new Error('歌曲数据为空');
+                    }
+    
+                    const songData = {
+                        title: result.name,
+                        artist: result.singers ? result.singers[0].name : '未知歌手',
+                        cover: result.picurl || result.picture || item.picurl || item.picture, // 优先使用详情里的封面，如果没有则使用列表里的
+                        src: result.music_url || result.url, // 兼容不同的 URL 字段名
+                        id: songId,
+                        lrc: result.lrc
+                    };
+                    
+                    addToPlaylistAndPlay(songData);
+                    
+                    // 获取歌词
+                    fetchLyrics(songId);
+                    // 切换回播放列表视图
+                    showPlaylist();
+                    // 关闭侧边栏，防止遮挡播放器
+                    playlistSidebar.classList.remove('active');
+                } else {
+                    alert('无法获取歌曲链接: ' + (data.message || '未知错误'));
+                }
             }
         } catch (error) {
             console.error('获取详情失败:', error);
-            alert('获取歌曲详情失败');
+            alert('获取歌曲详情失败: ' + (error.message || ''));
         } finally {
             document.title = prevTitle;
         }
