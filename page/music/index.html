@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EggyMusic - 蛋仔音乐</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- 搜索区域 -->
+        <div class="search-bar">
+            <select id="apiSource" style="display: none;">
+                <option value="netease">网易云</option>
+            </select>
+            <div class="search-input-wrapper" style="display: flex; flex: 1; align-items: center; gap: 10px;">
+                <i class="fas fa-music" style="color: var(--primary-color);"></i>
+                <input type="text" id="searchInput" placeholder="搜索网易云音乐...">
+            </div>
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+            <button id="themeToggleBtn" style="background: transparent; border: none; color: var(--text-color); cursor: pointer; font-size: 18px; margin-left: 5px;" title="切换模式">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <div class="player-wrapper">
+            <!-- 唱片区域 -->
+            <div class="record-wrapper">
+                <div class="record-bg"></div>
+                <div class="record" id="record">
+                    <div class="cover-art" id="coverArt">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="center-hole"></div>
+                </div>
+                <div class="tonearm" id="tonearm"></div>
+            </div>
+
+            <div class="player-content-right">
+                <!-- 歌曲信息 -->
+                <div class="song-info">
+                    <h2 id="songTitle">Eggy Music</h2>
+                    <p id="artistName">CloudGenius</p>
+                </div>
+
+                <!-- 歌词显示区域 -->
+                <div class="lyrics-container" id="lyricsContainer">
+                    <p class="no-lyrics">暂无歌词</p>
+                </div>
+            </div>
+
+            <div class="player-controls-bottom">
+                <!-- 进度条 -->
+                <div class="progress-wrapper">
+                    <span class="time-text" id="currentTime">00:00</span>
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <span class="time-text" id="totalTime">00:00</span>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="controls">
+                    <button id="prevBtn" class="control-btn small"><i class="fas fa-step-backward"></i></button>
+                    <button id="playBtn" class="control-btn big"><i class="fas fa-play"></i></button>
+                    <button id="nextBtn" class="control-btn small"><i class="fas fa-step-forward"></i></button>
+                    
+                    <div class="extra-controls">
+                        <button id="modeBtn" class="control-btn tiny" title="播放模式"><i class="fas fa-repeat"></i></button>
+                        <button id="listBtn" class="control-btn tiny" title="播放列表"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 播放列表侧边栏 -->
+        <div class="playlist-sidebar" id="playlistSidebar">
+            <div class="sidebar-header">
+                <h3 id="sidebarTitle">播放列表</h3>
+                <button id="closeListBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="sidebar-tabs" id="sidebarTabs">
+                <button id="tabPlaylist" class="tab-btn active" style="margin-right: 10px;">当前播放</button>
+                <button id="tabSearch" class="tab-btn">搜索结果</button>
+            </div>
+            <ul class="playlist" id="playlist">
+                <!-- 播放列表项将通过 JS 生成 -->
+            </ul>
+            <ul class="playlist" id="searchResults" style="display: none;">
+                <!-- 搜索结果将通过 JS 生成 -->
+            </ul>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
