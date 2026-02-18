@@ -20,7 +20,7 @@
 
 [data-theme="dark"] {
     --bg-gradient: linear-gradient(135deg, #1e2024 0%, #0d0e10 100%);
-    --glass-bg: rgba(0, 0, 0, 0.5);
+    --glass-bg: rgba(0, 0, 0, 0.2); /* 降低不透明度，从 0.5 降为 0.25 */
     --glass-border: rgba(255, 255, 255, 0.1);
     --text-color: #e0e0e0;
     --text-secondary: #aaa;
@@ -127,6 +127,19 @@ body {
     top: 40%;
     left: 60%;
     animation-delay: -4s;
+}
+
+/* 深色模式背景圆颜色 - 极光幻梦 (Aurora Dream) */
+[data-theme="dark"] .circle-1 {
+    background: #7c4dff; /* 亮紫色 */
+}
+
+[data-theme="dark"] .circle-2 {
+    background: #00e5ff; /* 荧光青 */
+}
+
+[data-theme="dark"] .circle-3 {
+    background: #2979ff; /* 宝蓝色 - 替换原来的红色 */
 }
 
 @keyframes float {
@@ -556,6 +569,7 @@ body {
     flex-shrink: 0;
 }
 
+/* 播放控制按钮 - 严格按照 yangshi.md Method 1 实现 */
 .control-btn {
     background: none;
     border: none;
@@ -565,6 +579,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative; /* 确保 z-index 上下文 */
+    z-index: 100; /* 提升按钮层级 */
 }
 
 .control-btn:hover {
@@ -572,14 +588,40 @@ body {
     color: var(--primary-color);
 }
 
+.control-btn i {
+    pointer-events: none; /* 核心：让图标不响应鼠标事件，点击穿透到父元素 */
+}
+
+/* 播放按钮特殊样式 - Method 1: 固定宽高 + border-radius 50% */
 .control-btn.big {
-    width: 60px;
-    height: 60px;
-    background: white;
+    width: 64px; /* 稍微大一点，符合手指触摸区域 */
+    height: 64px;
     border-radius: 50%;
+    background: white;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     font-size: 24px;
     color: var(--primary-color);
+    
+    /* 确保内容居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* 确保 z-index 高于周围元素 */
+    z-index: 200; 
+}
+
+/* 使用 ::after 伪元素作为绝对点击层，确保无死角覆盖 */
+.control-btn.big::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10; /* 在图标之上 */
 }
 
 [data-theme="dark"] .control-btn.big {

@@ -1,13 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 播放列表数据
-    let playlist = [
-        {
-            title: "欢迎来到EggyMusic",
-            artist: "By CloudGenius",
-            cover: "", 
-            src: ""
-        }
-    ];
+    let playlist = [];
 
     // DOM 元素
     const audioPlayer = document.getElementById('audioPlayer');
@@ -195,6 +188,74 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 歌词相关变量
     let currentLyrics = []; // [{time: 0, text: "歌词"}]
+    // 获取酷我歌词
+    async function fetchKuwoLyrics(musicId, retryCount = 0) {
+        // 确保 musicId 是纯数字
+        const cleanMusicId = musicId.toString().replace(/\D/g, '');
+        
+        // 清空现有歌词
+        if (retryCount === 0) {
+             renderLyrics([]);
+             // 显示加载提示
+             const lyricsContainer = document.getElementById('lyricsContainer');
+             if (lyricsContainer) {
+                 lyricsContainer.innerHTML = '<div class="no-lyrics">正在获取歌词...</div>';
+             }
+        }
+
+        try {
+            // 使用 cors-anywhere 代理或直接请求（如果允许跨域）
+            // 注意：http://m.kuwo.cn 可能有跨域限制，通常需要代理
+            // 这里先尝试直接请求，如果失败则尝试代理
+            const targetUrl = `http://m.kuwo.cn/newh5/singles/songinfoandlrc?musicId=${cleanMusicId}`;
+            // 使用 codetabs 代理
+            const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`;
+            
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
+            
+            // 解析返回的数据
+            // 成功格式: {"data":{"lrclist":[...], ...}, "status": 200}
+            // 失败格式: {"data":null, "status": 301, ...}
+            
+            if (data.status === 200 && data.data && data.data.lrclist) {
+                const lrclist = data.data.lrclist;
+                // 酷我返回的是对象数组 [{lineLyric: "歌词内容", time: "0.58"}, ...]
+                const lyrics = lrclist.map(item => ({
+                    time: parseFloat(item.time),
+                    text: item.lineLyric
+                }));
+                
+                if (lyrics.length > 0) {
+                    renderLyrics(lyrics);
+                } else {
+                    renderLyrics([]);
+                }
+            } else {
+                // 如果失败且重试次数小于10，则重试
+                if (retryCount < 10) {
+                    console.log(`获取酷我歌词失败，正在重试 (${retryCount + 1}/10)...`);
+                    fetchKuwoLyrics(musicId, retryCount + 1);
+                } else {
+                    console.error('获取酷我歌词失败:', data.msg || '未知错误');
+                    if (lyricsContainer) {
+                        lyricsContainer.innerHTML = '<div class="no-lyrics">歌词获取失败</div>';
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('获取酷我歌词网络错误:', error);
+            if (retryCount < 10) {
+                console.log(`获取酷我歌词网络错误，正在重试 (${retryCount + 1}/10)...`);
+                fetchKuwoLyrics(musicId, retryCount + 1);
+            } else {
+                if (lyricsContainer) {
+                    lyricsContainer.innerHTML = '<div class="no-lyrics">歌词获取失败</div>';
+                }
+            }
+        }
+    }
+
     // 获取歌词容器，注意这里可能获取为空，需要在 DOMContentLoaded 中确保获取
     let lyricsContainer = null; // 初始化为 null
     let currentLyricIndex = -1;
@@ -228,23 +289,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 渲染歌词
     function renderLyrics(lyrics) {
-        currentLyrics = lyrics || [];
+        currentLyrics = lyrics;
         currentLyricIndex = -1;
-        lyricsContainer = document.getElementById('lyricsContainer'); // 确保获取到元素
+        
+        // 确保容器存在
+        if (!lyricsContainer) {
+            lyricsContainer = document.getElementById('lyricsContainer');
+        }
         
         if (!lyricsContainer) return;
 
-        if (!currentLyrics.length) {
-            lyricsContainer.innerHTML = '<p class="no-lyrics">暂无歌词</p>';
+        if (!lyrics.length) {
+            lyricsContainer.innerHTML = '<div class="no-lyrics">暂无歌词</div>';
             return;
         }
 
-        let html = '<div class="lyrics-content" style="transition: transform 0.3s ease-out;">';
-        currentLyrics.forEach((line, index) => {
-            html += `<div class="lyrics-line" data-index="${index}">${line.text}</div>`;
+        let html = '<div class="lyrics-content">';
+        lyrics.forEach((line, index) => {
+            html += `<p class="lyrics-line" data-time="${line.time}">${line.text}</p>`;
         });
         html += '</div>';
+        
         lyricsContainer.innerHTML = html;
+        
+        // 渲染完成后立即进行一次校准
+        // 延迟一小段时间确保 DOM 渲染完成
+        setTimeout(() => {
+            const currentTime = audioPlayer.currentTime;
+            updateLyrics(currentTime);
+            // 强制将第一句（如果当前还没播放）或当前高亮行居中
+            if (currentLyricIndex === -1 && lyrics.length > 0) {
+                 // 如果还没开始播放，让第一句稍微往下一点，看起来像是在中间
+                 // 但实际上 updateLyrics 会处理居中，我们只需要手动调用一次
+                 // 如果 updateLyrics 没找到对应的行（currentTime=0），它会高亮第一行吗？
+                 // 让我们手动高亮第一行并居中
+                 currentLyricIndex = 0;
+                 const lines = lyricsContainer.querySelectorAll('.lyrics-line');
+                 if (lines[0]) {
+                     lines[0].classList.add('active');
+                     const content = lyricsContainer.querySelector('.lyrics-content');
+                     if (content) {
+                        const containerHeight = lyricsContainer.clientHeight;
+                        const lineHeight = lines[0].clientHeight;
+                        const offsetTop = lines[0].offsetTop;
+                        let scrollY = offsetTop - (containerHeight / 2) + (lineHeight / 2);
+                        content.style.transform = `translateY(-${scrollY}px)`;
+                     }
+                 }
+            }
+        }, 50);
     }
 
     // 更新歌词高亮和滚动
@@ -512,11 +605,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     addToPlaylistAndPlay(songData);
                     renderLyrics([]); // 清空歌词
                     
-                    // 显示特定提示
-                    setTimeout(() => {
-                        const noLyrics = document.getElementById('lyricsContainer').querySelector('.no-lyrics');
-                        if(noLyrics) noLyrics.textContent = '该渠道暂无歌词';
-                    }, 100);
+                    // 获取酷我歌词
+                    if (songData.id) {
+                        fetchKuwoLyrics(songData.id);
+                    }
 
                     showPlaylist();
                     playlistSidebar.classList.remove('active');
@@ -762,6 +854,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         updatePlaylistActive();
+
+        // 尝试加载歌词
+        renderLyrics([]); // 清空现有歌词
+        const lyricsContainer = document.getElementById('lyricsContainer');
+        if (lyricsContainer) {
+             lyricsContainer.innerHTML = '<div class="no-lyrics">正在获取歌词...</div>';
+        }
+
+        // 根据歌曲来源获取歌词
+        if (song.source === 'kuwo' && song.id) {
+            fetchKuwoLyrics(song.id);
+        } else if (song.id) {
+            // 默认为网易云
+            fetchLyrics(song.id);
+        } else {
+             // 如果没有 id，显示暂无歌词
+             if (lyricsContainer) {
+                 lyricsContainer.innerHTML = '<div class="no-lyrics">暂无歌词</div>';
+             }
+        }
+
+        // 重置播放状态图标
+        if (isPlaying) {
+             // 如果当前是播放状态切歌，保持播放图标（暂停样式）
+             const icon = playBtn.querySelector('i');
+             if(icon) icon.className = 'fas fa-pause';
+        } else {
+             const icon = playBtn.querySelector('i');
+             if(icon) icon.className = 'fas fa-play';
+        }
     }
 
     // 更新播放列表选中状态
@@ -776,22 +898,83 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 播放歌曲
+    // 播放
     function playSong() {
-        playerWrapper.classList.add('playing');
-        record.classList.add('playing');
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        audioPlayer.play();
-        isPlaying = true;
+        // 直接调用 play
+        const playPromise = audioPlayer.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // 只有真的播放成功了，才更新 UI 和状态
+                isPlaying = true;
+                const icon = playBtn.querySelector('i');
+                if (icon) icon.className = 'fas fa-pause';
+                
+                record.style.animationPlayState = 'running';
+                tonearm.style.transform = 'rotate(0deg)';
+                playerWrapper.classList.add('playing');
+                record.classList.add('playing');
+                updatePlaylistActive();
+            }).catch(error => {
+                console.error('Play prevented:', error);
+                // 播放失败，确保 UI 是暂停状态
+                isPlaying = false;
+                const icon = playBtn.querySelector('i');
+                if (icon) icon.className = 'fas fa-play';
+            });
+        }
     }
 
-    // 暂停歌曲
+    // 暂停
     function pauseSong() {
+        // 直接调用 pause
+        audioPlayer.pause();
+        
+        // 立即更新 UI 和状态
+        isPlaying = false;
+        const icon = playBtn.querySelector('i');
+        if (icon) icon.className = 'fas fa-play';
+        
+        record.style.animationPlayState = 'paused';
+        tonearm.style.transform = 'rotate(-30deg)';
         playerWrapper.classList.remove('playing');
         record.classList.remove('playing');
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        audioPlayer.pause();
-        isPlaying = false;
+    }
+    
+    // 绑定事件到播放按钮本身
+    if (playBtn) {
+        let lastClickTime = 0;
+        playBtn.onclick = (e) => {
+            e.stopPropagation();
+            
+            // 防止快速重复点击 (防抖/节流)
+            // 如果是在触摸设备上，可能会触发 touchstart 和 click，或者多次 click
+            // 300ms 内的重复点击被忽略
+            const now = Date.now();
+            if (now - lastClickTime < 300) {
+                console.log('Ignored rapid click on play button');
+                return;
+            }
+            lastClickTime = now;
+
+            console.log(`Play button clicked. Audio paused: ${audioPlayer.paused}`);
+
+            // 直接根据 audioPlayer 的真实状态来决定下一步操作
+            // 这是最稳健的方式，不依赖可能不同步的 isPlaying 变量
+            if (audioPlayer.paused) {
+                playSong();
+            } else {
+                pauseSong();
+            }
+        };
+    }
+
+    // 绑定上一首/下一首事件
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevSong);
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextSong);
     }
 
     // 上一首
@@ -875,17 +1058,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => modeBtn.classList.remove('active'), 200);
     }
 
-    // 事件监听
-    playBtn.addEventListener('click', () => {
-        if (isPlaying) {
-            pauseSong();
-        } else {
-            playSong();
-        }
-    });
-
-    prevBtn.addEventListener('click', prevSong);
-    nextBtn.addEventListener('click', nextSong);
+    // 事件监听 - 清理多余的绑定
+    // playBtn 的事件已经在前面统一处理了，这里移除所有旧的重复绑定代码
+    // prevBtn 和 nextBtn 的事件也已经在前面处理了
 
     audioPlayer.addEventListener('timeupdate', (e) => {
         updateProgress(e);
@@ -939,5 +1114,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化
     initPlaylist();
-    loadSong(currentindex);
+    if (playlist.length > 0) {
+        loadSong(currentindex);
+    } else {
+        // 如果播放列表为空，显示默认状态或清空信息
+        songTitle.innerText = "EggyMusic";
+        artistName.innerText = "快去搜索歌曲吧~";
+        if (coverArt) coverArt.src = "https://cloudgeniusyun.github.io/assets/images/music-cover.jpg"; // 或者设置一个默认封面
+        if (durationEl) durationEl.innerText = "0:00";
+    }
 });
