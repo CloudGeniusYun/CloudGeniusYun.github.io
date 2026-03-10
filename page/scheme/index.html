@@ -3,366 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>✨ Scheme 唤起助手</title>
+    <title>✨ 优雅的 URL Scheme 唤醒工具</title>
+    <!-- 谷歌字体 & 流畅图标库 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(145deg, #f6f9fc 0%, #e6f0f5 100%);
+            background: linear-gradient(145deg, #e6f0ff 0%, #f4e9ff 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
-            /* 柔光点缀 */
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* 抽象装饰背景 */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 240px;
-            height: 240px;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(173, 216, 230, 0.2) 70%);
-            border-radius: 50%;
-            top: -60px;
-            right: -60px;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle at 70% 80%, rgba(255, 245, 220, 0.5) 0%, rgba(190, 220, 240, 0.1) 80%);
-            border-radius: 50%;
-            bottom: -100px;
-            left: -80px;
-            z-index: 0;
-            pointer-events: none;
+            margin: 0;
+            transition: background 0.3s ease;
         }
 
         .card {
-            position: relative;
-            z-index: 10;
+            max-width: 560px;
             width: 100%;
-            max-width: 480px;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border-radius: 40px;
-            box-shadow: 0 30px 60px rgba(0, 30, 50, 0.12), 0 10px 30px rgba(0, 20, 30, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 2.2rem 1.8rem;
-            transition: transform 0.25s ease;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 2.5rem;
+            box-shadow: 0 30px 60px -20px rgba(70, 90, 140, 0.4), 0 8px 20px rgba(255, 255, 255, 0.6) inset, 0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+            padding: 2.2rem 2rem;
+            transition: all 0.25s ease;
         }
 
         .card:hover {
-            transform: scale(1.01);
+            box-shadow: 0 35px 70px -18px rgba(60, 80, 140, 0.5), 0 8px 22px rgba(255, 255, 255, 0.8) inset;
         }
 
-        h1 {
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header i {
             font-size: 2.2rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #1e3c5c, #2b5876);
+            background: linear-gradient(135deg, #3c4c9c, #6c4fc9);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            filter: drop-shadow(0 4px 6px rgba(90, 80, 200, 0.2));
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #1e293b, #2d3a5e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
         }
 
         .subhead {
-            font-size: 1rem;
-            color: #4e6b82;
-            margin-bottom: 2rem;
-            padding-left: 0.2rem;
-            border-left: 4px solid #8bb9d0;
-            padding-left: 12px;
-            font-weight: 350;
-            line-height: 1.4;
-        }
-
-        .input-wrapper {
-            margin-bottom: 1.8rem;
-            position: relative;
-        }
-
-        label {
-            font-size: 0.9rem;
+            font-size: 0.98rem;
             font-weight: 500;
-            color: #1e3b4f;
-            margin-bottom: 8px;
-            display: block;
-            letter-spacing: 0.3px;
+            color: #3e4b6b;
+            margin-left: 0.2rem;
+            margin-bottom: 2rem;
+            padding-left: 0.5rem;
+            border-left: 4px solid #9bb6ff;
+            opacity: 0.85;
         }
 
-        .scheme-input {
+        .input-field {
             width: 100%;
-            padding: 1.1rem 1.4rem;
-            font-size: 1.05rem;
             background: rgba(255, 255, 255, 0.7);
-            border: 1.5px solid rgba(120, 150, 170, 0.2);
-            border-radius: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 2rem;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #141e33;
             outline: none;
             transition: all 0.2s;
-            color: #0a2535;
-            font-weight: 450;
-            box-shadow: inset 0 4px 8px rgba(0, 20, 30, 0.02);
-            backdrop-filter: blur(5px);
-        }
-
-        .scheme-input:focus {
-            border-color: #5c9acf;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 18px -8px rgba(45, 115, 180, 0.3), inset 0 1px 3px #fff;
-        }
-
-        .scheme-input::placeholder {
-            color: #98aebb;
-            font-weight: 300;
-            font-size: 0.95rem;
-        }
-
-        .launch-btn {
-            width: 100%;
-            padding: 1.1rem 1.5rem;
-            background: linear-gradient(105deg, #1f4b6e, #2d658a);
-            border: none;
-            border-radius: 40px;
-            color: white;
-            font-size: 1.35rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 12px 22px -8px rgba(20, 70, 100, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3) inset;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 10px rgba(0, 10, 30, 0.05), inset 0 0 0 1px rgba(255,255,255,0.8);
+            backdrop-filter: blur(4px);
             margin-bottom: 1.2rem;
         }
 
-        .launch-btn:active {
-            transform: scale(0.97);
-            background: linear-gradient(105deg, #163e58, #1f5272);
-            box-shadow: 0 6px 12px -6px #103247;
+        .input-field:focus {
+            border-color: #a084fc;
+            background: white;
+            box-shadow: 0 12px 24px -12px rgba(90, 75, 200, 0.4), 0 0 0 3px rgba(160, 130, 255, 0.2);
         }
 
-        .launch-btn i {
-            font-size: 1.5rem;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-        }
-
-        .footer-tip {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #3b5d75;
-            background: rgba(235, 245, 250, 0.5);
-            padding: 0.7rem 1.2rem;
-            border-radius: 50px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(200, 220, 235, 0.5);
-        }
-
-        .example-link {
-            color: #1d5d8e;
-            font-weight: 550;
-            text-decoration: none;
-            border-bottom: 1px dashed #7ca9c9;
-            cursor: pointer;
-            transition: color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .example-link:hover {
-            color: #083c5c;
-            border-bottom: 1px solid #083c5c;
-        }
-
-        .example-link:active {
+        .input-field::placeholder {
+            color: #7a86a8;
+            font-weight: 400;
+            font-size: 1rem;
             opacity: 0.7;
         }
 
-        .security-badge {
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 0.7rem;
+            margin: 1.2rem 0 1.8rem;
+        }
+
+        .example-chip {
+            background: rgba(235, 240, 255, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #293759;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .example-chip i {
+            font-size: 0.85rem;
+            color: #4d61b0;
+        }
+
+        .example-chip:hover {
+            background: #ffffff;
+            border-color: #b3a1ff;
+            box-shadow: 0 10px 20px -8px rgba(110, 90, 210, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .example-chip:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .action-btn {
+            width: 100%;
+            background: linear-gradient(105deg, #2b3b7a, #5042b0);
+            border: none;
+            border-radius: 3rem;
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 25px 35px -12px #2d2b6b, 0 2px 4px rgba(255, 255, 255, 0.5) inset;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-top: 0.5rem;
+        }
+
+        .action-btn i {
+            font-size: 1.3rem;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(105deg, #33468b, #5f4dc2);
+            box-shadow: 0 32px 45px -15px #312b75, 0 4px 10px rgba(255, 255, 255, 0.3) inset;
+            transform: scale(1.01);
+        }
+
+        .action-btn:hover i {
+            transform: translateX(4px);
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 15px 25px -10px #2b2558;
+        }
+
+        .status-area {
+            margin-top: 1.8rem;
+            background: rgba(240, 245, 255, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 3rem;
+            padding: 0.9rem 1.5rem;
+            font-size: 0.95rem;
+            color: #1b2552;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            min-height: 3.6rem;
+        }
+
+        .status-area i {
+            color: #4e61c0;
+            font-size: 1.1rem;
+            width: 1.8rem;
+            text-align: center;
+        }
+
+        .status-text {
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .status-text.error {
+            color: #b13e5c;
+            font-weight: 600;
+        }
+
+        .status-text.success {
+            color: #1f6c4b;
+        }
+
+        footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #495e93;
             font-size: 0.8rem;
-            background: rgba(30, 60, 80, 0.08);
-            padding: 4px 12px;
-            border-radius: 30px;
-            color: #315e7c;
+            opacity: 0.8;
+            font-weight: 500;
         }
 
-        /* 移动端优化 */
-        @media (max-width: 420px) {
-            .card {
-                padding: 1.8rem 1.2rem;
-            }
-            h1 {
-                font-size: 1.9rem;
-            }
-            .launch-btn {
-                font-size: 1.2rem;
-                padding: 0.9rem;
-            }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(130, 140, 210, 0.2), transparent);
+            margin: 1.2rem 0 0.5rem;
         }
 
-        /* 简单动画 */
-        @keyframes gentle-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(70, 140, 200, 0.3); }
-            70% { box-shadow: 0 0 0 8px rgba(70, 140, 200, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(70, 140, 200, 0); }
-        }
-        .launch-btn:focus-visible {
-            animation: gentle-pulse 1.2s infinite;
+        /* 隐藏的 iframe — 默默干活 */
+        #hiddenSchemeFrame {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>🔗 Scheme 唤起器</h1>
+        <div class="header">
+            <i class="fas fa-link"></i>
+            <h1>Scheme 唤醒器</h1>
+        </div>
         <div class="subhead">
-            从浏览器 / 短信 / 邮件 · 一键调起Scheme
+            输入自定义URL Scheme · 点击按钮唤醒应用
         </div>
 
-        <!-- 输入区 -->
-        <div class="input-wrapper">
-            <label for="schemeInput">⚡ 输入 URL Scheme</label>
-            <input type="text" id="schemeInput" class="scheme-input" 
-                   placeholder="例如: weixin://dl/business/?appid=..." 
-                   value="weixin://"
-                   autofocus>
+        <!-- 主输入区 -->
+        <input type="text" class="input-field" id="schemeInput" 
+               placeholder="例如: myapp://home" 
+               value="myapp://profile">
+
+        <!-- 快捷示例标签 (点击填充) -->
+        <div class="examples">
+            <span class="example-chip" data-url="myapp://home">
+                <i class="fas fa-cube"></i> myapp://
+            </span>
+            <span class="example-chip" data-url="twitter://timeline">
+                <i class="fab fa-twitter"></i> twitter://
+            </span>
+            <span class="example-chip" data-url="mailto:hello@example.com">
+                <i class="fas fa-envelope"></i> mailto:
+            </span>
+            <span class="example-chip" data-url="tel:+1234567890">
+                <i class="fas fa-phone-alt"></i> tel:
+            </span>
+            <span class="example-chip" data-url="weixin://">
+                <i class="fab fa-weixin"></i> weixin://
+            </span>
         </div>
 
-        <!-- 主要操作按钮 -->
-        <button class="launch-btn" id="launchBtn">
-            <span>🚀 立即打开</span>
-            <i>↗</i>
+        <!-- 主要行动按钮 -->
+        <button class="action-btn" id="openBtn">
+            <i class="fas fa-arrow-up-right-from-square"></i> 打开链接
         </button>
 
-        <!-- 底部：填充示例 & 安全提示 -->
-        <div class="footer-tip">
-            <span class="example-link" id="fillExampleBtn">
-                <span>📋 填充示例</span>
-                <span style="font-size:0.9rem;">weixin://</span>
-            </span>
-            <span class="security-badge" title="javascript:等危险协议已被过滤">
-                🛡️ 安全过滤
-            </span>
+        <!-- 状态显示区域（友好反馈） -->
+        <div class="status-area" id="statusArea">
+            <i class="fas fa-circle-info" id="statusIcon"></i>
+            <span class="status-text" id="statusMessage">就绪，点击按钮尝试打开</span>
         </div>
 
-        <!-- 附加小提示 (点击后可清空或尝试其他) -->
-        <p style="font-size:0.75rem; color:#6b8da0; margin-top: 1rem; text-align: center; opacity:0.8;">
-            点击「填充示例」快速尝试 · 确保目标App已安装
-        </p>
+        <!-- 隐藏 iframe — 用于无痛调用自定义scheme -->
+        <iframe id="hiddenSchemeFrame" name="hiddenSchemeFrame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+        <hr>
+        <footer>
+            ⚡ 对于http/https将在新标签页打开 · 自动过滤危险协议
+        </footer>
     </div>
 
     <script>
         (function() {
-            const inputEl = document.getElementById('schemeInput');
-            const launchBtn = document.getElementById('launchBtn');
-            const fillExampleBtn = document.getElementById('fillExampleBtn');
+            // DOM 元素
+            const inputField = document.getElementById('schemeInput');
+            const openBtn = document.getElementById('openBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            const statusIcon = document.getElementById('statusIcon');
+            const hiddenFrame = document.getElementById('hiddenSchemeFrame');
 
-            // ---------- 安全过滤：禁止危险伪协议 ----------
-            function isSchemeAllowed(rawScheme) {
-                const trimmed = rawScheme.trim().toLowerCase();
-                // 过滤 javascript:  data:  vbscript: 等
-                if (trimmed.startsWith('javascript:') || 
-                    trimmed.startsWith('data:') || 
-                    trimmed.startsWith('vbscript:')) {
-                    return false;
-                }
-                // 也可以阻止空字符串
-                return trimmed !== '';
-            }
+            // 示例标签集合
+            const exampleChips = document.querySelectorAll('.example-chip');
 
-            // ---------- 唤起操作 ----------
-            function launchScheme(scheme) {
-                if (!scheme || scheme.trim() === '') {
-                    alert('请输入一个 URL Scheme～');
-                    inputEl.focus();
-                    return;
-                }
-
-                const trimmedScheme = scheme.trim();
-
-                if (!isSchemeAllowed(trimmedScheme)) {
-                    alert('检测到潜在危险的协议 (如 javascript:)，已拦截。\n请使用正常的 scheme，例如 weixin:// 或 https://');
-                    inputEl.value = '';   // 清空以免误触
-                    inputEl.focus();
-                    return;
-                }
-
-                // 使用 location.href 跳转 (由用户手势触发，安全)
-                // 对于自定义 scheme 会弹出询问或直接唤起
-                try {
-                    window.location.href = trimmedScheme;
-                } catch (e) {
-                    alert('跳转失败，可能是 scheme 格式有误：' + e);
+            // 更新状态的小助手
+            function setStatus(message, isError = false, isSuccess = false) {
+                statusMessage.textContent = message;
+                statusMessage.classList.remove('error', 'success');
+                if (isError) {
+                    statusMessage.classList.add('error');
+                    statusIcon.className = 'fas fa-circle-exclamation';
+                } else if (isSuccess) {
+                    statusMessage.classList.add('success');
+                    statusIcon.className = 'fas fa-circle-check';
+                } else {
+                    statusIcon.className = 'fas fa-circle-info';
                 }
             }
 
-            // ---------- 按钮点击事件 ----------
-            launchBtn.addEventListener('click', function() {
-                launchScheme(inputEl.value);
-            });
+            // 清除特殊状态 (回到中性)
+            function resetStatus() {
+                statusMessage.textContent = '就绪，点击按钮尝试打开';
+                statusMessage.classList.remove('error', 'success');
+                statusIcon.className = 'fas fa-circle-info';
+            }
 
-            // 支持回车键（在输入框内按回车直接唤起）
-            inputEl.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();   // 防止某些意外提交
-                    launchScheme(inputEl.value);
+            // 危险协议检测 (防javascript/data/vbscript)
+            function isDangerousProtocol(url) {
+                const trimmed = url.trim().toLowerCase();
+                // 检查以 javascript: data: vbscript: 开头
+                return /^\s*(javascript|data|vbscript):/i.test(trimmed);
+            }
+
+            // 核心逻辑：尝试打开链接
+            function performOpen(rawInput) {
+                const trimmed = rawInput.trim();
+                if (trimmed === '') {
+                    setStatus('⚠️ 输入不能为空，请填入一个URL Scheme', true);
+                    return;
                 }
-            });
 
-            // ---------- 填充示例 (可点击填充) ----------
-            function fillExample() {
-                // 一个有效且温和的示例：weixin://  (如果装了微信会打开微信)
-                // 也可以换成其他常见scheme，比如 m// 等，但 weixin:// 最典型。
-                inputEl.value = 'weixin://';
-                // 稍微高亮一下输入框（可选）
-                inputEl.style.backgroundColor = '#fffef0';
+                // 1. 必须包含至少一个冒号，否则很可能不是有效scheme
+                if (trimmed.indexOf(':') === -1) {
+                    setStatus('❌ 链接缺少 ":" ，它看起来不像有效的URL Scheme', true);
+                    return;
+                }
+
+                // 2. 危险协议检查
+                if (isDangerousProtocol(trimmed)) {
+                    setStatus('🚫 出于安全原因，不支持 javascript: / data: 等协议', true);
+                    return;
+                }
+
+                // 3. 判断是否为 http 或 https (我们让它们在新页面打开)
+                const isHttp = /^https?:\/\//i.test(trimmed);
+
+                // 显示尝试中的状态
+                setStatus(`⏳ 正在尝试: ${trimmed}`, false);
+                
+                // 一个小延迟让UI更新，再执行跳转
                 setTimeout(() => {
-                    inputEl.style.backgroundColor = '';
-                }, 300);
-                inputEl.focus();
+                    try {
+                        if (isHttp) {
+                            // http/https 用新窗口打开，避免当前页面丢失
+                            const newWindow = window.open(trimmed, '_blank');
+                            if (newWindow) {
+                                setStatus(`✅ 已在新标签页打开 http 链接`, false, true);
+                            } else {
+                                // 可能被浏览器阻止弹窗
+                                setStatus('⚠️ 新窗口被拦截，请允许弹出窗口或使用iframe模式', true);
+                                // fallback: 使用iframe? 但http放iframe里不合适，所以提醒用户手动
+                            }
+                        } else {
+                            // 自定义scheme: 设置隐藏iframe的src → 触发唤醒
+                            // 先设置成 about:blank 再快速切到目标，对某些浏览器更可靠
+                            hiddenFrame.src = 'about:blank';
+                            // 极短延时确保blank设置完成
+                            setTimeout(() => {
+                                hiddenFrame.src = trimmed;
+                                // 更新状态
+                                setStatus(`🚀 已尝试唤醒: ${trimmed}`, false, true);
+                            }, 10);
+                        }
+                    } catch (e) {
+                        setStatus(`❌ 打开时出现异常: ${e.message}`, true);
+                        console.warn(e);
+                    }
+                }, 30); // 延迟30ms让用户看到状态变化
             }
 
-            fillExampleBtn.addEventListener('click', function(e) {
-                e.preventDefault();   // 防止任何怪异行为
-                fillExample();
+            // 按钮点击处理
+            openBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                performOpen(inputField.value);
             });
 
-            // 额外优化: 长按或点击示例时防止选中文本（仅美观）
-            fillExampleBtn.addEventListener('mousedown', (e) => e.preventDefault());
+            // 支持回车键 (在输入框内按回车触发)
+            inputField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    performOpen(inputField.value);
+                }
+            });
 
-            // 初始化后如果输入框为空，置一个友好占位，但不强制覆盖用户可能的值
-            // 若用户想清空可自行删除
-            if (!inputEl.value) {
-                inputEl.value = 'weixin://';
+            // 示例标签点击填充
+            exampleChips.forEach(chip => {
+                chip.addEventListener('click', function(e) {
+                    const url = this.dataset.url;
+                    if (url) {
+                        inputField.value = url;
+                        // 填充后重置状态，提示用户可点击打开
+                        setStatus(`📋 示例已填充: ${url}，点击按钮打开`, false);
+                        // 可选聚焦
+                        inputField.focus();
+                    }
+                });
+            });
+
+            // 输入框变化时，如果内容为空就重置中性状态
+            inputField.addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    resetStatus();
+                } else {
+                    // 可以不清除，但为了让界面更友好，我们显示待命
+                    setStatus(`准备打开: ${this.value}`, false);
+                }
+            });
+
+            // 初始化状态: 如果输入框有默认值（myapp://profile），显示提示
+            if (inputField.value.trim() !== '') {
+                setStatus(`准备打开: ${inputField.value}`, false);
             }
 
-            // 处理粘贴内容的两端空格（在唤起时已做trim，但实时trim会干扰输入）
-            // 不实时trim，留给唤起时处理即可。
+            // 额外的保险：有些浏览器对自定义scheme在iframe内需要用户手势，
+            // 但按钮点击本身已是手势，再配合setTimeout足够。
+            // 同时，为防止重复过快，可使用标志，但无需过于复杂。
         })();
     </script>
 </body>
