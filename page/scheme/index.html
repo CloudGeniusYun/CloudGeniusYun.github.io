@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>✨ Scheme 唤起助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f6f9fc 0%, #e6f0f5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            /* 柔光点缀 */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 抽象装饰背景 */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(173, 216, 230, 0.2) 70%);
+            border-radius: 50%;
+            top: -60px;
+            right: -60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle at 70% 80%, rgba(255, 245, 220, 0.5) 0%, rgba(190, 220, 240, 0.1) 80%);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -80px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 30, 50, 0.12), 0 10px 30px rgba(0, 20, 30, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 2.2rem 1.8rem;
+            transition: transform 0.25s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1e3c5c, #2b5876);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subhead {
+            font-size: 1rem;
+            color: #4e6b82;
+            margin-bottom: 2rem;
+            padding-left: 0.2rem;
+            border-left: 4px solid #8bb9d0;
+            padding-left: 12px;
+            font-weight: 350;
+            line-height: 1.4;
+        }
+
+        .input-wrapper {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e3b4f;
+            margin-bottom: 8px;
+            display: block;
+            letter-spacing: 0.3px;
+        }
+
+        .scheme-input {
+            width: 100%;
+            padding: 1.1rem 1.4rem;
+            font-size: 1.05rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1.5px solid rgba(120, 150, 170, 0.2);
+            border-radius: 32px;
+            outline: none;
+            transition: all 0.2s;
+            color: #0a2535;
+            font-weight: 450;
+            box-shadow: inset 0 4px 8px rgba(0, 20, 30, 0.02);
+            backdrop-filter: blur(5px);
+        }
+
+        .scheme-input:focus {
+            border-color: #5c9acf;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 18px -8px rgba(45, 115, 180, 0.3), inset 0 1px 3px #fff;
+        }
+
+        .scheme-input::placeholder {
+            color: #98aebb;
+            font-weight: 300;
+            font-size: 0.95rem;
+        }
+
+        .launch-btn {
+            width: 100%;
+            padding: 1.1rem 1.5rem;
+            background: linear-gradient(105deg, #1f4b6e, #2d658a);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 12px 22px -8px rgba(20, 70, 100, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3) inset;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(2px);
+            margin-bottom: 1.2rem;
+        }
+
+        .launch-btn:active {
+            transform: scale(0.97);
+            background: linear-gradient(105deg, #163e58, #1f5272);
+            box-shadow: 0 6px 12px -6px #103247;
+        }
+
+        .launch-btn i {
+            font-size: 1.5rem;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+        }
+
+        .footer-tip {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #3b5d75;
+            background: rgba(235, 245, 250, 0.5);
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(200, 220, 235, 0.5);
+        }
+
+        .example-link {
+            color: #1d5d8e;
+            font-weight: 550;
+            text-decoration: none;
+            border-bottom: 1px dashed #7ca9c9;
+            cursor: pointer;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .example-link:hover {
+            color: #083c5c;
+            border-bottom: 1px solid #083c5c;
+        }
+
+        .example-link:active {
+            opacity: 0.7;
+        }
+
+        .security-badge {
+            font-size: 0.8rem;
+            background: rgba(30, 60, 80, 0.08);
+            padding: 4px 12px;
+            border-radius: 30px;
+            color: #315e7c;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 420px) {
+            .card {
+                padding: 1.8rem 1.2rem;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+            .launch-btn {
+                font-size: 1.2rem;
+                padding: 0.9rem;
+            }
+        }
+
+        /* 简单动画 */
+        @keyframes gentle-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(70, 140, 200, 0.3); }
+            70% { box-shadow: 0 0 0 8px rgba(70, 140, 200, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(70, 140, 200, 0); }
+        }
+        .launch-btn:focus-visible {
+            animation: gentle-pulse 1.2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔗 Scheme 唤起器</h1>
+        <div class="subhead">
+            从浏览器 / 短信 / 邮件 · 一键调起Scheme
+        </div>
+
+        <!-- 输入区 -->
+        <div class="input-wrapper">
+            <label for="schemeInput">⚡ 输入 URL Scheme</label>
+            <input type="text" id="schemeInput" class="scheme-input" 
+                   placeholder="例如: weixin://dl/business/?appid=..." 
+                   value="weixin://"
+                   autofocus>
+        </div>
+
+        <!-- 主要操作按钮 -->
+        <button class="launch-btn" id="launchBtn">
+            <span>🚀 立即打开</span>
+            <i>↗</i>
+        </button>
+
+        <!-- 底部：填充示例 & 安全提示 -->
+        <div class="footer-tip">
+            <span class="example-link" id="fillExampleBtn">
+                <span>📋 填充示例</span>
+                <span style="font-size:0.9rem;">weixin://</span>
+            </span>
+            <span class="security-badge" title="javascript:等危险协议已被过滤">
+                🛡️ 安全过滤
+            </span>
+        </div>
+
+        <!-- 附加小提示 (点击后可清空或尝试其他) -->
+        <p style="font-size:0.75rem; color:#6b8da0; margin-top: 1rem; text-align: center; opacity:0.8;">
+            点击「填充示例」快速尝试 · 确保目标App已安装
+        </p>
+    </div>
+
+    <script>
+        (function() {
+            const inputEl = document.getElementById('schemeInput');
+            const launchBtn = document.getElementById('launchBtn');
+            const fillExampleBtn = document.getElementById('fillExampleBtn');
+
+            // ---------- 安全过滤：禁止危险伪协议 ----------
+            function isSchemeAllowed(rawScheme) {
+                const trimmed = rawScheme.trim().toLowerCase();
+                // 过滤 javascript:  data:  vbscript: 等
+                if (trimmed.startsWith('javascript:') || 
+                    trimmed.startsWith('data:') || 
+                    trimmed.startsWith('vbscript:')) {
+                    return false;
+                }
+                // 也可以阻止空字符串
+                return trimmed !== '';
+            }
+
+            // ---------- 唤起操作 ----------
+            function launchScheme(scheme) {
+                if (!scheme || scheme.trim() === '') {
+                    alert('请输入一个 URL Scheme～');
+                    inputEl.focus();
+                    return;
+                }
+
+                const trimmedScheme = scheme.trim();
+
+                if (!isSchemeAllowed(trimmedScheme)) {
+                    alert('检测到潜在危险的协议 (如 javascript:)，已拦截。\n请使用正常的 scheme，例如 weixin:// 或 https://');
+                    inputEl.value = '';   // 清空以免误触
+                    inputEl.focus();
+                    return;
+                }
+
+                // 使用 location.href 跳转 (由用户手势触发，安全)
+                // 对于自定义 scheme 会弹出询问或直接唤起
+                try {
+                    window.location.href = trimmedScheme;
+                } catch (e) {
+                    alert('跳转失败，可能是 scheme 格式有误：' + e);
+                }
+            }
+
+            // ---------- 按钮点击事件 ----------
+            launchBtn.addEventListener('click', function() {
+                launchScheme(inputEl.value);
+            });
+
+            // 支持回车键（在输入框内按回车直接唤起）
+            inputEl.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();   // 防止某些意外提交
+                    launchScheme(inputEl.value);
+                }
+            });
+
+            // ---------- 填充示例 (可点击填充) ----------
+            function fillExample() {
+                // 一个有效且温和的示例：weixin://  (如果装了微信会打开微信)
+                // 也可以换成其他常见scheme，比如 m// 等，但 weixin:// 最典型。
+                inputEl.value = 'weixin://';
+                // 稍微高亮一下输入框（可选）
+                inputEl.style.backgroundColor = '#fffef0';
+                setTimeout(() => {
+                    inputEl.style.backgroundColor = '';
+                }, 300);
+                inputEl.focus();
+            }
+
+            fillExampleBtn.addEventListener('click', function(e) {
+                e.preventDefault();   // 防止任何怪异行为
+                fillExample();
+            });
+
+            // 额外优化: 长按或点击示例时防止选中文本（仅美观）
+            fillExampleBtn.addEventListener('mousedown', (e) => e.preventDefault());
+
+            // 初始化后如果输入框为空，置一个友好占位，但不强制覆盖用户可能的值
+            // 若用户想清空可自行删除
+            if (!inputEl.value) {
+                inputEl.value = 'weixin://';
+            }
+
+            // 处理粘贴内容的两端空格（在唤起时已做trim，但实时trim会干扰输入）
+            // 不实时trim，留给唤起时处理即可。
+        })();
+    </script>
+</body>
+</html>
