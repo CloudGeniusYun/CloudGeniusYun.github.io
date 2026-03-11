@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EggyHub 授权码生成器</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .hidden { display: none; }
+        .error { color: red; margin: 10px 0; }
+        .success { color: green; margin: 10px 0; }
+        input, button { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .code-box { background: #f4f4f4; padding: 10px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <h1>EggyHub 授权码生成器</h1>
+    
+    <!-- 登录表单 -->
+    <div id="login-section">
+        <h2>登录</h2>
+        <input type="password" id="password" placeholder="输入密码">
+        <button onclick="login()">登录</button>
+        <div id="login-error" class="error"></div>
+    </div>
+
+    <!-- 生成表单（登录后显示） -->
+    <div id="generate-section" class="hidden">
+        <h2>生成授权码</h2>
+        <input type="text" id="device-id" placeholder="输入设备ID">
+        <button onclick="generate()">生成</button>
+        <div id="result" class="code-box"></div>
+        <div id="generate-error" class="error"></div>
+        <button onclick="logout()" style="background-color: #f44336;">退出登录</button>
+    </div>
+
+    <script>
+        const API_BASE = 'https://cloudgenius-signer.hf.space';  // 替换为您的 Hugging Face Space 地址
+
+        async function login() {
+            const password = document.getElementById('password').value;
+            const res = await fetch(`${API_BASE}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',  // 允许携带 cookie
+                body: JSON.stringify({ password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('generate-section').classList.remove('hidden');
+                document.getElementById('login-error').innerText = '';
+            } else {
+                document.getElementById('login-error').innerText = data.message || '登录失败';
+            }
+        }
+
+        async function generate() {
+            const deviceId = document.getElementById('device-id').value;
+            if (!deviceId) {
+                document.getElementById('generate-error').innerText = '请输入设备ID';
+                return;
+            }
+            const res = await fetch(`${API_BASE}/generate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ device_id: deviceId })
+            });
+            if (res.status === 401) {
+                // 未登录，显示登录页
+                document.getElementById('login-section').classList.remove('hidden');
+                document.getElementById('generate-section').classList.add('hidden');
+                document.getElementById('generate-error').innerText = '';
+                return;
+            }
+            const data = await res.json();
+            if (data.auth_code) {
+                document.getElementById('result').innerText = data.auth_code;
+                document.getElementById('generate-error').innerText = '';
+            } else {
+                document.getElementById('generate-error').innerText = data.error || '生成失败';
+            }
+
+        }
+
+        async function logout() {
+            await fetch(`${API_BASE}/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('generate-section').classList.add('hidden');
+            document.getElementById('password').value = '';
+            document.getElementById('device-id').value = '';
+            document.getElementById('result').innerText = '';
+        }
+
+        // 检查是否已登录（可选，通过调用一个受保护端点验证）
+        async function checkLogin() {
+            // 简单起见，直接显示登录页
+        }
+        checkLogin();
+    </script>
+</body>
+</html>
