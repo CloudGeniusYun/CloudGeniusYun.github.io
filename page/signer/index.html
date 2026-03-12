@@ -27,7 +27,6 @@
             outline: none;
             box-shadow: none;
         }
-        /* 生成按钮同样使用主色（若需区分可单独定义，这里统一） */
         .btn-generate {
             background-color: #0096ff;
             color: white;
@@ -44,7 +43,6 @@
             outline: none;
             box-shadow: none;
         }
-        /* 退出按钮保持灰色 */
         .btn-secondary {
             background-color: #e5e7eb;
             color: #1f2937;
@@ -58,6 +56,23 @@
             background-color: #9ca3af;
         }
         .btn-secondary:focus {
+            outline: none;
+        }
+        /* 复制按钮新样式（蓝色边框+文字，白色背景） */
+        .btn-copy {
+            background-color: white;
+            color: #0096ff;
+            border: 1px solid #0096ff;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .btn-copy:hover {
+            background-color: #e6f2ff;
+        }
+        .btn-copy:active {
+            background-color: #cce6ff;
+        }
+        .btn-copy:focus {
             outline: none;
         }
     </style>
@@ -94,13 +109,13 @@
             </button>
             <div id="generate-error" class="text-red-500 text-sm text-center"></div>
 
-            <!-- 授权码显示区域 + 复制按钮 -->
+            <!-- 授权码显示区域 + 复制按钮（已改为蓝色调） -->
             <div id="result-area" class="hidden">
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
                     <p class="text-sm font-medium text-gray-500 mb-1">授权码：</p>
                     <p id="code-display" class="font-mono text-sm break-all text-gray-800 pr-10"></p>
                     <button id="copy-btn" onclick="copyToClipboard()" 
-                        class="absolute top-2 right-2 bg-white hover:bg-gray-100 text-gray-600 border border-gray-300 rounded-md px-2 py-1 text-xs transition"
+                        class="btn-copy absolute top-2 right-2 rounded-md px-2 py-1 text-xs transition"
                         title="复制到剪贴板">
                         复制
                     </button>
