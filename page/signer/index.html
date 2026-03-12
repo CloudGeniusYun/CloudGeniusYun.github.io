@@ -66,9 +66,57 @@
     </div>
 
     <script>
-        // 已替换为您的 Hugging Face Space 地址
+        // 您的 Hugging Face Space 地址
         const API_BASE = 'https://cloudgeniusyun-signer.hf.space';
 
+        // ========== 复制功能（兼容所有浏览器） ==========
+        async function copyToClipboard() {
+            const code = document.getElementById('code-display').innerText;
+            if (!code) {
+                alert('没有可复制的内容');
+                return;
+            }
+
+            // 方法1：使用现代 Clipboard API（需 HTTPS）
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(code);
+                    showCopySuccess();
+                    return;
+                } catch (err) {
+                    console.warn('Clipboard API 失败，尝试传统方法', err);
+                }
+            }
+
+            // 方法2：传统 document.execCommand 方法
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                textarea.style.position = 'fixed';   // 防止滚动
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                textarea.setSelectionRange(0, 99999); // 兼容移动端
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                if (successful) {
+                    showCopySuccess();
+                } else {
+                    alert('复制失败，请手动复制');
+                }
+            } catch (err) {
+                console.error('复制异常', err);
+                alert('复制失败，请手动复制');
+            }
+        }
+
+        function showCopySuccess() {
+            const msg = document.getElementById('copy-message');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 2000);
+        }
+
+        // ========== 登录、生成、登出功能 ==========
         async function login() {
             const password = document.getElementById('password').value;
             if (!password) {
@@ -132,20 +180,6 @@
             }
         }
 
-        async function copyToClipboard() {
-            const code = document.getElementById('code-display').innerText;
-            if (!code) return;
-            try {
-                await navigator.clipboard.writeText(code);
-                // 显示成功消息
-                const msg = document.getElementById('copy-message');
-                msg.classList.remove('hidden');
-                setTimeout(() => msg.classList.add('hidden'), 2000);
-            } catch (err) {
-                alert('复制失败，请手动复制');
-            }
-        }
-
         async function logout() {
             try {
                 await fetch(`${API_BASE}/logout`, {
@@ -163,7 +197,7 @@
             document.getElementById('generate-error').innerText = '';
         }
 
-        // 检查是否已登录（可选，保持登录状态刷新页面后仍可看到生成界面）
+        // 检查是否已登录（刷新后保持登录状态）
         async function checkSession() {
             try {
                 const res = await fetch(`${API_BASE}/generate`, {
@@ -173,7 +207,6 @@
                     body: JSON.stringify({ device_id: 'check' })
                 });
                 if (res.ok) {
-                    // 已登录，显示生成页
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('generate-section').classList.remove('hidden');
                 }
