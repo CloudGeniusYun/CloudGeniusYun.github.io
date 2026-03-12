@@ -75,9 +75,44 @@
         .btn-copy:focus {
             outline: none;
         }
+        /* Toast 通知样式 */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            color: #1f2937;
+            padding: 10px 24px;
+            border-radius: 9999px; /* 胶囊样式 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* 防止遮挡点击 */
+            border: 1px solid #e5e7eb;
+        }
+        #toast.show {
+            opacity: 1;
+        }
+        #toast.success {
+            background-color: #10b981;
+            color: white;
+            border-color: #059669;
+        }
+        #toast.error {
+            background-color: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+    <!-- Toast 容器 -->
+    <div id="toast"></div>
+
     <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">EggyHub 授权码生成器</h1>
         <p class="text-center text-gray-500 mb-6">输入密码后即可为设备生成授权码</p>
@@ -109,7 +144,7 @@
             </button>
             <div id="generate-error" class="text-red-500 text-sm text-center"></div>
 
-            <!-- 授权码显示区域 + 复制按钮（已改为蓝色调） -->
+            <!-- 授权码显示区域 + 复制按钮 -->
             <div id="result-area" class="hidden">
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
                     <p class="text-sm font-medium text-gray-500 mb-1">授权码：</p>
@@ -120,7 +155,7 @@
                         复制
                     </button>
                 </div>
-                <div id="copy-message" class="text-green-500 text-sm text-center hidden">已复制！</div>
+                <!-- 旧的消息提示已移除，改用全局 toast -->
             </div>
 
             <button onclick="logout()"
@@ -134,11 +169,24 @@
         // 您的 Hugging Face Space 地址
         const API_BASE = 'https://cloudgeniusyun-signer.hf.space';
 
+        // ========== Toast 通知函数 ==========
+        function showToast(message, type = 'success', duration = 2000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = ''; // 清除之前的类
+            toast.classList.add(type); // 添加颜色类 (success/error)
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
         // ========== 复制功能（兼容所有浏览器） ==========
         async function copyToClipboard() {
             const code = document.getElementById('code-display').innerText;
             if (!code) {
-                alert('没有可复制的内容');
+                showToast('没有可复制的内容', 'error');
                 return;
             }
 
@@ -146,7 +194,7 @@
             if (navigator.clipboard && window.isSecureContext) {
                 try {
                     await navigator.clipboard.writeText(code);
-                    showCopySuccess();
+                    showToast('已复制到剪贴板', 'success');
                     return;
                 } catch (err) {
                     console.warn('Clipboard API 失败，尝试传统方法', err);
@@ -165,20 +213,14 @@
                 const successful = document.execCommand('copy');
                 document.body.removeChild(textarea);
                 if (successful) {
-                    showCopySuccess();
+                    showToast('已复制到剪贴板', 'success');
                 } else {
-                    alert('复制失败，请手动复制');
+                    showToast('复制失败，请手动复制', 'error');
                 }
             } catch (err) {
                 console.error('复制异常', err);
-                alert('复制失败，请手动复制');
+                showToast('复制失败，请手动复制', 'error');
             }
-        }
-
-        function showCopySuccess() {
-            const msg = document.getElementById('copy-message');
-            msg.classList.remove('hidden');
-            setTimeout(() => msg.classList.add('hidden'), 2000);
         }
 
         // ========== 登录、生成、登出功能 ==========
@@ -235,8 +277,6 @@
                     document.getElementById('code-display').innerText = data.auth_code;
                     document.getElementById('result-area').classList.remove('hidden');
                     document.getElementById('generate-error').innerText = '';
-                    // 隐藏之前的复制成功提示
-                    document.getElementById('copy-message').classList.add('hidden');
                 } else {
                     document.getElementById('generate-error').innerText = data.error || '生成失败，请稍后重试';
                 }
