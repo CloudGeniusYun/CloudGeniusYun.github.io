@@ -6,7 +6,7 @@
     <title>EggyHub 授权码生成器</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 可选字体 -->
+    <!-- 字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -31,7 +31,7 @@
             <div id="login-error" class="text-red-500 text-sm text-center"></div>
         </div>
 
-        <!-- 生成表单（初始隐藏） -->
+        <!-- 生成表单（登录后显示） -->
         <div id="generate-section" class="hidden space-y-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">设备ID</label>
@@ -43,38 +43,31 @@
                 生成授权码
             </button>
             <div id="generate-error" class="text-red-500 text-sm text-center"></div>
-            <div id="result" class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <p class="text-sm font-medium text-gray-500 mb-1">授权码：</p>
-                <p id="code-display" class="font-mono text-sm break-all text-gray-800"></p>
+
+            <!-- 授权码显示区域 + 复制按钮 -->
+            <div id="result-area" class="hidden">
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
+                    <p class="text-sm font-medium text-gray-500 mb-1">授权码：</p>
+                    <p id="code-display" class="font-mono text-sm break-all text-gray-800 pr-10"></p>
+                    <button id="copy-btn" onclick="copyToClipboard()" 
+                        class="absolute top-2 right-2 bg-white hover:bg-gray-100 text-gray-600 border border-gray-300 rounded-md px-2 py-1 text-xs transition"
+                        title="复制到剪贴板">
+                        复制
+                    </button>
+                </div>
+                <div id="copy-message" class="text-green-500 text-sm text-center hidden">已复制！</div>
             </div>
+
             <button onclick="logout()"
                 class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-200">
                 退出登录
             </button>
         </div>
-
-        <!-- 调试信息区域（仅开发时可显示） -->
-        <div id="debug-info" class="mt-6 text-xs text-gray-400 border-t pt-4 hidden">
-            <p class="font-medium">调试信息：</p>
-            <pre id="debug-content" class="mt-1 whitespace-pre-wrap"></pre>
-        </div>
     </div>
 
     <script>
-        // ！！！重要：请将此处替换为你的 Hugging Face Space 实际地址（格式：https://你的用户名-空间名.hf.space）
-        const API_BASE = 'https://cloudgeniusyun-signer.hf.space';  // 例如：https://zhangsan-eggyhub-auth.hf.space
-
-        // 调试开关：设为 true 可显示详细错误信息
-        const DEBUG = true;
-
-        function debugLog(message, data) {
-            if (!DEBUG) return;
-            const debugDiv = document.getElementById('debug-info');
-            const debugContent = document.getElementById('debug-content');
-            debugDiv.classList.remove('hidden');
-            debugContent.innerText = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-            console.log(message, data);
-        }
+        // ！！！重要：请将此处替换为您的 Hugging Face Space 实际地址
+        const API_BASE = 'https://<您的 Hugging Face Space 地址>';  // 例如：https://zhangsan-eggyhub-auth.hf.space
 
         async function login() {
             const password = document.getElementById('password').value;
@@ -86,11 +79,10 @@
                 const res = await fetch(`${API_BASE}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',  // 必须携带 cookie
+                    credentials: 'include',
                     body: JSON.stringify({ password })
                 });
                 const data = await res.json();
-                debugLog('登录响应', { status: res.status, data });
                 if (res.ok && data.success) {
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('generate-section').classList.remove('hidden');
@@ -99,7 +91,6 @@
                     document.getElementById('login-error').innerText = data.message || '登录失败，请检查密码或网络';
                 }
             } catch (err) {
-                debugLog('登录异常', err.message);
                 document.getElementById('login-error').innerText = '网络错误，请稍后重试';
             }
         }
@@ -118,26 +109,40 @@
                     body: JSON.stringify({ device_id: deviceId })
                 });
                 const data = await res.json();
-                debugLog('生成响应', { status: res.status, data });
 
                 if (res.status === 401) {
                     // 未登录或会话过期，退回登录页
                     document.getElementById('login-section').classList.remove('hidden');
                     document.getElementById('generate-section').classList.add('hidden');
-                    document.getElementById('generate-error').innerText = '';
                     document.getElementById('login-error').innerText = '会话已过期，请重新登录';
                     return;
                 }
 
                 if (res.ok && data.auth_code) {
                     document.getElementById('code-display').innerText = data.auth_code;
+                    document.getElementById('result-area').classList.remove('hidden');
                     document.getElementById('generate-error').innerText = '';
+                    // 隐藏之前的复制成功提示
+                    document.getElementById('copy-message').classList.add('hidden');
                 } else {
                     document.getElementById('generate-error').innerText = data.error || '生成失败，请稍后重试';
                 }
             } catch (err) {
-                debugLog('生成异常', err.message);
                 document.getElementById('generate-error').innerText = '网络错误，请检查 API 地址或后端状态';
+            }
+        }
+
+        async function copyToClipboard() {
+            const code = document.getElementById('code-display').innerText;
+            if (!code) return;
+            try {
+                await navigator.clipboard.writeText(code);
+                // 显示成功消息
+                const msg = document.getElementById('copy-message');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 2000);
+            } catch (err) {
+                alert('复制失败，请手动复制');
             }
         }
 
@@ -153,11 +158,12 @@
             document.getElementById('password').value = '';
             document.getElementById('device-id').value = '';
             document.getElementById('code-display').innerText = '';
+            document.getElementById('result-area').classList.add('hidden');
             document.getElementById('login-error').innerText = '';
             document.getElementById('generate-error').innerText = '';
         }
 
-        // 可选的初始登录检查（调用一个简单接口验证会话）
+        // 检查是否已登录（可选，保持登录状态刷新页面后仍可看到生成界面）
         async function checkSession() {
             try {
                 const res = await fetch(`${API_BASE}/generate`, {
@@ -166,10 +172,8 @@
                     credentials: 'include',
                     body: JSON.stringify({ device_id: 'check' })
                 });
-                if (res.status === 401) {
-                    // 未登录，保持登录页
-                } else if (res.ok) {
-                    // 已登录，显示生成页（但不要显示授权码）
+                if (res.ok) {
+                    // 已登录，显示生成页
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('generate-section').classList.remove('hidden');
                 }
@@ -178,4 +182,4 @@
         checkSession();
     </script>
 </body>
-                </html>
+</html>
