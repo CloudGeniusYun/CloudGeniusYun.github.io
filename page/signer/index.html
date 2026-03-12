@@ -75,43 +75,108 @@
         .btn-copy:focus {
             outline: none;
         }
-        /* Toast 通知样式 */
+
+        /* Toast 容器 */
         #toast {
             position: fixed;
-            top: 20px;
+            top: 24px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: white;
+            background-color: #f3f4f6;  /* 灰白色背景 */
             color: #1f2937;
-            padding: 10px 24px;
-            border-radius: 9999px; /* 胶囊样式 */
+            padding: 10px 20px;
+            border-radius: 9999px;      /* 胶囊 */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             font-size: 14px;
             font-weight: 500;
             z-index: 9999;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            pointer-events: none; /* 防止遮挡点击 */
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             border: 1px solid #e5e7eb;
+            /* 进入动画将在 .show 时触发 */
         }
+
         #toast.show {
-            opacity: 1;
+            animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        #toast.success {
-            background-color: #10b981;
-            color: white;
-            border-color: #059669;
+
+        @keyframes toastIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scaleX(0.2) scaleY(0.5) translateX(-50px);
+            }
+            40% {
+                opacity: 1;
+                transform: translateX(-50%) scaleX(1.1) scaleY(0.9) translateX(0);
+            }
+            70% {
+                transform: translateX(-50%) scaleX(0.95) scaleY(1.05) translateX(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scaleX(1) scaleY(1) translateX(0);
+            }
         }
-        #toast.error {
-            background-color: #ef4444;
-            color: white;
-            border-color: #dc2626;
+
+        /* 图标容器 */
+        .toast-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* SVG 图标基础样式 */
+        .toast-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 成功图标（对勾）描边动画 */
+        .toast.success .check-path {
+            stroke: #10b981; /* 浅绿色 */
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: drawStroke 0.4s ease-out forwards;
+        }
+
+        /* 失败图标（叉）描边动画 */
+        .toast.error .cross-path {
+            stroke: #ef4444; /* 浅红色 */
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: drawStroke 0.4s ease-out forwards;
+        }
+
+        @keyframes drawStroke {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* 文字颜色微调 */
+        .toast.success .toast-message {
+            color: #065f46;
+        }
+        .toast.error .toast-message {
+            color: #991b1b;
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
-    <!-- Toast 容器 -->
-    <div id="toast"></div>
+    <!-- Toast 容器（结构已更新） -->
+    <div id="toast">
+        <span class="toast-icon"></span>
+        <span class="toast-message"></span>
+    </div>
 
     <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">EggyHub 授权码生成器</h1>
@@ -155,7 +220,6 @@
                         复制
                     </button>
                 </div>
-                <!-- 旧的消息提示已移除，改用全局 toast -->
             </div>
 
             <button onclick="logout()"
@@ -169,15 +233,45 @@
         // 您的 Hugging Face Space 地址
         const API_BASE = 'https://cloudgeniusyun-signer.hf.space';
 
-        // ========== Toast 通知函数 ==========
+        // ========== Toast 通知函数（带图标和动画） ==========
         function showToast(message, type = 'success', duration = 2000) {
             const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = ''; // 清除之前的类
-            toast.classList.add(type); // 添加颜色类 (success/error)
-            toast.classList.add('show');
+            const iconContainer = toast.querySelector('.toast-icon');
+            const messageSpan = toast.querySelector('.toast-message');
             
-            setTimeout(() => {
+            // 清空之前的图标和类
+            iconContainer.innerHTML = '';
+            toast.className = ''; 
+            
+            // 根据类型设置图标和类
+            if (type === 'success') {
+                toast.classList.add('success', 'show');
+                // 对勾 SVG
+                iconContainer.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path class="check-path" d="M20 6L9 17L4 12" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                `;
+            } else {
+                toast.classList.add('error', 'show');
+                // 叉 SVG (两条线)
+                iconContainer.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path class="cross-path" d="M18 6L6 18" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path class="cross-path" d="M6 6L18 18" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                `;
+            }
+            
+            messageSpan.textContent = message;
+            
+            // 移除之前的定时器
+            if (toast.timeoutId) {
+                clearTimeout(toast.timeoutId);
+            }
+            
+            // 定时隐藏
+            toast.timeoutId = setTimeout(() => {
                 toast.classList.remove('show');
             }, duration);
         }
