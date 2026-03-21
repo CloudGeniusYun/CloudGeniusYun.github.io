@@ -14,8 +14,8 @@
     const openBtn = document.getElementById('openBtn');
     const errorMsgDiv = document.getElementById('errorMsg');
 
-    // 标记是否已尝试自动跳转（避免重复）
-    let autoJumpAttempted = false;
+    // 自动跳转定时器变量
+    let autoJumpTimeout = null;
 
     // 辅助函数：显示错误信息并禁用按钮
     function showError(msg) {
@@ -23,6 +23,11 @@
         errorMsgDiv.classList.remove('hidden');
         openBtn.disabled = true;
         openBtn.classList.add('disabled');
+        // 如果有自动跳转定时器，清除它（因为参数无效，不应跳转）
+        if (autoJumpTimeout) {
+            clearTimeout(autoJumpTimeout);
+            autoJumpTimeout = null;
+        }
     }
 
     // 辅助函数：隐藏错误信息（当参数修复后）
@@ -88,46 +93,57 @@
         return;
     }
 
-    // 有效 scheme：隐藏错误信息，绑定按钮事件
+    // 有效 scheme：隐藏错误信息，绑定按钮事件，并设置自动跳转
     hideError();
 
-    // ---------- 立即自动跳转（无延迟） ----------
-    function executeJump() {
-        if (autoJumpAttempted) return; // 防止重复跳转
-        autoJumpAttempted = true;
-        try {
-            window.location.href = rawScheme;
-        } catch (err) {
-            console.warn('自动跳转失败', err);
-            showError('自动跳转失败，请手动点击按钮打开应用');
-            // 自动跳转失败后，启用按钮让用户手动尝试（若按钮被禁用则启用）
-            if (openBtn.disabled) {
-                openBtn.disabled = false;
-                openBtn.classList.remove('disabled');
-            }
+    // ---------- 自动跳转逻辑 ----------
+    function executeAutoJump() {
+        // 清除已有的定时器（防止重复）
+        if (autoJumpTimeout) {
+            clearTimeout(autoJumpTimeout);
+            autoJumpTimeout = null;
         }
+        // 延迟 2 秒后自动跳转，让用户看到页面内容（也可调整延迟）
+        autoJumpTimeout = setTimeout(() => {
+            // 再次确认安全（页面运行中可能被篡改，实际极少）
+            if (isSafeScheme(rawScheme)) {
+                try {
+                    window.location.href = rawScheme;
+                } catch (err) {
+                    console.warn('自动跳转失败', err);
+                    showError('自动跳转失败，请手动点击按钮打开应用');
+                }
+            } else {
+                showError('⛔ 非法的 scheme 协议');
+            }
+            autoJumpTimeout = null;
+        }, 2000); // 2秒后自动跳转
     }
 
-    // 页面加载后立即执行跳转（使用微任务确保尽早执行）
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', executeJump);
-    } else {
-        executeJump();
-    }
-
-    // 手动点击按钮时，若尚未跳转或跳转失败，再次尝试
+    // 手动点击按钮时，取消自动跳转，并立即跳转
     openBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // 如果已经尝试过自动跳转但页面未离开（可能被阻止），再次尝试
+        // 清除自动跳转定时器（用户已手动操作）
+        if (autoJumpTimeout) {
+            clearTimeout(autoJumpTimeout);
+            autoJumpTimeout = null;
+        }
+        // 再次确认安全（防止页面运行中被篡改，虽然几乎不会）
         if (!isSafeScheme(rawScheme)) {
             showError('⛔ 非法的 scheme 协议');
             return;
         }
+        // 执行跳转
         try {
             window.location.href = rawScheme;
         } catch (err) {
-            console.warn('手动跳转失败', err);
+            console.warn('跳转失败', err);
             showError('无法跳转，请检查 scheme 是否正确，或手动打开应用');
         }
     });
+
+    // 启动自动跳转
+    executeAutoJump();
+
+    // 可选：如果页面在自动跳转前已经通过其他方式卸载，定时器会自动取消（无需额外处理）
 })();
