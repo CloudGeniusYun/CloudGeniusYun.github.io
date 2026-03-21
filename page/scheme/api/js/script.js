@@ -14,9 +14,6 @@
     const openBtn = document.getElementById('openBtn');
     const errorMsgDiv = document.getElementById('errorMsg');
 
-    // 标志：是否已经尝试过跳转
-    let jumpAttempted = false;
-
     // ---------- 辅助函数 ----------
     function showError(msg) {
         errorMsgDiv.textContent = msg;
@@ -31,9 +28,9 @@
         openBtn.classList.remove('disabled');
     }
 
-    // 填充界面内容（仅在跳转失败时调用）
+    // 填充界面内容
     function fillContent() {
-        // 图标：若 pic 有效则设置 src，否则隐藏
+        // 图标
         if (pic && pic.trim() !== '') {
             iconImg.src = pic.trim();
             iconImg.onerror = () => iconWrapper.classList.add('hidden');
@@ -68,22 +65,29 @@
         return !dangerous.test(trimmed);
     }
 
-    // ---------- 核心跳转逻辑 ----------
-    function tryJump(url) {
-        if (jumpAttempted) return;
-        jumpAttempted = true;
-        try {
-            window.location.href = url;
-        } catch (e) {
-            console.warn('跳转异常', e);
+    // ---------- 使用隐藏 iframe 触发 scheme（不影响当前页面） ----------
+    let iframe = null;
+
+    function triggerScheme(url) {
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
         }
+        // 重置 iframe 内容再设置新 src，确保触发
+        iframe.src = 'about:blank';
+        setTimeout(() => {
+            iframe.src = url;
+        }, 10);
     }
 
-    // 检查 scheme 参数
+    // ---------- 检查 scheme 参数 ----------
     if (!scheme || scheme.trim() === '') {
-        // 无参数：显示错误，不跳转
         showError('❌ 缺少 scheme 参数，请在链接后添加 ?scheme=你的应用协议');
-        fillContent(); // 填充内容（图标等可能为空，但保持界面完整）
+        fillContent();
         return;
     }
 
@@ -94,21 +98,16 @@
         return;
     }
 
-    // ---------- 立即尝试跳转 ----------
-    tryJump(rawScheme);
+    // ---------- 参数有效：填充内容（页面始终可见） ----------
+    fillContent();
+    hideError(); // 确保按钮可用
 
-    // 设置一个短延时，如果页面未卸载，说明跳转失败（可能未安装应用）
-    setTimeout(() => {
-        // 如果页面仍然存在，说明跳转未成功
-        if (document.body) {
-            // 显示界面内容
-            fillContent();
-            hideError(); // 清除可能存在的错误（如果有）
-            // 绑定手动按钮
-            openBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                tryJump(rawScheme);
-            });
-        }
-    }, 300); // 300ms 足够判断跳转是否生效
+    // ---------- 自动触发：页面加载后立即尝试唤醒 ----------
+    triggerScheme(rawScheme);
+
+    // ---------- 手动按钮：点击时再次触发 ----------
+    openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        triggerScheme(rawScheme);
+    });
 })();
