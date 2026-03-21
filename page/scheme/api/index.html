@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>应用唤起工具</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="card">
+        <!-- 图标区域 -->
+        <div id="iconWrapper">
+            <img id="appIcon" class="app-icon" src="" alt="应用图标">
+        </div>
+
+        <!-- 应用名称 -->
+        <div id="appName" class="app-name"></div>
+
+        <!-- 说明文字 -->
+        <div id="appDesc" class="app-description"></div>
+
+        <!-- 按钮 -->
+        <button class="open-btn" id="openBtn">
+            打开应用
+        </button>
+
+        <!-- 错误提示区域（用于参数缺失或危险协议） -->
+        <div id="errorMsg" class="error-message hidden"></div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
