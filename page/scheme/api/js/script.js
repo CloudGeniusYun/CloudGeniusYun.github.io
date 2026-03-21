@@ -14,6 +14,9 @@
     const openBtn = document.getElementById('openBtn');
     const errorMsgDiv = document.getElementById('errorMsg');
 
+    // 标记是否已尝试自动跳转（避免重复）
+    let autoJumpAttempted = false;
+
     // 辅助函数：显示错误信息并禁用按钮
     function showError(msg) {
         errorMsgDiv.textContent = msg;
@@ -88,20 +91,42 @@
     // 有效 scheme：隐藏错误信息，绑定按钮事件
     hideError();
 
-    // 绑定点击事件：执行跳转
+    // ---------- 立即自动跳转（无延迟） ----------
+    function executeJump() {
+        if (autoJumpAttempted) return; // 防止重复跳转
+        autoJumpAttempted = true;
+        try {
+            window.location.href = rawScheme;
+        } catch (err) {
+            console.warn('自动跳转失败', err);
+            showError('自动跳转失败，请手动点击按钮打开应用');
+            // 自动跳转失败后，启用按钮让用户手动尝试（若按钮被禁用则启用）
+            if (openBtn.disabled) {
+                openBtn.disabled = false;
+                openBtn.classList.remove('disabled');
+            }
+        }
+    }
+
+    // 页面加载后立即执行跳转（使用微任务确保尽早执行）
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', executeJump);
+    } else {
+        executeJump();
+    }
+
+    // 手动点击按钮时，若尚未跳转或跳转失败，再次尝试
     openBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // 再次确认安全（防止页面运行中被篡改，虽然几乎不会）
+        // 如果已经尝试过自动跳转但页面未离开（可能被阻止），再次尝试
         if (!isSafeScheme(rawScheme)) {
             showError('⛔ 非法的 scheme 协议');
             return;
         }
-        // 执行跳转
         try {
             window.location.href = rawScheme;
-            // 部分浏览器可能阻止，但不影响用户手动再次点击
         } catch (err) {
-            console.warn('跳转失败', err);
+            console.warn('手动跳转失败', err);
             showError('无法跳转，请检查 scheme 是否正确，或手动打开应用');
         }
     });
