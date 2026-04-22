@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>EggyMusic · 横屏歌词模式</title>
+    <!-- 原版样式（完全保留） -->
+    <link rel="stylesheet" href="../m/style.css">
+    <!-- 横屏布局覆盖（仅修改布局，不改变视觉变量） -->
+    <link rel="stylesheet" href="landscape-layout.css">
     <!-- Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- 独立横屏样式 -->
-    <link rel="stylesheet" href="landscape.css">
 </head>
 <body>
+    <!-- 整体容器，结构与原版保持一致，仅包裹层用于横屏布局 -->
     <div class="app landscape-mode">
-        <!-- ========= 左侧面板：唱片 + 控制 ========= -->
+        <!-- 左侧面板：包含原版中除歌词外的所有主要元素 -->
         <div class="left-panel">
-            <!-- 顶部工具栏：搜索 + 主题切换 -->
+            <!-- 顶部工具栏：搜索、主题切换（原版结构不变） -->
             <div class="top-bar">
                 <div class="search-section">
                     <div class="source-switch">
@@ -30,7 +33,7 @@
                 </button>
             </div>
 
-            <!-- 唱片区域 -->
+            <!-- 唱片区域（原版结构） -->
             <div class="record-container">
                 <div class="record-wrapper">
                     <div class="record-player">
@@ -70,7 +73,7 @@
             </div>
         </div>
 
-        <!-- ========= 右侧面板：歌词 ========= -->
+        <!-- 右侧面板：歌词区域（原版歌词容器直接移入） -->
         <div class="right-panel">
             <div class="lyrics-header">
                 <i class="fas fa-microphone-alt"></i>
@@ -81,7 +84,7 @@
             </div>
         </div>
 
-        <!-- 播放列表面板 (浮层) -->
+        <!-- 播放列表面板（原版结构，默认隐藏，由JS控制） -->
         <div id="playlistPanel" class="playlist-panel hidden">
             <div class="playlist-header">
                 <h3>播放列表</h3>
@@ -90,7 +93,7 @@
             <ul id="playlistItems" class="playlist-items"></ul>
         </div>
 
-        <!-- 搜索结果面板 (浮层) -->
+        <!-- 搜索结果面板（原版结构） -->
         <div id="searchResultPanel" class="search-result-panel hidden">
             <div class="panel-header">
                 <h3>搜索结果</h3>
@@ -104,7 +107,20 @@
         <audio id="audioPlayer" preload="metadata"></audio>
     </div>
 
-    <!-- 独立横屏脚本 -->
-    <script src="landscape.js"></script>
+    <!-- 直接引用原版脚本（所有逻辑完全复用） -->
+    <script src="../m/script.js"></script>
+    <!-- 可选：横屏初始化微调（例如默认隐藏播放列表等） -->
+    <script>
+        (function(){
+            // 确保原版脚本加载完成后执行一些横屏适配（不修改核心逻辑）
+            window.addEventListener('load', function() {
+                // 如果原版有播放列表面板默认显示等，可以在这里强制关闭
+                const playlistPanel = document.getElementById('playlistPanel');
+                if (playlistPanel) playlistPanel.classList.add('hidden');
+                const searchPanel = document.getElementById('searchResultPanel');
+                if (searchPanel) searchPanel.classList.add('hidden');
+            });
+        })();
+    </script>
 </body>
 </html>
