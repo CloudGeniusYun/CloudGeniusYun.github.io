@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>EggyMusic · 横屏歌词模式</title>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 独立横屏样式 -->
+    <link rel="stylesheet" href="landscape.css">
+</head>
+<body>
+    <div class="app landscape-mode">
+        <!-- ========= 左侧面板：唱片 + 控制 ========= -->
+        <div class="left-panel">
+            <!-- 顶部工具栏：搜索 + 主题切换 -->
+            <div class="top-bar">
+                <div class="search-section">
+                    <div class="source-switch">
+                        <button id="sourceNetease" class="source-btn active">网易云</button>
+                        <button id="sourceKuwo" class="source-btn">酷我</button>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="搜索歌曲..." autocomplete="off">
+                        <button id="searchBtn"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <button id="themeToggle" class="theme-btn" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <!-- 唱片区域 -->
+            <div class="record-container">
+                <div class="record-wrapper">
+                    <div class="record-player">
+                        <img id="coverImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='%23333'/%3E%3Ccircle cx='100' cy='100' r='25' fill='%23ff3b30'/%3E%3C/svg%3E" alt="封面" class="cover-img">
+                        <div class="tonearm" id="tonearm">
+                            <div class="arm-base"></div>
+                            <div class="arm-line"></div>
+                            <div class="arm-head"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 歌曲信息 -->
+            <div class="song-info">
+                <h2 id="songTitle" class="song-title">未播放歌曲</h2>
+                <p id="songArtist" class="song-artist">-</p>
+            </div>
+
+            <!-- 进度条 -->
+            <div class="progress-container">
+                <span id="currentTime" class="time-text">0:00</span>
+                <div class="progress-bar" id="progressBarContainer">
+                    <div id="progressFill" class="progress-fill"></div>
+                    <div id="progressHandle" class="progress-handle"></div>
+                </div>
+                <span id="durationTime" class="time-text">0:00</span>
+            </div>
+
+            <!-- 播放控制按钮组 -->
+            <div class="play-controls">
+                <button id="modeBtn" class="ctrl-btn" title="播放模式"><i class="fas fa-redo-alt"></i></button>
+                <button id="prevBtn" class="ctrl-btn"><i class="fas fa-step-backward"></i></button>
+                <button id="playPauseBtn" class="ctrl-btn play-pause-btn"><i class="fas fa-play"></i></button>
+                <button id="nextBtn" class="ctrl-btn"><i class="fas fa-step-forward"></i></button>
+                <button id="playlistToggleBtn" class="ctrl-btn" title="播放列表"><i class="fas fa-list"></i></button>
+            </div>
+        </div>
+
+        <!-- ========= 右侧面板：歌词 ========= -->
+        <div class="right-panel">
+            <div class="lyrics-header">
+                <i class="fas fa-microphone-alt"></i>
+                <span>歌词</span>
+            </div>
+            <div id="lyricsContainer" class="lyrics-container">
+                <div class="lyrics-placeholder">暂无歌词</div>
+            </div>
+        </div>
+
+        <!-- 播放列表面板 (浮层) -->
+        <div id="playlistPanel" class="playlist-panel hidden">
+            <div class="playlist-header">
+                <h3>播放列表</h3>
+                <button id="closePlaylistBtn" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <ul id="playlistItems" class="playlist-items"></ul>
+        </div>
+
+        <!-- 搜索结果面板 (浮层) -->
+        <div id="searchResultPanel" class="search-result-panel hidden">
+            <div class="panel-header">
+                <h3>搜索结果</h3>
+                <button id="closeSearchResultBtn" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="searchResultList" class="search-result-list"></div>
+            <div id="searchLoading" class="loading-indicator hidden">加载中...</div>
+        </div>
+
+        <!-- 隐藏的 Audio 元素 -->
+        <audio id="audioPlayer" preload="metadata"></audio>
+    </div>
+
+    <!-- 独立横屏脚本 -->
+    <script src="landscape.js"></script>
+</body>
+</html>
