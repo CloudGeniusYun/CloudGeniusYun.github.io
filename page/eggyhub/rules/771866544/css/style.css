@@ -113,6 +113,31 @@ h1:after {
     margin-bottom: 10px;
 }
 
+.rule-number-long-red {
+    display: inline-block;
+    padding: 0 10px;
+    height: 28px;
+    background-color: #ff7a7a;
+    color: white;
+    border-radius: 14px;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 12px;
+    margin-bottom: 10px;
+}
+
+.content-back {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 20px;
+    background: #fef8f5;
+    border-radius: 24px;
+    padding: 1.2rem 1.5rem;
+}
+
 .rule-content {
     color: #475569;
     font-size: 15px;
