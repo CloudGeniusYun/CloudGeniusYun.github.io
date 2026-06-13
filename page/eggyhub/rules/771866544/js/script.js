@@ -22,6 +22,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // 添加规则项点击交互效果
+    const ruleItems = document.querySelectorAll('.rule-item-important');
+
+    ruleItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // 切换高亮效果
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+                this.style.backgroundColor = '';
+            } else {
+                // 移除其他所有规则项的高亮
+                ruleItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    otherItem.style.backgroundColor = '';
+                });
+
+                // 添加当前规则项的高亮
+                this.classList.add('active');
+                this.style.backgroundColor = '#fedddd';
+            }
+        });
+    });
     
     // 头像加载失败时的备用处理
     const avatar = document.querySelector('.avatar');
