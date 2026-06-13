@@ -93,6 +93,11 @@ h1:after {
     box-shadow: 0 4px 15px rgba(0, 150, 255, 0.1);
 }
 
+.rule-item-important:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 96, 96, 0.1);
+}
+
 .rule-number {
     display: inline-block;
     width: 28px;
