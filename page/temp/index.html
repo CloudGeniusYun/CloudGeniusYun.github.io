@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toast 样式预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    background: #0f1115;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #e8eaed;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: #8b8f96;
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* 样式切换按钮 */
+  .style-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 620px;
+  }
+
+  .style-picker button {
+    background: #1a1d23;
+    color: #c9cdd3;
+    border: 1px solid #2a2e36;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .style-picker button:hover {
+    background: #23272f;
+    border-color: #3a3f48;
+  }
+
+  .style-picker button.active {
+    background: #2a6ef0;
+    border-color: #2a6ef0;
+    color: #fff;
+  }
+
+  /* 手机模拟框 */
+  .phone {
+    width: 360px;
+    height: 640px;
+    background: #1a1d23;
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px #2a2e36 inset;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+    background:
+      radial-gradient(circle at 20% 20%, #4a5fd4 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #d44a8a 0%, transparent 45%),
+      radial-gradient(circle at 30% 80%, #4ad4a8 0%, transparent 45%),
+      radial-gradient(circle at 75% 75%, #d4a84a 0%, transparent 45%),
+      linear-gradient(160deg, #1a1d2e 0%, #2d1f3d 100%);
+  }
+
+  /* 手机里的模拟内容 */
+  .mock-content {
+    position: absolute;
+    inset: 0;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mock-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .mock-card h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .mock-card p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* Toast 容器 */
+  .toast-area {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    pointer-events: none;
+  }
+
+  /* 通用 Toast 基础 */
+  .toast {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: 100%;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─────────────────────────────
+     样式 1：经典深色胶囊
+     ───────────────────────────── */
+  .toast-classic {
+    background: #2d3036;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 28px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+
+  /* ─────────────────────────────
+     样式 2：磨砂玻璃（浅）
+     ───────────────────────────── */
+  .toast-frosted-light {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 28px;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+
+  /* ─────────────────────────────
+     样式 3：磨砂玻璃（深）
+     ───────────────────────────── */
+  .toast-frosted-dark {
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 28px;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  /* ─────────────────────────────
+     样式 4：带图标的胶囊
+     ───────────────────────────── */
+  .toast-icon {
+    background: rgba(30,32,38,0.85);
+    color: #fff;
+    padding: 10px 18px 10px 10px;
+    border-radius: 28px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .toast-icon .icon-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .toast-icon .icon-wrap.success {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    box-shadow: 0 0 12px rgba(74,222,128,0.4);
+  }
+
+  .toast-icon .icon-wrap.error {
+    background: linear-gradient(135deg, #f87171, #ef4444);
+    box-shadow: 0 0 12px rgba(248,113,113,0.4);
+  }
+
+  .toast-icon .icon-wrap.info {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    box-shadow: 0 0 12px rgba(96,165,250,0.4);
+  }
+
+  .toast-icon .icon-wrap svg {
+    width: 16px;
+    height: 16px;
+    stroke: #fff;
+    stroke-width: 2.5;
+    fill: none;
+  }
+
+  /* ─────────────────────────────
+     样式 5：卡片式（带标题）
+     ───────────────────────────── */
+  .toast-card {
+    background: rgba(30,32,38,0.9);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px;
+    padding: 14px 18px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .toast-card .accent {
+    width: 4px;
+    height: 32px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #2a6ef0, #60a5fa);
+    flex-shrink: 0;
+  }
+
+  .toast-card .text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .toast-card .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .toast-card .desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+
+  /* ─────────────────────────────
+     样式 6：顶部下滑横幅
+     ───────────────────────────── */
+  .toast-banner {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(30,32,38,0.9);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    gap: 12px;
+    transform: translateY(-120%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .toast-banner.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .toast-banner .app-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .toast-banner .app-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2a6ef0, #60a5fa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .toast-banner .text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .toast-banner .title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .toast-banner .desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .toast-banner .time {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* 显示按钮 */
+  .show-btn {
+    background: linear-gradient(135deg, #2a6ef0, #60a5fa);
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(42,110,240,0.4);
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .show-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(42,110,240,0.5);
+  }
+
+  .show-btn:active {
+    transform: translateY(0);
+  }
+
+  .desc-panel {
+    background: #1a1d23;
+    border: 1px solid #2a2e36;
+    border-radius: 14px;
+    padding: 16px 20px;
+    max-width: 520px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c9cdd3;
+  }
+
+  .desc-panel strong { color: #fff; }
+  .desc-panel code {
+    background: #2a2e36;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #7ab3ff;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>Toast 样式预览</h1>
+<p class="hint">点击下方按钮切换样式，再点"显示 Toast"查看效果。磨砂玻璃效果在彩色背景上最明显。</p>
+
+<div class="style-picker" id="picker">
+  <button data-style="classic" class="active">经典深色</button>
+  <button data-style="frostedLight">磨砂（浅）</button>
+  <button data-style="frostedDark">磨砂（深）</button>
+  <button data-style="icon">图标胶囊</button>
+  <button data-style="card">卡片式</button>
+  <button data-style="banner">顶部横幅</button>
+</div>
+
+<div class="phone">
+  <div class="phone-screen">
+    <div class="mock-content">
+      <div class="mock-card">
+        <h3>闯关大冒险</h3>
+        <p>作者：小明 · 热度 1520</p>
+      </div>
+      <div class="mock-card">
+        <h3>极速赛车</h3>
+        <p>作者：小红 · 热度 980</p>
+      </div>
+      <div class="mock-card">
+        <h3>迷宫逃脱</h3>
+        <p>作者：小刚 · 热度 2340</p>
+      </div>
+    </div>
+    <div class="toast-area" id="toastArea"></div>
+  </div>
+</div>
+
+<button class="show-btn" onclick="showToast()">显示 Toast</button>
+
+<div class="desc-panel" id="descPanel">
+  <strong>经典深色胶囊</strong><br>
+  最通用，兼容性最好，任何背景上都清晰可读。适合作为默认样式。
+</div>
+
+<script>
+  let currentStyle = 'classic';
+
+  const descriptions = {
+    classic: '<strong>经典深色胶囊</strong><br>最通用，兼容性最好，任何背景上都清晰可读。适合作为默认样式。',
+    frostedLight: '<strong>磨砂玻璃（浅）</strong><br>半透明白 + 模糊背景，高级感强。HTML 里靠 <code>backdrop-filter: blur()</code> 实现；Android 里需要 API 31+ 或 Haze 库，性能开销较大，建议作为可选开关。',
+    frostedDark: '<strong>磨砂玻璃（深）</strong><br>半透明黑 + 模糊背景，暗色主题下更好看，文字对比度也更高。性能特点和上面一样。',
+    icon: '<strong>图标胶囊</strong><br>左侧带状态图标（成功/失败/提示），信息量比纯文字大。图标颜色可以区分语义，用户一眼就知道发生了什么。',
+    card: '<strong>卡片式</strong><br>左侧彩条 + 标题 + 描述，适合需要解释的场景，比如"Mapcode 已复制，2 秒后启动游戏"。',
+    banner: '<strong>顶部横幅</strong><br>从顶部下滑，类似系统通知，适合重要提示。缺点是会被状态栏遮挡，需要额外处理 inset。'
+  };
+
+  document.querySelectorAll('#picker button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#picker button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStyle = btn.dataset.style;
+      document.getElementById('descPanel').innerHTML = descriptions[currentStyle];
+    });
+  });
+
+  function showToast() {
+    const area = document.getElementById('toastArea');
+    // 清掉旧的
+    area.innerHTML = '';
+
+    let el;
+
+    if (currentStyle === 'classic') {
+      el = document.createElement('div');
+      el.className = 'toast toast-classic';
+      el.textContent = 'Mapcode 已复制';
+
+    } else if (currentStyle === 'frostedLight') {
+      el = document.createElement('div');
+      el.className = 'toast toast-frosted-light';
+      el.textContent = 'Mapcode 已复制';
+
+    } else if (currentStyle === 'frostedDark') {
+      el = document.createElement('div');
+      el.className = 'toast toast-frosted-dark';
+      el.textContent = 'Mapcode 已复制';
+
+    } else if (currentStyle === 'icon') {
+      el = document.createElement('div');
+      el.className = 'toast toast-icon';
+      el.innerHTML = `
+        <div class="icon-wrap success">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span>Mapcode 已复制</span>
+      `;
+
+    } else if (currentStyle === 'card') {
+      el = document.createElement('div');
+      el.className = 'toast toast-card';
+      el.innerHTML = `
+        <div class="accent"></div>
+        <div class="text">
+          <div class="title">Mapcode 已复制</div>
+          <div class="desc">2 秒后启动蛋仔派对</div>
+        </div>
+      `;
+
+    } else if (currentStyle === 'banner') {
+      // 横幅单独处理
+      let banner = area.querySelector('.toast-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.className = 'toast toast-banner';
+        banner.innerHTML = `
+          <div class="app-info">
+            <div class="app-icon">E</div>
+            <div class="text">
+              <div class="title">Eggyhub</div>
+              <div class="desc">Mapcode 已复制</div>
+            </div>
+            <div class="time">刚刚</div>
+          </div>
+        `;
+        area.appendChild(banner);
+      }
+      requestAnimationFrame(() => banner.classList.add('show'));
+      setTimeout(() => {
+        banner.classList.remove('show');
+        setTimeout(() => banner.remove(), 350);
+      }, 2500);
+      return;
+    }
+
+    area.appendChild(el);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => el.classList.add('show'));
+    });
+
+    setTimeout(() => {
+      el.classList.remove('show');
+      setTimeout(() => el.remove(), 300);
+    }, 2200);
+  }
+</script>
+
+</body>
+</html>
