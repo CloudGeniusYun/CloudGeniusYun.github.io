@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toast 简洁版预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+    background: #0a0a0c;
+    color: #e8eaed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 20px;
+    gap: 20px;
+  }
+
+  h1 { font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
+
+  .hint {
+    font-size: 12px;
+    color: #6b6f76;
+    text-align: center;
+    max-width: 420px;
+    line-height: 1.6;
+  }
+
+  .picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .picker button {
+    background: transparent;
+    color: #8b8f96;
+    border: 1px solid #26282d;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .picker button:hover { color: #c9cdd3; border-color: #3a3d44; }
+  .picker button.active { color: #fff; background: #1e2025; border-color: #3a3d44; }
+
+  /* 手机框 */
+  .phone {
+    width: 340px;
+    height: 620px;
+    background: #14161a;
+    border-radius: 36px;
+    padding: 10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px #22252b inset;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    /* 彩色背景，方便看透明/模糊效果 */
+    background:
+      radial-gradient(circle at 15% 15%, #5b6ce0 0%, transparent 40%),
+      radial-gradient(circle at 85% 25%, #d55b9e 0%, transparent 40%),
+      radial-gradient(circle at 25% 85%, #4ac0a0 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, #d4a04a 0%, transparent 40%),
+      #1a1c22;
+  }
+
+  .mock {
+    position: absolute;
+    inset: 0;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mock-item {
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+  }
+  .mock-item small { color: rgba(255,255,255,0.4); font-size: 11px; }
+
+  /* Toast 容器 */
+  .toast-area {
+    position: absolute;
+    bottom: 44px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    pointer-events: none;
+  }
+
+  /* 通用 */
+  .toast {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1.3;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── 方案 A：极简胶囊 ── */
+  .t-capsule {
+    background: rgba(20,22,26,0.92);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 100px;
+  }
+
+  /* ── 方案 B：幽灵条 ── */
+  .t-ghost {
+    background: transparent;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.35);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* ── 方案 C：小点 + 文字 ── */
+  .t-dot {
+    background: transparent;
+    color: #fff;
+    padding: 8px 4px;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+  }
+  .t-dot .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .t-dot.success .dot { background: #4ade80; color: #4ade80; }
+  .t-dot.error .dot { background: #f87171; color: #f87171; }
+  .t-dot.info .dot { background: #60a5fa; color: #60a5fa; }
+
+  /* ── 方案 D：极薄磨砂 ── */
+  .t-frost {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 100px;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* ── 方案 E：贴底细条 ── */
+  .t-bar {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    background: rgba(20,22,26,0.95);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  }
+  .t-bar.show { opacity: 1; transform: translateY(0); }
+  .t-bar .icon-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #4ade80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .t-bar .icon-check svg {
+    width: 10px;
+    height: 10px;
+    stroke: #0a0a0c;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  .show-btn {
+    background: #2a6ef0;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .show-btn:hover { background: #3a7eff; }
+  .show-btn:active { background: #1f5ede; }
+
+  .desc {
+    background: #14161a;
+    border: 1px solid #22252b;
+    border-radius: 12px;
+    padding: 14px 18px;
+    max-width: 460px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #8b8f96;
+  }
+  .desc strong { color: #fff; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Toast · 简洁版</h1>
+<p class="hint">数字越小越克制。按一下按钮看效果。</p>
+
+<div class="picker" id="picker">
+  <button data-style="capsule" class="active">A 极简胶囊</button>
+  <button data-style="ghost">B 幽灵条</button>
+  <button data-style="dot">C 小点</button>
+  <button data-style="frost">D 极薄磨砂</button>
+  <button data-style="bar">E 贴底细条</button>
+</div>
+
+<div class="phone">
+  <div class="screen">
+    <div class="mock">
+      <div class="mock-item">闯关大冒险<br><small>作者：小明 · 热度 1520</small></div>
+      <div class="mock-item">极速赛车<br><small>作者：小红 · 热度 980</small></div>
+      <div class="mock-item">迷宫逃脱<br><small>作者：小刚 · 热度 2340</small></div>
+    </div>
+    <div class="toast-area" id="toastArea"></div>
+  </div>
+</div>
+
+<button class="show-btn" onclick="show()">显示</button>
+
+<div class="desc" id="desc">
+  <strong>A 极简胶囊</strong><br>黑底白字，一行，胶囊圆角。最克制，也最通用。微信、Telegram 都是这种思路。
+</div>
+
+<script>
+  let style = 'capsule';
+
+  const descs = {
+    capsule: '<strong>A 极简胶囊</strong><br>黑底白字，一行，胶囊圆角。最克制，也最通用。微信、Telegram 都是这种思路。',
+    ghost: '<strong>B 幽灵条</strong><br>没有实心背景，只有一圈很细的白边 + 文字阴影。视觉上更轻，适合彩色背景，但在浅色背景上会看不清。',
+    dot: '<strong>C 小点 + 文字</strong><br>最轻的方案，连背景都没有。左侧 6dp 小色点表示状态（绿/红/蓝），文字带轻微阴影。信息量少、动效轻，适合"已复制"这类不需要强调的提示。',
+    frost: '<strong>D 极薄磨砂</strong><br>真磨砂玻璃，但做得极薄：背景透明 8%，模糊 20px，只保留一点质感。视觉上和 A 很接近，但更有层次。代价是性能，建议做成用户可开关的选项。',
+    bar: '<strong>E 贴底细条</strong><br>贴在底部、左右留边，类似 MD3 的 Snackbar，但更轻。左侧一个绿色小勾表示成功。适合信息稍长、需要"确认感"的场景。缺点是底部有导航栏时会被压住。'
+  };
+
+  document.querySelectorAll('#picker button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#picker button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      style = b.dataset.style;
+      document.getElementById('desc').innerHTML = descs[style];
+    });
+  });
+
+  function show() {
+    const area = document.getElementById('toastArea');
+    area.innerHTML = '';
+
+    let el;
+
+    if (style === 'capsule') {
+      el = document.createElement('div');
+      el.className = 'toast t-capsule';
+      el.textContent = 'Mapcode 已复制';
+
+    } else if (style === 'ghost') {
+      el = document.createElement('div');
+      el.className = 'toast t-ghost';
+      el.textContent = 'Mapcode 已复制';
+
+    } else if (style === 'dot') {
+      el = document.createElement('div');
+      el.className = 'toast t-dot success';
+      el.innerHTML = '<span class="dot"></span><span>Mapcode 已复制</span>';
+
+    } else if (style === 'frost') {
+      el = document.createElement('div');
+      el.className = 'toast t-frost';
+      el.textContent = 'Mapcode 已复制';
+
+    } else if (style === 'bar') {
+      el = document.createElement('div');
+      el.className = 't-bar';
+      el.innerHTML = `
+        <div class="icon-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span>Mapcode 已复制，2 秒后启动蛋仔派对</span>
+      `;
+      area.style.display = 'none';
+      document.querySelector('.screen').appendChild(el);
+      requestAnimationFrame(() => el.classList.add('show'));
+      setTimeout(() => {
+        el.classList.remove('show');
+        setTimeout(() => { el.remove(); area.style.display = 'flex'; }, 250);
+      }, 2400);
+      return;
+    }
+
+    area.appendChild(el);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+
+    setTimeout(() => {
+      el.classList.remove('show');
+      setTimeout(() => el.remove(), 250);
+    }, 2000);
+  }
+</script>
+
+</body>
+</html>
